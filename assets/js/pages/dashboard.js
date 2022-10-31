@@ -20,7 +20,11 @@ for (let i = 0; i < choices.length; i++) {
 let options_alumnos = {
   series: [76, 30],
   labels: ["Alumnos total (hombres)", "Alumnos total (mujeres)"],
-  colors: ["#435ebe", "#55c6e8"],
+  plotOptions: {
+    bar: {
+      distributed: true,
+    },
+  },
   chart: {
     type: "donut",
     width: "100%",
@@ -46,7 +50,7 @@ let chart_alumnos = new ApexCharts(
 chart_alumnos.render();
 
 //Chart docentes
-var options_docentes = {
+let options_docentes = {
   annotations: {
     position: "back",
   },
@@ -67,7 +71,11 @@ var options_docentes = {
       data: [9, 20, 29],
     },
   ],
-  colors: ["#55c6e8"],
+  plotOptions: {
+    bar: {
+      distributed: true,
+    },
+  },
   xaxis: {
     categories: [
       "Docentes total (hombres)	",
@@ -84,7 +92,7 @@ let chart_docentes = new ApexCharts(
 chart_docentes.render();
 
 //Chart aulas
-var options_aulas = {
+let options_aulas = {
   annotations: {
     position: "back",
   },
@@ -105,7 +113,11 @@ var options_aulas = {
       data: [34, 20],
     },
   ],
-  colors: ["#55c6e8"],
+  plotOptions: {
+    bar: {
+      distributed: true,
+    },
+  },
   xaxis: {
     categories: ["Aulas en uso", "Aulas existentes"],
   },
@@ -116,3 +128,175 @@ let chart_aulas = new ApexCharts(
 );
 
 chart_aulas.render();
+
+//Chart preescolar
+let options_preescolar = {
+  annotations: {
+    position: "back",
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  chart: {
+    type: "bar",
+    height: 300,
+  },
+  fill: {
+    opacity: 1,
+  },
+  plotOptions: {},
+  series: [
+    {
+      name: "Preescolar",
+      data: [34, 20, 15, 78],
+    },
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+    },
+  },
+  xaxis: {
+    categories: [
+      "Huehuetla",
+      "Pachuca de Soto",
+      "Tulancingo de Bravo",
+      "Total",
+    ],
+  },
+};
+let chart_preescolar = new ApexCharts(
+  document.querySelector("#dashboard_chart_preescolar"),
+  options_preescolar
+);
+
+chart_preescolar.render();
+
+//Chart primaria
+let options_primaria = {
+  annotations: {
+    position: "back",
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  chart: {
+    type: "bar",
+    height: 300,
+  },
+  fill: {
+    opacity: 1,
+  },
+  plotOptions: {},
+  series: [
+    {
+      name: "Primaria",
+      data: [12, 67, 4, 100],
+    },
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+    },
+  },
+  xaxis: {
+    categories: [
+      "Huehuetla",
+      "Pachuca de Soto",
+      "Tulancingo de Bravo",
+      "Total",
+    ],
+  },
+};
+let chart_primaria = new ApexCharts(
+  document.querySelector("#dashboard_chart_primaria"),
+  options_primaria
+);
+
+chart_primaria.render();
+
+//Chart secundaria
+let options_secundaria = {
+  annotations: {
+    position: "back",
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  chart: {
+    type: "bar",
+    height: 300,
+  },
+  fill: {
+    opacity: 1,
+  },
+  plotOptions: {},
+  series: [
+    {
+      name: "Secundaria",
+      data: [112, 23, 67, 150],
+    },
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+    },
+  },
+  xaxis: {
+    categories: [
+      "Huehuetla",
+      "Pachuca de Soto",
+      "Tulancingo de Bravo",
+      "Total",
+    ],
+  },
+};
+let chart_secundaria = new ApexCharts(
+  document.querySelector("#dashboard_chart_secundaria"),
+  options_secundaria
+);
+
+chart_secundaria.render();
+
+//Chart media superior
+let options_media_superior = {
+  annotations: {
+    position: "back",
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  chart: {
+    type: "bar",
+    height: 300,
+  },
+  fill: {
+    opacity: 1,
+  },
+  plotOptions: {},
+  series: [
+    {
+      name: "Media superior",
+      data: [12, 55, 23, 70],
+    },
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+    },
+  },
+  xaxis: {
+    categories: [
+      "Huehuetla",
+      "Pachuca de Soto",
+      "Tulancingo de Bravo",
+      "Total",
+    ],
+  },
+};
+let chart_media_superior = new ApexCharts(
+  document.querySelector("#dashboard_chart_media_superior"),
+  options_media_superior
+);
+
+chart_media_superior.render();
