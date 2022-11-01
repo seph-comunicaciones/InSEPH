@@ -1,5 +1,3 @@
-console.log("Dashboard");
-
 //Select
 let choices = document.querySelectorAll(".choices");
 let initChoice;
