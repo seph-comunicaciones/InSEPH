@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Mazer Admin Dashboard</title>
+
+    <link rel="stylesheet" href="assets/css/main/app.css" />
+    <link rel="stylesheet" href="assets/css/main/app-dark.css" />
+
+    <link rel="stylesheet" href="assets/extensions/filepond/filepond.css" />
+    <link
+      rel="stylesheet"
+      href="assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="assets/extensions/sweetalert2/sweetalert2.min.css"
+    />
+
+    <link
+      rel="shortcut icon"
+      href="assets/images/logo/favicon.svg"
+      type="image/x-icon"
+    />
+    <link
+      rel="shortcut icon"
+      href="assets/images/logo/favicon.png"
+      type="image/png"
+    />
+
+    <link rel="stylesheet" href="assets/css/shared/iconly.css" />
+  </head>
+
+  <body>
+    <div id="app">
+      <div id="sidebar" class="active">
+        <div class="sidebar-wrapper active">
+          <div class="sidebar-header position-relative">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="logo">
+                <a href="index.html"
+                  ><img src="assets/images/logo/logo.svg" alt="Logo" srcset=""
+                /></a>
+              </div>
+              <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  aria-hidden="true"
+                  role="img"
+                  class="iconify iconify--system-uicons"
+                  width="20"
+                  height="20"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 21 21"
+                >
+                  <g
+                    fill="none"
+                    fill-rule="evenodd"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M10.5 14.5c2.219 0 4-1.763 4-3.982a4.003 4.003 0 0 0-4-4.018c-2.219 0-4 1.781-4 4c0 2.219 1.781 4 4 4zM4.136 4.136L5.55 5.55m9.9 9.9l1.414 1.414M1.5 10.5h2m14 0h2M4.135 16.863L5.55 15.45m9.899-9.9l1.414-1.415M10.5 19.5v-2m0-14v-2"
+                      opacity=".3"
+                    ></path>
+                    <g transform="translate(-210 -1)">
+                      <path d="M220.5 2.5v2m6.5.5l-1.5 1.5"></path>
+                      <circle cx="220.5" cy="11.5" r="4"></circle>
+                      <path
+                        d="m214 5l1.5 1.5m5 14v-2m6.5-.5l-1.5-1.5M214 18l1.5-1.5m-4-5h2m14 0h2"
+                      ></path>
+                    </g>
+                  </g>
+                </svg>
+                <div class="form-check form-switch fs-6">
+                  <input
+                    class="form-check-input me-0"
+                    type="checkbox"
+                    id="toggle-dark"
+                  />
+                  <label class="form-check-label"></label>
+                </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  aria-hidden="true"
+                  role="img"
+                  class="iconify iconify--mdi"
+                  width="20"
+                  height="20"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="m17.75 4.09l-2.53 1.94l.91 3.06l-2.63-1.81l-2.63 1.81l.91-3.06l-2.53-1.94L12.44 4l1.06-3l1.06 3l3.19.09m3.5 6.91l-1.64 1.25l.59 1.98l-1.7-1.17l-1.7 1.17l.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95l2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85c-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14c.4-.4.82-.76 1.27-1.08c.75-.53 1.93.36 1.85 1.19c-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82c-2.81 3.14-2.7 7.96.31 10.98c3.02 3.01 7.84 3.12 10.98.31Z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="sidebar-toggler x">
+                <a href="#" class="sidebar-hide d-xl-none d-block"
+                  ><i class="bi bi-x bi-middle"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+          <div class="sidebar-menu">
+            <ul class="menu">
+              <li class="sidebar-title">
+                Sistema de Información Gerencial -SEPH
+              </li>
+
+              <li class="sidebar-item">
+                <a href="dashboard.html" class="sidebar-link">
+                  <i class="bi bi-bar-chart-fill"></i>
+                  <span>Dashboard</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item">
+                <a href="escuelas.html" class="sidebar-link">
+                  <i class="bi bi-building"></i>
+                  <span>Escuelas</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item active">
+                <a href="usuarios.html" class="sidebar-link">
+                  <i class="bi bi-people-fill"></i>
+                  <span>Usuarios</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item">
+                <a href="login.html" class="sidebar-link">
+                  <i class="bi bi-box-arrow-right"></i>
+                  <span>Cerrar sesión</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div id="main">
+        <header class="mb-3">
+          <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+          </a>
+        </header>
+
+        <div class="page-heading">
+          <h3>Alta, Baja y Modificación de Usuarios</h3>
+        </div>
+
+        <section id="menu_usuarios" class="section">
+          <div class="card">
+            <div class="card-header">
+              <button
+                type="button"
+                id="btn_nuevo_usuario"
+                class="btn btn-success"
+              >
+                <i class="bi bi-plus-circle"></i>
+                Nuevo usuario
+              </button>
+            </div>
+            <div class="card-body">
+              <table class="table" id="table_usuarios">
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>invitado</td>
+                    <td>Andres</td>
+                    <td>Guzman</td>
+                    <td style="text-align: center">
+                      <button class="btn btn-primary editar_usuario">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                    </td>
+                    <td style="text-align: center">
+                      <button class="btn btn-danger eliminar_usuario">
+                        <i class="bi bi-trash3-fill"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>admin</td>
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td style="text-align: center">
+                      <button class="btn btn-primary editar_usuario">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                    </td>
+                    <td style="text-align: center">
+                      <button class="btn btn-danger eliminar_usuario">
+                        <i class="bi bi-trash3-fill"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>alta</td>
+                    <td>alta</td>
+                    <td>registros</td>
+                    <td style="text-align: center">
+                      <button class="btn btn-primary editar_usuario">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                    </td>
+                    <td style="text-align: center">
+                      <button class="btn btn-danger eliminar_usuario">
+                        <i class="bi bi-trash3-fill"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Damian</td>
+                    <td>Damian</td>
+                    <td>Perez</td>
+                    <td style="text-align: center">
+                      <button class="btn btn-primary editar_usuario">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                    </td>
+                    <td style="text-align: center">
+                      <button class="btn btn-danger eliminar_usuario">
+                        <i class="bi bi-trash3-fill"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="nuevo_usuario" class="section d-none">
+          <div class="card">
+            <div class="card-header">
+              <p>Nuevo usuario</p>
+            </div>
+            <div class="card-body">
+              <form class="form" data-parsley-validate id="form_nuevo_usuario">
+                <div class="row">
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="usuario" class="form-label">Usuario </label>
+                      <input
+                        type="text"
+                        id="usuario"
+                        class="form-control validacion"
+                        placeholder="Usuario"
+                        name="usuario"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="correo" class="form-label"
+                        >Correo Electrónico
+                      </label>
+                      <input
+                        type="text"
+                        id="correo"
+                        class="form-control validacion"
+                        placeholder="Correo Electrónico"
+                        name="correo"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="contrasena" class="form-label"
+                        >Contraseña
+                      </label>
+                      <input
+                        type="password"
+                        id="contrasena"
+                        class="form-control validacion"
+                        placeholder="Contraseña"
+                        name="contrasena"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="nombre" class="form-label">Nombre (s) </label>
+                      <input
+                        type="text"
+                        id="nombre"
+                        class="form-control validacion"
+                        placeholder="Nombre (s)"
+                        name="nombre"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="apellido_paterno" class="form-label"
+                        >Apellido Paterno
+                      </label>
+                      <input
+                        type="text"
+                        id="apellido_paterno"
+                        class="form-control validacion"
+                        placeholder="Apellido Paterno"
+                        name="apellido_paterno"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="apellido_materno" class="form-label"
+                        >Apellido Materno
+                      </label>
+                      <input
+                        type="text"
+                        id="apellido_materno"
+                        class="form-control validacion"
+                        placeholder="Apellido Materno"
+                        name="apellido_materno"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="rol" class="form-label">Rol </label>
+                      <select
+                        id="rol"
+                        name="rol"
+                        class="form-select validacion"
+                        data-parsley-required="true"
+                      >
+                        <option value="">Elige una opción</option>
+                        <option value="Administrador">Administrador</option>
+                        <option value="Registrador">Registrador</option>
+                        <option value="Visualizador">Visualizador</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div style="display: flex; justify-content: space-around">
+                      <button
+                        type="button"
+                        id="btn_cancelar_usuario"
+                        class="btn btn-danger"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        type="submit"
+                        id="btn_guardar_usuario"
+                        class="btn btn-success"
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section id="editar_usuario" class="section d-none">
+          <div class="card">
+            <div class="card-header">
+              <p>Editar usuario</p>
+            </div>
+            <div class="card-body">
+              <form class="form" data-parsley-validate id="form_edit_usuario">
+                <div class="row">
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="usuario_edit" class="form-label"
+                        >Usuario
+                      </label>
+                      <input
+                        type="text"
+                        id="usuario_edit"
+                        class="form-control validacion_edit"
+                        placeholder="Usuario"
+                        name="usuario_edit"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="correo_edit" class="form-label"
+                        >Correo Electrónico
+                      </label>
+                      <input
+                        type="text"
+                        id="correo_edit"
+                        class="form-control validacion_edit"
+                        placeholder="Correo Electrónico"
+                        name="correo_edit"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="contrasena_edit" class="form-label"
+                        >Contraseña
+                      </label>
+                      <input
+                        type="password"
+                        id="contrasena_edit"
+                        class="form-control validacion_edit"
+                        placeholder="Contraseña"
+                        name="contrasena_edit"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="nombre_edit" class="form-label"
+                        >Nombre (s)
+                      </label>
+                      <input
+                        type="text"
+                        id="nombre_edit"
+                        class="form-control validacion_edit"
+                        placeholder="Nombre (s)"
+                        name="nombre_edit"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="apellido_paterno_edit" class="form-label"
+                        >Apellido Paterno
+                      </label>
+                      <input
+                        type="text"
+                        id="apellido_paterno_edit"
+                        class="form-control validacion_edit"
+                        placeholder="Apellido Paterno"
+                        name="apellido_paterno_edit"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="apellido_materno_edit" class="form-label"
+                        >Apellido Materno
+                      </label>
+                      <input
+                        type="text"
+                        id="apellido_materno_edit"
+                        class="form-control validacion_edit"
+                        placeholder="Apellido Materno"
+                        name="apellido_materno_edit"
+                        data-parsley-required="true"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="rol_edit" class="form-label">Rol </label>
+                      <select
+                        id="rol_edit"
+                        name="rol_edit"
+                        class="form-select validacion_edit"
+                        data-parsley-required="true"
+                      >
+                        <option value="">Elige una opción</option>
+                        <option value="Administrador">Administrador</option>
+                        <option value="Registrador">Registrador</option>
+                        <option value="Visualizador">Visualizador</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div style="display: flex; justify-content: space-around">
+                      <button
+                        type="button"
+                        id="btn_cancelar_edit_usuario"
+                        class="btn btn-danger"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        type="submit"
+                        id="btn_guardar_edit_usuario"
+                        class="btn btn-success"
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <footer>
+          <div class="footer clearfix mb-0 text-muted">
+            <div class="float-start">
+              <p>Copyright © 2020-2024 ---. Todos los derechos reservados.</p>
+            </div>
+            <div class="float-end">
+              <p>Tel. 1234567890</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <script src="assets/extensions/jquery/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+    <script src="assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+    <script src="assets/extensions/parsleyjs/parsley.min.js"></script>
+    <script src="assets/js/pages/usuarios.js"></script>
+  </body>
+</html>

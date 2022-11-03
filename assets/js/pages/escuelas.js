@@ -224,7 +224,7 @@ $("#btn_cancelar_escuela").click(() => {
 //Editar escuelas
 $("#main").on("click", ".editar_escuela", () => {
   $("#form_edit_escuela")[0].reset();
-  img_escuela.removeFile();
+  img_escuela_edit.removeFile();
 
   $("#menu_escuelas").addClass("d-none");
   $("#editar_escuela").removeClass("d-none");
@@ -307,7 +307,7 @@ $("#btn_cancelar_edit_escuela").click(() => {
   $("#editar_escuela").addClass("d-none");
 });
 
-//Guardar escuela
+//Editar escuela
 $("#form_edit_escuela").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_edit_escuela").click(() => {
@@ -315,7 +315,7 @@ $("#btn_guardar_edit_escuela").click(() => {
     Swal.fire({
       icon: "success",
       title: "Exito",
-      text: "Escuela registrada",
+      text: "Escuela actualizada",
       confirmButtonColor: "#3085d6",
       confirmButtonText: "Aceptar",
     });
@@ -328,7 +328,7 @@ $("#btn_guardar_edit_escuela").click(() => {
   }
 });
 
-//Eliminar escuelas
+//Cancelar escuelas
 $("#main").on("click", ".eliminar_escuela", (event) => {
   const button = event.currentTarget;
 
