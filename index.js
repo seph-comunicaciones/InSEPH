@@ -3,7 +3,7 @@ const { consultar_escuelas } = require("./js/services/escuelas");
 
 const server = express();
 
-server.get("/api/escuelas", consultar_escuelas);
+server.get("/api/escuelas/consultar_escuelas", consultar_escuelas);
 
 server.use("/js", express.static(__dirname + "/js"));
 server.use("/extensions", express.static(__dirname + "/extensions"));
