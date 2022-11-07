@@ -60,6 +60,25 @@ const pool_query_insert = (body, uuid) => {
   return query;
 };
 
+const pool_query_update = (body, where) => {
+  const llaves_body = Object.keys(body);
+  const values_body = Object.values(body);
+
+  const llaves_where = Object.keys(where);
+  const values_where = Object.values(where);
+
+  let query = "UPDATE escuela SET ";
+  let query_where = " Where ";
+
+  for (let i = 0; i < llaves_body.length; i++) query += ` ${llaves_body[i]} = '${values_body[i]}'${i !== llaves_body.length - 1 ? "," : ""} `;
+
+  for (let i = 0; i < llaves_where.length; i++) query_where += ` ${llaves_where[i]} = '${values_where[i]}'${i !== llaves_where.length - 1 ? "," : " ;"} `;
+
+  query += query_where;
+
+  return query;
+};
+
 const message_success = (message, result) => {
   return {
     failure: false,
@@ -87,5 +106,6 @@ module.exports = {
   message_success,
   pool_query,
   pool_query_insert,
+  pool_query_update,
   uuidv4,
 };

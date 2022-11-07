@@ -1,4 +1,4 @@
-const { pool_query, pool_query_insert, message_success, message_failure, validar_llaves } = require("../functions/servicios");
+const { pool_query, pool_query_insert, pool_query_update, message_success, message_failure, validar_llaves } = require("../functions/servicios");
 
 const consultar_escuelas = async (request, response) => {
   //Validar llaves obligatorias
@@ -97,6 +97,28 @@ const agregar_escuela = async (request, response) => {
   }
 };
 
+const editar_escuela = async (request, response) => {
+  //Validar llaves obligatorias
+  const llaves_obligatorias = ["id_escuela"];
+
+  const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
+
+  if (!validacion_llaves.success) {
+    return response.status(400).json(message_failure(validacion_llaves.message));
+  }
+
+  //Consulta query
+  const { id_escuela } = request.body;
+  const where = { id_escuela: id_escuela };
+  const query = await pool_query(pool_query_update(request.body, where), "Escuela editada existosamente", "Error, no se pudo editar la escuela");
+
+  if (query.success) {
+    return response.status(200).json(query);
+  } else {
+    return response.status(400).json(query);
+  }
+};
+
 const aliminar_escuela = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_escuela"];
@@ -121,5 +143,6 @@ module.exports = {
   consultar_escuelas,
   consultar_escuela,
   agregar_escuela,
+  editar_escuela,
   aliminar_escuela,
 };

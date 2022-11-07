@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { consultar_escuelas, agregar_escuela, consultar_escuela, aliminar_escuela } = require("./js/services/escuelas");
+const { consultar_escuelas, agregar_escuela, consultar_escuela, aliminar_escuela, editar_escuela } = require("./js/services/escuelas");
 const { consultar_municipios } = require("./js/services/municipios");
 const { consultar_turnos } = require("./js/services/turnos");
 const { consultar_modelos } = require("./js/services/modelos");
@@ -25,6 +25,7 @@ app.listen(process.env.PORT || 3000);
 app.post("/api/v1/escuelas/consultar_escuelas", consultar_escuelas);
 app.post("/api/v1/escuelas/consultar_escuela", consultar_escuela);
 app.post("/api/v1/escuelas/agregar_escuela", agregar_escuela);
+app.post("/api/v1/escuelas/editar_escuela", editar_escuela);
 app.post("/api/v1/escuelas/aliminar_escuela", aliminar_escuela);
 
 //Municipios
