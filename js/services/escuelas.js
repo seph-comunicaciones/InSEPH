@@ -62,7 +62,15 @@ const consultar_escuela = async (request, response) => {
   const { id_escuela } = request.body;
 
   const query = await pool_query(
-    `Select * From escuela Where id_escuela = ${id_escuela};`,
+    `Select escuela.*, turno.nom_turno, control.nom_control, modelo.nom_modelo, sostenimiento.nom_sostenimiento, municipio.nom_municipio, nivel.nom_nivel
+    From escuela 
+    Join turno On escuela.turno_id = turno.id_turno
+    Join control On escuela.control_id = control.id_control
+    Join modelo On escuela.modelo_id = modelo.id_modelo
+    Join sostenimiento On escuela.sostenimiento_id = sostenimiento.id_sostenimiento
+    Join municipio On escuela.municipio_id = municipio.id_municipio
+    Join nivel On escuela.nivel_id = nivel.id_nivel
+    Where escuela.id_escuela = ${id_escuela};`,
     "Escuela consultada existosamente",
     "Error, no se pudo consultar la escuela"
   );
