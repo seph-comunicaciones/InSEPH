@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.listen(process.env.PORT || 3000);
 
 //Escuelas
-app.get("/api/v1/escuelas/consultar_escuelas", consultar_escuelas);
+app.post("/api/v1/escuelas/consultar_escuelas", consultar_escuelas);
 app.post("/api/v1/escuelas/consultar_escuela", consultar_escuela);
 app.post("/api/v1/escuelas/agregar_escuela", agregar_escuela);
 

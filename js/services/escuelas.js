@@ -7,12 +7,32 @@ const {
 } = require("../functions/servicios");
 
 const consultar_escuelas = async (request, response) => {
+  //Validar llaves obligatorias
+  const llaves_obligatorias = ["id_municipio"];
+
+  const validacion_llaves = await validar_llaves(
+    llaves_obligatorias,
+    request.body
+  );
+
+  if (!validacion_llaves.success) {
+    return response
+      .status(400)
+      .json(message_failure(validacion_llaves.message));
+  }
+
   //Consulta query
+  const { id_municipio } = request.body;
+
   const query = await pool_query(
     `Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
     From escuela
     Join turno On escuela.turno_id = turno.id_turno
-    Join municipio On escuela.municipio_id = municipio.id_municipio;`,
+    Join municipio On escuela.municipio_id = municipio.id_municipio ${
+      id_municipio !== ""
+        ? `  Where municipio.id_municipio = ${id_municipio} `
+        : ""
+    };`,
     "Escuelas consultadas existosamente",
     "Error, no se pudieron consultar las escuelas"
   );
