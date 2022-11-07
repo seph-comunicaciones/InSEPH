@@ -1,11 +1,11 @@
 const { pool_query } = require("../functions/servicios");
 
-const consultar_turnos = async (request, response) => {
+const consultar_modelos = async (request, response) => {
   //Consulta query
   const query = await pool_query(
-    "Select * From turno;",
-    "Turnos consultados existosamente",
-    "Error, no se pudieron consultar los Turnos"
+    "Select * From modelo;",
+    "Modelos de educación consultados existosamente",
+    "Error, no se pudieron consultar los modelos de educación"
   );
 
   if (query.success) {
@@ -16,5 +16,5 @@ const consultar_turnos = async (request, response) => {
 };
 
 module.exports = {
-    consultar_turnos,
+    consultar_modelos,
 };
