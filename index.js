@@ -8,6 +8,7 @@ const {
 const { consultar_municipios } = require("./js/services/municipios");
 const { consultar_turnos } = require("./js/services/turnos");
 const { consultar_modelos } = require("./js/services/modelos");
+const { consultar_sostenimientos } = require("./js/services/sostenimiento");
 
 const app = express();
 
@@ -34,5 +35,8 @@ app.get("/api/v1/municipios/consultar_municipios", consultar_municipios);
 //Turnos
 app.get("/api/v1/turnos/consultar_turnos", consultar_turnos);
 
-//Turnos
+//Modelos educativos
 app.get("/api/v1/modelos/consultar_modelos", consultar_modelos);
+
+//Sostenimientos educativos
+app.get("/api/v1/sostenimientos/consultar_modelos", consultar_sostenimientos);
