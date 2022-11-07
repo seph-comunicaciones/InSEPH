@@ -6,9 +6,9 @@ const {
   consultar_escuela,
 } = require("./js/services/escuelas");
 const {
-  agregar_municipio,
   consultar_municipios,
 } = require("./js/services/municipios");
+const {consultar_turnos} = require("./js/services/turnos")
 
 const app = express();
 
@@ -31,4 +31,6 @@ app.post("/api/v1/escuelas/agregar_escuela", agregar_escuela);
 
 //Municipios
 app.get("/api/v1/municipios/consultar_municipios", consultar_municipios);
-app.post("/api/v1/municipios/agregar_municipio", agregar_municipio);
+
+//Turnos
+app.get("/api/v1/turnos/consultar_turnos", consultar_turnos);
