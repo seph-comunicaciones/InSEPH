@@ -1,6 +1,6 @@
 const {
   pool_query,
-  uuidv4,
+  pool_query_insert,
   message_success,
   message_failure,
   validar_llaves,
@@ -84,11 +84,38 @@ const consultar_escuela = async (request, response) => {
 
 const agregar_escuela = async (request, response) => {
   //Validar llaves obligatorias
+  const llaves_obligatorias = [
+    "clave",
+    "nombre",
+    "alum_muj",
+    "alum_hom",
+    "doc_muj",
+    "doc_hom",
+    "aulas_exist",
+    "aulas_uso",
+    "id_escuela",
+    "turno_id",
+    "control_id",
+    "modelo_id",
+    "sostenimiento_id",
+    "municipio_id",
+    "nivel_id",
+  ];
+
+  const validacion_llaves = await validar_llaves(
+    llaves_obligatorias,
+    request.body
+  );
+
+  if (!validacion_llaves.success) {
+    return response
+      .status(400)
+      .json(message_failure(validacion_llaves.message));
+  }
 
   //Consulta query
   const query = await pool_query(
-    `INSERT into public.escuela (uuid, clave, nombre, pag_web, alum_muj, alum_hom, doc_muj, doc_hom, aulas_exist, aulas_uso, telefono, turno_id, control_id)
-    VALUES ('${uuidv4()}','','','', 1, 1, 1, 1, 1, 1,'', 1, 1);`,
+    pool_query_insert(request.body, true),
     "Escuela registrada existosamente",
     "Error, no se pudo registrar la escuela"
   );

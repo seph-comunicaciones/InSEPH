@@ -38,6 +38,30 @@ const pool_query = (query, msg_success, msg_failure) => {
   });
 };
 
+const pool_query_insert = (body, uuid) => {
+  const llaves_body = Object.keys(body);
+  const values_body = Object.values(body);
+
+  let query = "INSERT into escuela ( ";
+  let values = "( ";
+
+  if (uuid) {
+    query += " uuid, ";
+    values += ` '${uuidv4()}', `;
+  }
+
+  for (let i = 0; i < llaves_body.length; i++) {
+    query += ` ${llaves_body[i]}${i !== llaves_body.length - 1 ? "," : " )"} `;
+    values += ` '${values_body[i]}'${
+      i !== llaves_body.length - 1 ? "," : " );"
+    } `;
+  }
+
+  query += `Values ${values}`;
+
+  return query;
+};
+
 const message_success = (message, result) => {
   return {
     failure: false,
@@ -69,5 +93,6 @@ module.exports = {
   message_failure,
   message_success,
   pool_query,
+  pool_query_insert,
   uuidv4,
 };
