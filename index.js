@@ -5,10 +5,8 @@ const {
   agregar_escuela,
   consultar_escuela,
 } = require("./js/services/escuelas");
-const {
-  consultar_municipios,
-} = require("./js/services/municipios");
-const {consultar_turnos} = require("./js/services/turnos")
+const { consultar_municipios } = require("./js/services/municipios");
+const { consultar_turnos } = require("./js/services/turnos");
 
 const app = express();
 
