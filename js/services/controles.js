@@ -2,11 +2,7 @@ const { pool_query } = require("../functions/servicios");
 
 const consultar_controles = async (request, response) => {
   //Consulta query
-  const query = await pool_query(
-    "Select * From control;",
-    "Controles consultados existosamente",
-    "Error, no se pudieron consultar los controles"
-  );
+  const query = await pool_query("Select * From control;", "Controles consultados existosamente", "Error, no se pudieron consultar los controles");
 
   if (query.success) {
     return response.status(200).json(query);
@@ -16,5 +12,5 @@ const consultar_controles = async (request, response) => {
 };
 
 module.exports = {
-    consultar_controles,
+  consultar_controles,
 };

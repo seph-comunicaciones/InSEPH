@@ -52,9 +52,7 @@ const pool_query_insert = (body, uuid) => {
 
   for (let i = 0; i < llaves_body.length; i++) {
     query += ` ${llaves_body[i]}${i !== llaves_body.length - 1 ? "," : " )"} `;
-    values += ` '${values_body[i]}'${
-      i !== llaves_body.length - 1 ? "," : " );"
-    } `;
+    values += ` '${values_body[i]}'${i !== llaves_body.length - 1 ? "," : " );"} `;
   }
 
   query += `Values ${values}`;
@@ -80,12 +78,7 @@ const message_failure = (message) => {
 };
 
 function uuidv4() {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-    (
-      c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-    ).toString(16)
-  );
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
 }
 
 module.exports = {
