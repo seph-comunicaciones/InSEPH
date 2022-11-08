@@ -1,5 +1,7 @@
 let escuelas_datatable = null;
 let escuelas_local = [];
+let servicios_local = [];
+let tipos_local = [];
 
 //Notficaciones
 const notificacion = (mensaje) => {
@@ -153,6 +155,13 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
   const { success, response: municipios } = response;
 
   if (success) {
+    $(`#municipio`).empty();
+    let opciones_select = `<option value="">Elige una opción</option> `;
+
+    municipios.forEach((municipio) => (opciones_select += ` <option value="${municipio.id_municipio}">${municipio.nom_municipio}</option> `));
+
+    $(`#municipio`).append(opciones_select);
+
     pintar_select_menu_municipios(municipios);
 
     //Estilo choice select
@@ -181,6 +190,124 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
         pintar_tabla_escuelas(escuelas);
       }
     });
+  }
+});
+
+//Carga de catalogos
+
+//Turnos
+request_get("/api/v1/turnos/consultar_turnos").then((response) => {
+  const { success, response: turnos } = response;
+
+  if (success) {
+    $(`#turno`).empty();
+    let opciones_select = `<option value="">Elige una opción</option> `;
+
+    turnos.forEach((turno) => (opciones_select += ` <option value="${turno.id_turno}">${turno.nom_turno}</option> `));
+
+    $(`#turno`).append(opciones_select);
+  } else {
+    Swal.fire("Error", message, "error");
+  }
+});
+
+//Niveles educativos
+request_get("/api/v1/sistemas_educativos/consultar_niveles").then((response) => {
+  const { success, response: niveles } = response;
+
+  if (success) {
+    $(`#nivel`).empty();
+    let opciones_select = `<option value="">Elige una opción</option> `;
+
+    niveles.forEach((nivel) => (opciones_select += ` <option value="${nivel.id_nivel}">${nivel.nom_nivel}</option> `));
+
+    $(`#nivel`).append(opciones_select);
+  } else {
+    Swal.fire("Error", message, "error");
+  }
+});
+
+//Servicios educativos
+request_get("/api/v1/sistemas_educativos/consultar_servicios").then((response) => {
+  const { success, response: servicios } = response;
+
+  if (success) {
+    servicios_local = servicios;
+
+    $(`#servicio`).empty();
+    let opciones_select = `<option value="">Elige una opción</option> `;
+
+    servicios.forEach((servicio) => (opciones_select += ` <option value="${servicio.id_servicio_educativo}">${servicio.nom_servicio_educativo}</option> `));
+
+    $(`#servicio`).append(opciones_select);
+  } else {
+    Swal.fire("Error", message, "error");
+  }
+});
+
+//Tipos educativos
+request_get("/api/v1/sistemas_educativos/consultar_tipos").then((response) => {
+  const { success, response: tipos } = response;
+
+  if (success) {
+    tipos_local = tipos;
+
+    $(`#tipo`).empty();
+    let opciones_select = `<option value="">Elige una opción</option> `;
+
+    tipos.forEach((tipo) => (opciones_select += ` <option value="${tipo.id_tipo}">${tipo.nom_tipo}</option> `));
+
+    $(`#tipo`).append(opciones_select);
+  } else {
+    Swal.fire("Error", message, "error");
+  }
+});
+
+//Controles
+request_get("/api/v1/controles/consultar_controles").then((response) => {
+  const { success, response: controles } = response;
+
+  if (success) {
+    $(`#control`).empty();
+    let opciones_select = `<option value="">Elige una opción</option> `;
+
+    controles.forEach((control) => (opciones_select += ` <option value="${control.id_control}">${control.nom_control}</option> `));
+
+    $(`#control`).append(opciones_select);
+  } else {
+    Swal.fire("Error", message, "error");
+  }
+});
+
+//Sostenimiento
+request_get("/api/v1/sostenimientos/consultar_sostenimientos").then((response) => {
+  const { success, response: sostenimientos } = response;
+
+  if (success) {
+    $(`#sostenimiento`).empty();
+    let opciones_select = `<option value="">Elige una opción</option> `;
+
+    sostenimientos.forEach((sostenimiento) => (opciones_select += ` <option value="${sostenimiento.id_sostenimiento}">${sostenimiento.nom_sostenimiento}</option> `));
+
+    $(`#sostenimiento`).append(opciones_select);
+  } else {
+    Swal.fire("Error", message, "error");
+  }
+});
+
+//Modelos
+request_get("/api/v1/modelos/consultar_modelos").then((response) => {
+  const { success, response: modelos } = response;
+
+  if (success) {
+    $(`#modelo`).empty();
+    let opciones_select = `<option value="">Elige una opción</option> `;
+
+    modelos.forEach((modelo) => (opciones_select += ` <option value="${modelo.id_modelo}">${modelo.nom_modelo}</option> `));
+
+    $(`#modelo`).append(opciones_select);
+  } else {
+    Swal.fire("Error", message, "error");
   }
 });
 
@@ -284,32 +411,6 @@ let img_escuela_edit = FilePond.create(document.querySelector("#img_escuela_edit
   labelIdle: "Selecciona o arrastra la imagen de la escuela",
 });
 
-//On change tipo de educación
-$("#educacion").on("change", () => {
-  $("#contenedor_educacion").addClass("d-none");
-  $("#contenedor_educacion").empty();
-
-  if ($("#educacion").val() === "Básica") {
-    $("#contenedor_educacion").removeClass("d-none");
-    $("#contenedor_educacion").append(`<div class="form-group mandatory">
-                                        <label for="educacion" class="form-label"
-                                          >Nivel educativo
-                                        </label>
-                                        <select
-                                          id="educacion"
-                                          name="educacion"
-                                          class="form-select"
-                                          data-parsley-required="true"
-                                        >
-                                          <option value="">Elige una opción</option>
-                                          <option value="Preescolar">Preescolar</option>
-                                          <option value="Primaria">Primaria</option>
-                                          <option value="Secundaria">Secundaria</option>
-                                        </select>
-                                      </div>`);
-  }
-});
-
 //On change totales alumnos
 $("#alumnos_mujeres").on("input", (event) => {
   const input_val = event.currentTarget.value;
@@ -337,19 +438,57 @@ $("#form_nueva_escuela").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_escuela").click(() => {
   if (validar_form_escuela()) {
-    Swal.fire({
-      icon: "success",
-      title: "Exito",
-      text: "Escuela registrada",
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "Aceptar",
+    notificacion_carga();
+    request_post("/api/v1/escuelas/agregar_escuela", {
+      clave: $("#clave_centro").val(),
+      nombre: $("#nombre_centro").val(),
+      pag_web: $("#pagina").val(),
+      telefono: $("#telefono").val(),
+      alum_muj: $("#alumnos_mujeres").val(),
+      alum_hom: $("#alumnos_hombres").val(),
+      doc_muj: $("#docentes_mujeres").val(),
+      doc_hom: $("#docentes_hombres").val(),
+      aulas_exist: $("#aulas_existentes").val(),
+      aulas_uso: $("#aulas_uso").val(),
+      turno_id: $("#turno").val(),
+      control_id: $("#control").val(),
+      modelo_id: $("#modelo").val(),
+      tipo_id: $("#tipo").val(),
+      servicio_educativo_id: $("#servicio").val(),
+      sostenimiento_id: $("#sostenimiento").val(),
+      municipio_id: $("#municipio").val(),
+      nivel_id: $("#nivel").val(),
+    }).then((response) => {
+      const { success, message } = response;
+
+      if (success) {
+        request_post("/api/v1/escuelas/consultar_escuelas", {
+          id_municipio: $("#escuelas_select_municipio").val(),
+        }).then((response) => {
+          const { success, response: escuelas } = response;
+
+          if (success) {
+            pintar_tabla_escuelas(escuelas);
+          }
+        });
+
+        Swal.fire({
+          icon: "success",
+          title: "Exito",
+          text: "Escuela registrada",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Aceptar",
+        });
+
+        $("#form_nueva_escuela")[0].reset();
+        img_escuela.removeFile();
+
+        $("#menu_escuelas").removeClass("d-none");
+        $("#nueva_escuela").addClass("d-none");
+      } else {
+        Swal.fire("Error", message, "error");
+      }
     });
-
-    $("#form_nueva_escuela")[0].reset();
-    img_escuela.removeFile();
-
-    $("#menu_escuelas").removeClass("d-none");
-    $("#nueva_escuela").addClass("d-none");
   }
 });
 
