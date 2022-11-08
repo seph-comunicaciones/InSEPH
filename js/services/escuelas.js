@@ -130,7 +130,7 @@ const aliminar_escuela = async (request, response) => {
   //Consulta query
   const { id_escuela } = request.body;
 
-  const query = await pool_query(`Update escuela Set activo = '0' Where id_escuela = '${id_escuela}';`, "Escuela eliminada existosamente", "Error, no se pudo eliminar la escuela");
+  const query = await pool_query(`Update escuela Set activo = 'false' Where id_escuela = '${id_escuela}';`, "Escuela eliminada existosamente", "Error, no se pudo eliminar la escuela");
 
   if (query.success) {
     return response.status(200).json(query);
