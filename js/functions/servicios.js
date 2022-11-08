@@ -5,7 +5,6 @@ const validar_llaves = (llaves_obligatorias, body) => {
   return new Promise((resolve, reject) => {
     const llaves_body = Object.keys(body);
 
-    llaves_obligatorias;
     for (let i = 0; i < llaves_obligatorias.length; i++) {
       if (llaves_body.indexOf(llaves_obligatorias[i]) < 0) {
         resolve({

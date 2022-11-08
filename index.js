@@ -6,6 +6,7 @@ const { consultar_turnos } = require("./js/services/turnos");
 const { consultar_modelos } = require("./js/services/modelos");
 const { consultar_sostenimientos } = require("./js/services/sostenimientos");
 const { consultar_controles } = require("./js/services/controles");
+const { consultar_niveles, consultar_servicios, consultar_tipos } = require("./js/services/sistemas_educativos");
 
 const app = express();
 
@@ -27,6 +28,11 @@ app.post("/api/v1/escuelas/consultar_escuela", consultar_escuela);
 app.post("/api/v1/escuelas/agregar_escuela", agregar_escuela);
 app.post("/api/v1/escuelas/editar_escuela", editar_escuela);
 app.post("/api/v1/escuelas/aliminar_escuela", aliminar_escuela);
+
+//Sistemas educativos
+app.get("/api/v1/sistemas_educativos/consultar_niveles", consultar_niveles);
+app.get("/api/v1/sistemas_educativos/consultar_servicios", consultar_servicios);
+app.get("/api/v1/sistemas_educativos/consultar_tipos", consultar_tipos);
 
 //Municipios
 app.get("/api/v1/municipios/consultar_municipios", consultar_municipios);

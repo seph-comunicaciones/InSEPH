@@ -65,7 +65,7 @@ const consultar_escuela = async (request, response) => {
 
 const agregar_escuela = async (request, response) => {
   //Validar llaves obligatorias
-  const llaves_obligatorias = ["clave", "nombre", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "id_escuela", "turno_id", "control_id", "modelo_id", "sostenimiento_id", "municipio_id", "nivel_id", "tipo_id", "servicio_educativo_id"];
+  const llaves_obligatorias = ["clave", "nombre", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "sostenimiento_id", "municipio_id", "nivel_id", "tipo_id", "servicio_educativo_id"];
 
   const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
