@@ -17,7 +17,7 @@ const consultar_escuelas = async (request, response) => {
     `Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
     From escuela
     Join turno On escuela.turno_id = turno.id_turno
-    Join municipio On escuela.municipio_id = municipio.id_municipio ${id_municipio !== "" ? ` Where municipio.id_municipio = ${id_municipio} ` : ""};`,
+    Join municipio On escuela.municipio_id = municipio.id_municipio ${id_municipio !== "" ? ` Where municipio.id_municipio = ${id_municipio} And escuela.activo = true ` : " Where escuela.activo = true "};`,
     "Escuelas consultadas existosamente",
     "Error, no se pudieron consultar las escuelas"
   );
@@ -63,23 +63,7 @@ const consultar_escuela = async (request, response) => {
 
 const agregar_escuela = async (request, response) => {
   //Validar llaves obligatorias
-  const llaves_obligatorias = [
-    "clave",
-    "nombre",
-    "alum_muj",
-    "alum_hom",
-    "doc_muj",
-    "doc_hom",
-    "aulas_exist",
-    "aulas_uso",
-    "id_escuela",
-    "turno_id",
-    "control_id",
-    "modelo_id",
-    "sostenimiento_id",
-    "municipio_id",
-    "nivel_id",
-  ];
+  const llaves_obligatorias = ["clave", "nombre", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "id_escuela", "turno_id", "control_id", "modelo_id", "sostenimiento_id", "municipio_id", "nivel_id"];
 
   const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
