@@ -41,7 +41,7 @@ const consultar_escuela = async (request, response) => {
   const { id_escuela } = request.body;
 
   const query = await pool_query_unique(
-    `Select escuela.*, turno.nom_turno, control.nom_control, modelo.nom_modelo, sostenimiento.nom_sostenimiento, municipio.nom_municipio, nivel.nom_nivel
+    `Select escuela.*, turno.nom_turno, control.nom_control, modelo.nom_modelo, sostenimiento.nom_sostenimiento, municipio.nom_municipio, nivel.nom_nivel, tipo.nom_tipo, servicio_educativo.nom_servicio_educativo
     From escuela 
     Join turno On escuela.turno_id = turno.id_turno
     Join control On escuela.control_id = control.id_control
@@ -49,6 +49,8 @@ const consultar_escuela = async (request, response) => {
     Join sostenimiento On escuela.sostenimiento_id = sostenimiento.id_sostenimiento
     Join municipio On escuela.municipio_id = municipio.id_municipio
     Join nivel On escuela.nivel_id = nivel.id_nivel
+	  Join tipo On escuela.tipo_id = tipo.id_tipo
+	  Join servicio_educativo On escuela.servicio_educativo_id = servicio_educativo.id_servicio_educativo
     Where escuela.id_escuela = '${id_escuela}';`,
     "Escuela consultada existosamente",
     "Error, no se pudo consultar la escuela"
@@ -63,13 +65,11 @@ const consultar_escuela = async (request, response) => {
 
 const agregar_escuela = async (request, response) => {
   //Validar llaves obligatorias
-  const llaves_obligatorias = ["clave", "nombre", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "id_escuela", "turno_id", "control_id", "modelo_id", "sostenimiento_id", "municipio_id", "nivel_id"];
+  const llaves_obligatorias = ["clave", "nombre", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "id_escuela", "turno_id", "control_id", "modelo_id", "sostenimiento_id", "municipio_id", "nivel_id", "tipo_id", "servicio_educativo_id"];
 
   const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
-  if (!validacion_llaves.success) {
-    return response.status(400).json(message_failure(validacion_llaves.message));
-  }
+  if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
   const query = await pool_query(pool_query_insert(request.body, true), "Escuela registrada existosamente", "Error, no se pudo registrar la escuela");

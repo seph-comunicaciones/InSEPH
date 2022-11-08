@@ -5,17 +5,19 @@ const validar_llaves = (llaves_obligatorias, body) => {
   return new Promise((resolve, reject) => {
     const llaves_body = Object.keys(body);
 
-    llaves_obligatorias.forEach((llave_obligatoria) => {
-      if (llaves_body.indexOf(llave_obligatoria) === -1) {
+    llaves_obligatorias;
+    for (let i = 0; i < llaves_obligatorias.length; i++) {
+      if (llaves_body.indexOf(llaves_obligatorias[i]) < 0) {
         resolve({
-          message: `La llave ${llave_obligatoria} es obligatoria`,
+          message: `La llave ${llaves_obligatorias[i]} es obligatoria`,
           success: false,
         });
+        break;
       }
-      resolve({
-        message: ``,
-        success: true,
-      });
+    }
+    resolve({
+      message: ``,
+      success: true,
     });
   });
 };
