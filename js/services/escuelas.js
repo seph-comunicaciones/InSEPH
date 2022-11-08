@@ -1,4 +1,4 @@
-const { pool_query, pool_query_insert, pool_query_update, message_success, message_failure, validar_llaves } = require("../functions/servicios");
+const { pool_query, pool_query_unique, pool_query_insert, pool_query_update, message_success, message_failure, validar_llaves } = require("../functions/servicios");
 
 const consultar_escuelas = async (request, response) => {
   //Validar llaves obligatorias
@@ -40,7 +40,7 @@ const consultar_escuela = async (request, response) => {
   //Consulta query
   const { id_escuela } = request.body;
 
-  const query = await pool_query(
+  const query = await pool_query_unique(
     `Select escuela.*, turno.nom_turno, control.nom_control, modelo.nom_modelo, sostenimiento.nom_sostenimiento, municipio.nom_municipio, nivel.nom_nivel
     From escuela 
     Join turno On escuela.turno_id = turno.id_turno

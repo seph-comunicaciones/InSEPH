@@ -186,12 +186,14 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
 
 //On change select municipios
 $("#escuelas_select_municipio").on("change", () => {
+  notificacion_carga();
   request_post("/api/v1/escuelas/consultar_escuelas", {
     id_municipio: $("#escuelas_select_municipio").val(),
   }).then((response) => {
     const { success, response: escuelas } = response;
 
     if (success) {
+      notificacion("Escuelas consutadas");
       pintar_tabla_escuelas(escuelas);
     }
   });
@@ -423,8 +425,8 @@ $("#main").on("click", ".control_escuela", (event) => {
         const { success, message, response: escuela } = response;
 
         if (success) {
-          notificacion("Escuela consultada")
-          visualizar_escuela(escuela[0]);
+          notificacion("Escuela consultada");
+          visualizar_escuela(escuela);
         } else {
           Swal.fire("Error", message, "error");
         }

@@ -38,6 +38,24 @@ const pool_query = (query, msg_success, msg_failure) => {
   });
 };
 
+const pool_query_unique = (query, msg_success, msg_failure) => {
+  console.log(query);
+  return new Promise((resolve, reject) => {
+    pool.query(query, (error, results) => {
+      try {
+        if (error) {
+          console.log("Error query", error);
+          resolve(message_failure(msg_failure));
+        } else {
+          resolve(message_success(msg_success, results.rows[0]));
+        }
+      } catch (e) {
+        console.log("Try", e);
+      }
+    });
+  });
+};
+
 const pool_query_insert = (body, uuid) => {
   const llaves_body = Object.keys(body);
   const values_body = Object.values(body);
@@ -105,6 +123,7 @@ module.exports = {
   message_failure,
   message_success,
   pool_query,
+  pool_query_unique,
   pool_query_insert,
   pool_query_update,
   uuidv4,
