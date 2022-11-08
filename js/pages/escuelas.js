@@ -1,6 +1,27 @@
 let escuelas_datatable = null;
 let escuelas_local = [];
 
+//Notficaciones
+const notificacion = (mensaje) => {
+  Toastify({
+    text: mensaje,
+    duration: 3000,
+    close: true,
+    gravity: "top",
+    position: "right",
+  }).showToast();
+};
+
+const notificacion_carga = () => {
+  Toastify({
+    text: "Cargando...",
+    duration: 3000,
+    close: true,
+    gravity: "top",
+    position: "right",
+  }).showToast();
+};
+
 //Funciones
 const pintar_select_menu_municipios = (municipios) => {
   $("#escuelas_select_municipio").empty();
@@ -80,8 +101,6 @@ const validar_campo_escuela = (campo, nombre, row) => {
 };
 
 const visualizar_escuela = (escuela) => {
-  console.log(escuela);
-
   $("#modal_label").text("Información de la escuela");
 
   $("#modal_body").html(`<div class="row">
@@ -129,6 +148,7 @@ const visualizar_escuela = (escuela) => {
 };
 
 //Cargar municipios
+notificacion_carga();
 request_get("/api/v1/municipios/consultar_municipios").then((response) => {
   const { success, response: municipios } = response;
 
@@ -157,6 +177,7 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
       const { success, response: escuelas } = response;
 
       if (success) {
+        notificacion("Escuelas consutadas");
         pintar_tabla_escuelas(escuelas);
       }
     });
@@ -395,12 +416,14 @@ $("#main").on("click", ".control_escuela", (event) => {
 
   switch (type) {
     case "visualizar_escuela":
+      notificacion_carga();
       request_post("/api/v1/escuelas/consultar_escuela", {
         id_escuela: id,
       }).then((response) => {
         const { success, message, response: escuela } = response;
 
         if (success) {
+          notificacion("Escuela consultada")
           visualizar_escuela(escuela[0]);
         } else {
           Swal.fire("Error", message, "error");
@@ -408,6 +431,7 @@ $("#main").on("click", ".control_escuela", (event) => {
       });
       break;
     case "editar_escuela":
+      notificacion_carga();
       $("#form_edit_escuela")[0].reset();
       img_escuela_edit.removeFile();
 
@@ -426,6 +450,8 @@ $("#main").on("click", ".control_escuela", (event) => {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
+          notificacion_carga();
+
           request_post("/api/v1/escuelas/aliminar_escuela", {
             id_escuela: id,
           }).then((response) => {
