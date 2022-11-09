@@ -8,6 +8,7 @@ const { consultar_modelos } = require("./js/services/modelos");
 const { consultar_sostenimientos } = require("./js/services/sostenimientos");
 const { consultar_controles } = require("./js/services/controles");
 const { consultar_niveles, consultar_servicios, consultar_tipos } = require("./js/services/sistemas_educativos");
+const { consultar_usuario } = require("./js/services/usuarios");
 
 const app = express();
 
@@ -64,7 +65,7 @@ const routes_sesion = (route, session_true, session_false, log_out) => (request,
 //Carga de vistar
 app.get("/", routes_sesion("/", "dashboard.html", "login.html", false));
 app.get("/login.html", routes_sesion("/login.html", "dashboard.html", "login.html", false));
-app.get("/out.html", routes_sesion("/out.html", "login.html", "login.html", true));
+app.get("/logout.html", routes_sesion("/out.html", "login.html", "login.html", true));
 app.get("/dashboard.html", routes_sesion("/dashboard.html", "dashboard.html", "login.html", false));
 app.get("/escuelas.html", routes_sesion("/escuelas.html", "escuelas.html", "login.html", false));
 app.get("/usuarios.html", routes_sesion("/usuarios.html", "usuarios.html", "login.html", false));
@@ -95,3 +96,6 @@ app.get("/api/v1/sostenimientos/consultar_sostenimientos", consultar_sostenimien
 
 //Controles
 app.get("/api/v1/controles/consultar_controles", consultar_controles);
+
+//Usuario
+app.post("/api/v1/usuarios/consultar_usuario", consultar_usuario);
