@@ -2,6 +2,7 @@ let escuelas_datatable = null;
 let escuelas_local = [];
 let servicios_local = [];
 let tipos_local = [];
+let escuela_actual = null;
 
 //Notficaciones
 const notificacion = (mensaje) => {
@@ -90,7 +91,7 @@ const pintar_tabla_escuelas = (escuelas) => {
   });
 };
 
-const validar_campo_escuela = (campo, nombre, row) => {
+const validar_campo_modal_escuela = (campo, nombre, row) => {
   return `${
     campo
       ? `<div class='col-md-${row} col-12'>
@@ -110,27 +111,27 @@ const visualizar_escuela = (escuela) => {
                         </div>
                         <hr>
                         <div class="row">
-                          ${validar_campo_escuela(escuela.clave, "Clave", "6")}
-                          ${validar_campo_escuela(escuela.nombre, "Nombre", "6")}
-                          ${validar_campo_escuela(escuela.direccion, "Dirección", "6")}
-                          ${validar_campo_escuela(escuela.nom_municipio, "Municipio", "6")}
-                          ${validar_campo_escuela(escuela.nom_modelo, "Modelo", "6")}
-                          ${validar_campo_escuela(escuela.nom_control, "Control", "6")}
-                          ${validar_campo_escuela(escuela.nom_turno, "Turno", "6")}
-                          ${validar_campo_escuela(escuela.nom_nivel, "Nivel", "6")}
-                          ${validar_campo_escuela(escuela.pag_web, "Pagina web", "6")}
-                          ${validar_campo_escuela(escuela.telefono, "Telefono", "6")}
+                          ${validar_campo_modal_escuela(escuela.clave, "Clave", "6")}
+                          ${validar_campo_modal_escuela(escuela.nombre, "Nombre", "6")}
+                          ${validar_campo_modal_escuela(escuela.direccion, "Dirección", "6")}
+                          ${validar_campo_modal_escuela(escuela.nom_municipio, "Municipio", "6")}
+                          ${validar_campo_modal_escuela(escuela.nom_modelo, "Modelo", "6")}
+                          ${validar_campo_modal_escuela(escuela.nom_control, "Control", "6")}
+                          ${validar_campo_modal_escuela(escuela.nom_turno, "Turno", "6")}
+                          ${validar_campo_modal_escuela(escuela.nom_nivel, "Nivel", "6")}
+                          ${validar_campo_modal_escuela(escuela.pag_web, "Pagina web", "6")}
+                          ${validar_campo_modal_escuela(escuela.telefono, "Telefono", "6")}
                         </div>
                         <hr>
                         <div class="row">
-                          ${validar_campo_escuela(escuela.alum_muj, "Alumnos (Mujeres)", "4")}
-                          ${validar_campo_escuela(escuela.alum_hom, "Alumnos (Hombres)", "4")}
-                          ${validar_campo_escuela(escuela.alum_muj + escuela.alum_hom, "Alumnos (Total)", "4")}
-                          ${validar_campo_escuela(escuela.doc_muj, "Docentes (Mujeres)", "4")}
-                          ${validar_campo_escuela(escuela.doc_hom, "Docentes (Hombres)", "4")}
-                          ${validar_campo_escuela(escuela.doc_muj + escuela.doc_hom, "Docentes (Total)", "4")}
-                          ${validar_campo_escuela(escuela.aulas_exist, "Aulas (Existentes)", "4")}
-                          ${validar_campo_escuela(escuela.aulas_uso, "Aulas (En uso)", "4")}
+                          ${validar_campo_modal_escuela(escuela.alum_muj, "Alumnos (Mujeres)", "4")}
+                          ${validar_campo_modal_escuela(escuela.alum_hom, "Alumnos (Hombres)", "4")}
+                          ${validar_campo_modal_escuela(escuela.alum_muj + escuela.alum_hom, "Alumnos (Total)", "4")}
+                          ${validar_campo_modal_escuela(escuela.doc_muj, "Docentes (Mujeres)", "4")}
+                          ${validar_campo_modal_escuela(escuela.doc_hom, "Docentes (Hombres)", "4")}
+                          ${validar_campo_modal_escuela(escuela.doc_muj + escuela.doc_hom, "Docentes (Total)", "4")}
+                          ${validar_campo_modal_escuela(escuela.aulas_exist, "Aulas (Existentes)", "4")}
+                          ${validar_campo_modal_escuela(escuela.aulas_uso, "Aulas (En uso)", "4")}
                         </div>
                         <hr>
                         <div class="col-12">
@@ -149,6 +150,41 @@ const visualizar_escuela = (escuela) => {
   $("#modal_datos_escuela").click();
 };
 
+const validar_campo_edit_escuela = (campo, id) => {
+  if (campo && $(`#${id}`).length > 0) {
+    $(`#${id}`).val(campo);
+  }
+};
+
+const editar_escuela = (escuela) => {
+  $("#form_edit_escuela")[0].reset();
+  img_escuela_edit.removeFile();
+
+  validar_campo_edit_escuela(escuela.clave, "clave_centro_edit");
+  validar_campo_edit_escuela(escuela.nombre, "nombre_centro_edit");
+  validar_campo_edit_escuela(escuela.pag_web, "pagina_edit");
+  validar_campo_edit_escuela(escuela.telefono, "telefono_edit");
+  validar_campo_edit_escuela(escuela.alum_muj, "alumnos_mujeres_edit");
+  validar_campo_edit_escuela(escuela.alum_hom, "alumnos_hombres_edit");
+  validar_campo_edit_escuela(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_edit");
+  validar_campo_edit_escuela(escuela.doc_muj, "docentes_mujeres_edit");
+  validar_campo_edit_escuela(escuela.doc_hom, "docentes_hombres_edit");
+  validar_campo_edit_escuela(escuela.doc_hom + escuela.doc_muj, "docentes_totales_edit");
+  validar_campo_edit_escuela(escuela.aulas_exist, "aulas_existentes_edit");
+  validar_campo_edit_escuela(escuela.aulas_uso, "aulas_uso_edit");
+  validar_campo_edit_escuela(escuela.turno_id, "turno_edit");
+  validar_campo_edit_escuela(escuela.control_id, "control_edit");
+  validar_campo_edit_escuela(escuela.modelo_id, "modelo_edit");
+  validar_campo_edit_escuela(escuela.tipo_id, "tipo_edit");
+  validar_campo_edit_escuela(escuela.servicio_educativo_id, "servicio_edit");
+  validar_campo_edit_escuela(escuela.sostenimiento_id, "sostenimiento_edit");
+  validar_campo_edit_escuela(escuela.municipio_id, "municipio_edit");
+  validar_campo_edit_escuela(escuela.nivel_id, "nivel_edit");
+
+  $("#menu_escuelas").addClass("d-none");
+  $("#editar_escuela").removeClass("d-none");
+};
+
 //Cargar municipios
 notificacion_carga();
 request_get("/api/v1/municipios/consultar_municipios").then((response) => {
@@ -156,11 +192,13 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
 
   if (success) {
     $(`#municipio`).empty();
+    $(`#municipio_edit`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     municipios.forEach((municipio) => (opciones_select += ` <option value="${municipio.id_municipio}">${municipio.nom_municipio}</option> `));
 
     $(`#municipio`).append(opciones_select);
+    $(`#municipio_edit`).append(opciones_select);
 
     pintar_select_menu_municipios(municipios);
 
@@ -201,11 +239,13 @@ request_get("/api/v1/turnos/consultar_turnos").then((response) => {
 
   if (success) {
     $(`#turno`).empty();
+    $(`#turno_edit`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     turnos.forEach((turno) => (opciones_select += ` <option value="${turno.id_turno}">${turno.nom_turno}</option> `));
 
     $(`#turno`).append(opciones_select);
+    $(`#turno_edit`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -217,11 +257,13 @@ request_get("/api/v1/sistemas_educativos/consultar_niveles").then((response) => 
 
   if (success) {
     $(`#nivel`).empty();
+    $(`#nivel_edit`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     niveles.forEach((nivel) => (opciones_select += ` <option value="${nivel.id_nivel}">${nivel.nom_nivel}</option> `));
 
     $(`#nivel`).append(opciones_select);
+    $(`#nivel_edit`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -235,11 +277,13 @@ request_get("/api/v1/sistemas_educativos/consultar_servicios").then((response) =
     servicios_local = servicios;
 
     $(`#servicio`).empty();
+    $(`#servicio_edit`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     servicios.forEach((servicio) => (opciones_select += ` <option value="${servicio.id_servicio_educativo}">${servicio.nom_servicio_educativo}</option> `));
 
     $(`#servicio`).append(opciones_select);
+    $(`#servicio_edit`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -253,11 +297,13 @@ request_get("/api/v1/sistemas_educativos/consultar_tipos").then((response) => {
     tipos_local = tipos;
 
     $(`#tipo`).empty();
+    $(`#tipo_edit`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     tipos.forEach((tipo) => (opciones_select += ` <option value="${tipo.id_tipo}">${tipo.nom_tipo}</option> `));
 
     $(`#tipo`).append(opciones_select);
+    $(`#tipo_edit`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -269,11 +315,13 @@ request_get("/api/v1/controles/consultar_controles").then((response) => {
 
   if (success) {
     $(`#control`).empty();
+    $(`#control_edit`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     controles.forEach((control) => (opciones_select += ` <option value="${control.id_control}">${control.nom_control}</option> `));
 
     $(`#control`).append(opciones_select);
+    $(`#control_edit`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -285,11 +333,13 @@ request_get("/api/v1/sostenimientos/consultar_sostenimientos").then((response) =
 
   if (success) {
     $(`#sostenimiento`).empty();
+    $(`#sostenimiento_edit`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     sostenimientos.forEach((sostenimiento) => (opciones_select += ` <option value="${sostenimiento.id_sostenimiento}">${sostenimiento.nom_sostenimiento}</option> `));
 
     $(`#sostenimiento`).append(opciones_select);
+    $(`#sostenimiento_edit`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -301,11 +351,13 @@ request_get("/api/v1/modelos/consultar_modelos").then((response) => {
 
   if (success) {
     $(`#modelo`).empty();
+    $(`#modelo_edit`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     modelos.forEach((modelo) => (opciones_select += ` <option value="${modelo.id_modelo}">${modelo.nom_modelo}</option> `));
 
     $(`#modelo`).append(opciones_select);
+    $(`#modelo_edit`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -501,32 +553,6 @@ $("#btn_cancelar_escuela").click(() => {
   $("#nueva_escuela").addClass("d-none");
 });
 
-//On change tipo de educación
-$("#educacion_edit").on("change", () => {
-  $("#contenedor_educacion_edit").addClass("d-none");
-  $("#contenedor_educacion_edit").empty();
-
-  if ($("#educacion_edit").val() === "Básica") {
-    $("#contenedor_educacion_edit").removeClass("d-none");
-    $("#contenedor_educacion_edit").append(`<div class="form-group mandatory">
-                                        <label for="educacion_edit" class="form-label"
-                                          >Nivel educativo
-                                        </label>
-                                        <select
-                                          id="educacion_edit"
-                                          name="educacion_edit"
-                                          class="form-select"
-                                          data-parsley-required="true"
-                                        >
-                                          <option value="">Elige una opción</option>
-                                          <option value="Preescolar">Preescolar</option>
-                                          <option value="Primaria">Primaria</option>
-                                          <option value="Secundaria">Secundaria</option>
-                                        </select>
-                                      </div>`);
-  }
-});
-
 //On change totales alumnos
 $("#alumnos_mujeres_edit").on("input", (event) => {
   const input_val = event.currentTarget.value;
@@ -555,6 +581,8 @@ $("#main").on("click", ".control_escuela", (event) => {
   const type = button.dataset.type;
   const id = button.dataset.id;
 
+  escuela_actual = id;
+
   switch (type) {
     case "visualizar_escuela":
       notificacion_carga();
@@ -573,11 +601,18 @@ $("#main").on("click", ".control_escuela", (event) => {
       break;
     case "editar_escuela":
       notificacion_carga();
-      $("#form_edit_escuela")[0].reset();
-      img_escuela_edit.removeFile();
+      request_post("/api/v1/escuelas/consultar_escuela", {
+        id_escuela: id,
+      }).then((response) => {
+        const { success, message, response: escuela } = response;
 
-      $("#menu_escuelas").addClass("d-none");
-      $("#editar_escuela").removeClass("d-none");
+        if (success) {
+          notificacion("Escuela consultada");
+          editar_escuela(escuela);
+        } else {
+          Swal.fire("Error", message, "error");
+        }
+      });
       break;
     case "eliminar_escuela":
       Swal.fire({
@@ -634,18 +669,57 @@ $("#form_edit_escuela").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_edit_escuela").click(() => {
   if (validar_form_edit_escuela()) {
-    Swal.fire({
-      icon: "success",
-      title: "Exito",
-      text: "Escuela actualizada",
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "Aceptar",
+    notificacion_carga();
+    request_post("/api/v1/escuelas/editar_escuela", {
+      id_escuela: escuela_actual,
+      clave: $("#clave_centro_edit").val(),
+      nombre: $("#nombre_centro_edit").val(),
+      pag_web: $("#pagina_edit").val(),
+      telefono: $("#telefono_edit").val(),
+      alum_muj: $("#alumnos_mujeres_edit").val(),
+      alum_hom: $("#alumnos_hombres_edit").val(),
+      doc_muj: $("#docentes_mujeres_edit").val(),
+      doc_hom: $("#docentes_hombres_edit").val(),
+      aulas_exist: $("#aulas_existentes_edit").val(),
+      aulas_uso: $("#aulas_uso_edit").val(),
+      turno_id: $("#turno_edit").val(),
+      control_id: $("#control_edit").val(),
+      modelo_id: $("#modelo_edit").val(),
+      tipo_id: $("#tipo_edit").val(),
+      servicio_educativo_id: $("#servicio_edit").val(),
+      sostenimiento_id: $("#sostenimiento_edit").val(),
+      municipio_id: $("#municipio_edit").val(),
+      nivel_id: $("#nivel_edit").val(),
+    }).then((response) => {
+      const { success, message } = response;
+
+      if (success) {
+        request_post("/api/v1/escuelas/consultar_escuelas", {
+          id_municipio: $("#escuelas_select_municipio").val(),
+        }).then((response) => {
+          const { success, response: escuelas } = response;
+
+          if (success) {
+            pintar_tabla_escuelas(escuelas);
+          }
+        });
+
+        Swal.fire({
+          icon: "success",
+          title: "Exito",
+          text: "Escuela actualizada",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Aceptar",
+        });
+
+        $("#form_edit_escuela")[0].reset();
+        img_escuela_edit.removeFile();
+
+        $("#menu_escuelas").removeClass("d-none");
+        $("#editar_escuela").addClass("d-none");
+      } else {
+        Swal.fire("Error", message, "error");
+      }
     });
-
-    $("#form_nueva_escuela")[0].reset();
-    img_escuela.removeFile();
-
-    $("#menu_escuelas").removeClass("d-none");
-    $("#nueva_escuela").addClass("d-none");
   }
 });

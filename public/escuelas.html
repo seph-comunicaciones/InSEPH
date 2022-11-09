@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard - Mazer Admin Dashboard</title>
+    <title>Escuelas</title>
 
     <link rel="stylesheet" href="/css/main/app.css" />
     <link rel="stylesheet" href="/css/main/app-dark.css" />
@@ -157,7 +157,7 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="turno" class="form-label">Tipo de turno </label>
-                      <select id="turno" name="turno" class="form-select" data-parsley-required="true"></select>
+                      <select id="turno" name="turno" class="form-select validacion" data-parsley-required="true"></select>
                     </div>
                   </div>
 
@@ -171,42 +171,42 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="nivel" class="form-label">Nivel de educación </label>
-                      <select id="nivel" name="nivel" class="form-select" data-parsley-required="true"></select>
+                      <select id="nivel" name="nivel" class="form-select validacion" data-parsley-required="true"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="servicio" class="form-label">Servicio educativo </label>
-                      <select id="servicio" name="servicio" class="form-select" data-parsley-required="true"></select>
+                      <select id="servicio" name="servicio" class="form-select validacion" data-parsley-required="true"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="tipo" class="form-label">Tipo educativo </label>
-                      <select id="tipo" name="tipo" class="form-select" data-parsley-required="true"></select>
+                      <select id="tipo" name="tipo" class="form-select validacion" data-parsley-required="true"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="control" class="form-label">Tipo de control </label>
-                      <select id="control" name="control" class="form-select" data-parsley-required="true"></select>
+                      <select id="control" name="control" class="form-select validacion" data-parsley-required="true"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="sostenimiento" class="form-label">Tipo de sostenimiento </label>
-                      <select id="sostenimiento" name="sostenimiento" class="form-select" data-parsley-required="true"></select>
+                      <select id="sostenimiento" name="sostenimiento" class="form-select validacion" data-parsley-required="true"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="modelo" class="form-label">Tipo de modelo </label>
-                      <select id="modelo" name="modelo" class="form-select" data-parsley-required="true"></select>
+                      <select id="modelo" name="modelo" class="form-select validacion" data-parsley-required="true"></select>
                     </div>
                   </div>
 
@@ -380,12 +380,7 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="turno_edit" class="form-label">Tipo de turno </label>
-                      <select id="turno_edit" name="turno_edit" class="form-select" data-parsley-required="true">
-                        <option value="">Elige una opción</option>
-                        <option value="Matutino">Matutino</option>
-                        <option value="Vespertino">Vespertino</option>
-                        <option value="Nocturno">Nocturno</option>
-                      </select>
+                      <select id="turno_edit" name="turno_edit" class="form-select validacion_edit" data-parsley-required="true"></select>
                     </div>
                   </div>
 
@@ -398,45 +393,43 @@
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="educacion_edit" class="form-label">Tipo de educación </label>
-                      <select id="educacion_edit" name="educacion_edit" class="form-select" data-parsley-required="true">
-                        <option value="">Elige una opción</option>
-                        <option value="Básica">Básica</option>
-                        <option value="Media superior">Media superior</option>
-                        <option value="Superior">Superior</option>
-                      </select>
+                      <label for="nivel_edit" class="form-label">Nivel de educación </label>
+                      <select id="nivel_edit" name="nivel_edit" class="form-select validacion_edit" data-parsley-required="true"></select>
                     </div>
                   </div>
 
-                  <div class="col-md-6 col-12 d-none" id="contenedor_educacion_edit"></div>
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="educativo_edit" class="form-label">Servicio educativo </label>
-                      <select id="educativo_edit" name="educativo_edit" class="form-select" data-parsley-required="true">
-                        <option value="">Elige una opción</option>
-                        <option value="Superior">General</option>
-                      </select>
+                      <label for="servicio_edit" class="form-label">Servicio educativo </label>
+                      <select id="servicio_edit" name="servicio_edit" class="form-select validacion_edit" data-parsley-required="true"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="tipo_edit" class="form-label">Tipo educativo </label>
+                      <select id="tipo_edit" name="tipo_edit" class="form-select validacion_edit" data-parsley-required="true"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="control_edit" class="form-label">Tipo de control </label>
-                      <select id="control_edit" name="control_edit" class="form-select" data-parsley-required="true">
-                        <option value="">Elige una opción</option>
-                        <option value="Superior">Público</option>
-                        <option value="Superior">Privado</option>
-                      </select>
+                      <select id="control_edit" name="control_edit" class="form-select validacion_edit" data-parsley-required="true"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="control_edit" class="form-label">Tipo de sostenimiento </label>
-                      <select id="control_edit" name="control_edit" class="form-select" data-parsley-required="true">
-                        <option value="">Elige una opción</option>
-                        <option value="Superior">Federal Transferido</option>
-                      </select>
+                      <label for="sostenimiento_edit" class="form-label">Tipo de sostenimiento </label>
+                      <select id="sostenimiento_edit" name="sostenimiento_edit" class="form-select validacion_edit" data-parsley-required="true"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="modelo_edit" class="form-label">Tipo de modelo </label>
+                      <select id="modelo_edit" name="modelo_edit" class="form-select validacion_edit" data-parsley-required="true"></select>
                     </div>
                   </div>
 
@@ -450,19 +443,14 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="municipio_edit" class="form-label">Municipio </label>
-                      <select id="municipio_edit" name="municipio_edit" class="form-select validacion_edit" data-parsley-required="true">
-                        <option value="">Elige una opción</option>
-                        <option value="PACHUCA DE SOTO">PACHUCA DE SOTO</option>
-                        <option value="TULANCINGO">TULANCINGO</option>
-                        <option value="HUEHETLA">HUEHETLA</option>
-                      </select>
+                      <select id="municipio_edit" name="municipio_edit" class="form-select validacion_edit" data-parsley-required="true"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12 d-none">
-                    <div class="form-group mandatory">
+                    <div class="form-group">
                       <label for="municipio_maps_edit" class="form-label">Municipio </label>
-                      <input type="text" id="municipio_maps_edit" class="form-control validacion_edit" placeholder="Municipio" name="municipio_maps_edit" data-parsley-required="true" />
+                      <input type="text" id="municipio_maps_edit" class="form-control" placeholder="Municipio" name="municipio_maps_edit" data-parsley-required="true" />
                     </div>
                   </div>
 
@@ -518,56 +506,56 @@
                   <div class="col-md-4 col-12">
                     <div class="form-group mandatory">
                       <label for="alumnos_hombres_edit" class="form-label">Alumnos (Hombres) </label>
-                      <input type="number" id="alumnos_hombres_edit" placeholder="0" step="1" min="1" class="form-control validacion_edit" name="alumnos_hombres_edit" data-parsley-required="true" />
+                      <input type="number" id="alumnos_hombres_edit" placeholder="0" step="1" min="0" class="form-control validacion_edit" name="alumnos_hombres_edit" data-parsley-required="true" />
                     </div>
                   </div>
 
                   <div class="col-md-4 col-12">
                     <div class="form-group mandatory">
                       <label for="alumnos_mujeres_edit" class="form-label">Alumnos (Mujeres) </label>
-                      <input type="number" id="alumnos_mujeres_edit" placeholder="0" step="1" min="1" class="form-control validacion_edit" name="alumnos_mujeres_edit" data-parsley-required="true" />
+                      <input type="number" id="alumnos_mujeres_edit" placeholder="0" step="1" min="0" class="form-control validacion_edit" name="alumnos_mujeres_edit" data-parsley-required="true" />
                     </div>
                   </div>
 
                   <div class="col-md-4 col-12">
                     <div class="form-group mandatory">
-                      <label for="alumnos_totale_edits" class="form-label">Alumnos (Totales) </label>
-                      <input type="number" id="alumnos_totales_edit" value="0" step="1" min="1" class="form-control validacion_edit" name="alumnos_totales_edit" disabled data-parsley-required="true" />
+                      <label for="alumnos_totales_edit" class="form-label">Alumnos (Totales) </label>
+                      <input type="number" id="alumnos_totales_edit" value="0" step="1" min="0" class="form-control validacion_edit" name="alumnos_totales_edit" disabled data-parsley-required="true" />
                     </div>
                   </div>
 
                   <div class="col-md-4 col-12">
                     <div class="form-group mandatory">
                       <label for="docentes_hombres_edit" class="form-label">Docentes (Hombres) </label>
-                      <input type="number" id="docentes_hombres_edit" placeholder="0" step="1" min="1" class="form-control validacion_edit" name="docentes_hombres_edit" data-parsley-required="true" />
+                      <input type="number" id="docentes_hombres_edit" placeholder="0" step="1" min="0" class="form-control validacion_edit" name="docentes_hombres_edit" data-parsley-required="true" />
                     </div>
                   </div>
 
                   <div class="col-md-4 col-12">
-                    <div class="form-group mandatory_edit">
-                      <label for="docentes_mujeres" class="form-label">Docentes (Mujeres) </label>
-                      <input type="number" id="docentes_mujeres_edit" placeholder="0" step="1" min="1" class="form-control validacion_edit" name="docentes_mujeres_edit" data-parsley-required="true" />
+                    <div class="form-group mandatory">
+                      <label for="docentes_mujeres_edit" class="form-label">Docentes (Mujeres) </label>
+                      <input type="number" id="docentes_mujeres_edit" placeholder="0" step="1" min="0" class="form-control validacion_edit" name="docentes_mujeres_edit" data-parsley-required="true" />
                     </div>
                   </div>
 
                   <div class="col-md-4 col-12">
-                    <div class="form-group mandatory_edit">
-                      <label for="docentes_totales" class="form-label">Docentes (Totales) </label>
-                      <input type="number" id="docentes_totales_edit" value="0" step="1" min="1" class="form-control validacion_edit" name="docentes_totales_edit" disabled data-parsley-required="true" />
+                    <div class="form-group mandatory">
+                      <label for="docentes_totales_edit" class="form-label">Docentes (Totales) </label>
+                      <input type="number" id="docentes_totales_edit" value="0" step="1" min="0" class="form-control validacion_edit" name="docentes_totales_edit" disabled data-parsley-required="true" />
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="aulas_existentes_edit" class="form-label">Aulas Existentes </label>
-                      <input type="number" id="aulas_existentes_edit" placeholder="0" step="1" min="1" class="form-control validacion_edit" name="aulas_existentes_edit" data-parsley-required="true" />
+                      <input type="number" id="aulas_existentes_edit" placeholder="0" step="1" min="0" class="form-control validacion_edit" name="aulas_existentes_edit" data-parsley-required="true" />
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="aulas_uso_edit" class="form-label">Aulas En Uso </label>
-                      <input type="number" id="aulas_uso_edit" placeholder="0" step="1" min="1" class="form-control validacion_edit" name="aulas_uso_edit" data-parsley-required="true" />
+                      <input type="number" id="aulas_uso_edit" placeholder="0" step="1" min="0" class="form-control validacion_edit" name="aulas_uso_edit" data-parsley-required="true" />
                     </div>
                   </div>
 
