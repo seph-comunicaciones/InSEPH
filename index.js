@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const bodyParser = require("body-parser");
 const { consultar_escuelas, agregar_escuela, consultar_escuela, aliminar_escuela, editar_escuela } = require("./js/services/escuelas");
 const { consultar_municipios } = require("./js/services/municipios");
@@ -15,12 +16,58 @@ app.use("/extensions", express.static(__dirname + "/extensions"));
 app.use("/fonts", express.static(__dirname + "/fonts"));
 app.use("/images", express.static(__dirname + "/images"));
 app.use("/css", express.static(__dirname + "/css"));
-app.use(express.static(__dirname + "/public"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.listen(process.env.PORT || 3000);
+
+//Session cookie
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "575c4bd0-2e5c-4102-a1cf-c49b1ecb6b3b",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      expires: Date.now() + 30 * 24 * 60 * 60 * 1000,
+      id_usuario: parseInt(Math.random() * (10000 - 1) + 1),
+      login: true,
+    },
+  })
+);
+
+let my_session;
+
+app.use((request, response, next) => {
+  my_session = request.session;
+  my_session.login = my_session.cookie.login ? my_session.cookie.login : my_session.login;
+  my_session.id_usuario = my_session.cookie.id_usuario ? my_session.cookie.id_usuario : my_session.id_usuario;
+  next();
+});
+
+const routes_sesion = (route, session_true, session_false, log_out) => (request, response) => {
+  if (log_out) {
+    request.session.login = false;
+    request.session.id_usuario = null;
+  }
+
+  console.log(request.session);
+
+  if (request.session.login) {
+    response.sendFile(__dirname + `/public/${session_true}`);
+  } else {
+    response.sendFile(__dirname + `/public/${session_false}`);
+  }
+};
+
+//Carga de vistar
+app.get("/", routes_sesion("/", "dashboard.html", "login.html", false));
+app.get("/login.html", routes_sesion("/login.html", "dashboard.html", "login.html", false));
+app.get("/out.html", routes_sesion("/out.html", "login.html", "login.html", true));
+app.get("/dashboard.html", routes_sesion("/dashboard.html", "dashboard.html", "login.html", false));
+app.get("/escuelas.html", routes_sesion("/escuelas.html", "escuelas.html", "login.html", false));
+app.get("/usuarios.html", routes_sesion("/usuarios.html", "usuarios.html", "login.html", false));
 
 //Escuelas
 app.post("/api/v1/escuelas/consultar_escuelas", consultar_escuelas);
