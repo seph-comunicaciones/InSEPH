@@ -1,14 +1,14 @@
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const { consultar_escuelas, agregar_escuela, consultar_escuela, aliminar_escuela, editar_escuela } = require("./js/services/escuelas");
-const { consultar_municipios } = require("./js/services/municipios");
-const { consultar_turnos } = require("./js/services/turnos");
-const { consultar_modelos } = require("./js/services/modelos");
-const { consultar_sostenimientos } = require("./js/services/sostenimientos");
-const { consultar_controles } = require("./js/services/controles");
-const { consultar_niveles, consultar_servicios, consultar_tipos } = require("./js/services/sistemas_educativos");
-const { consultar_usuario } = require("./js/services/usuarios");
+const {consultar_escuelas, agregar_escuela, consultar_escuela, aliminar_escuela, editar_escuela} = require("./js/services/escuelas");
+const {consultar_municipios} = require("./js/services/municipios");
+const {consultar_turnos} = require("./js/services/turnos");
+const {consultar_modelos} = require("./js/services/modelos");
+const {consultar_sostenimientos} = require("./js/services/sostenimientos");
+const {consultar_controles} = require("./js/services/controles");
+const {consultar_niveles, consultar_servicios, consultar_tipos} = require("./js/services/sistemas_educativos");
+const {consultar_usuario} = require("./js/services/usuarios");
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use("/fonts", express.static(__dirname + "/fonts"));
 app.use("/images", express.static(__dirname + "/images"));
 app.use("/css", express.static(__dirname + "/css"));
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.listen(process.env.PORT || 3000);
@@ -32,8 +32,8 @@ app.use(
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       expires: Date.now() + 30 * 24 * 60 * 60 * 1000,
-      id_usuario: parseInt(Math.random() * (10000 - 1) + 1),
-      login: true,
+      id_usuario: 0,
+      login: false,
     },
   })
 );
@@ -47,10 +47,10 @@ app.use((request, response, next) => {
   next();
 });
 
-const routes_sesion = (route, session_true, session_false, log_out) => (request, response) => {
+const routes_session = (route, session_true, session_false, log_out) => (request, response) => {
   if (log_out) {
     request.session.login = false;
-    request.session.id_usuario = null;
+    request.session.id_usuario = 0;
   }
 
   console.log(request.session);
@@ -62,13 +62,13 @@ const routes_sesion = (route, session_true, session_false, log_out) => (request,
   }
 };
 
-//Carga de vistar
-app.get("/", routes_sesion("/", "dashboard.html", "login.html", false));
-app.get("/login.html", routes_sesion("/login.html", "dashboard.html", "login.html", false));
-app.get("/logout.html", routes_sesion("/out.html", "login.html", "login.html", true));
-app.get("/dashboard.html", routes_sesion("/dashboard.html", "dashboard.html", "login.html", false));
-app.get("/escuelas.html", routes_sesion("/escuelas.html", "escuelas.html", "login.html", false));
-app.get("/usuarios.html", routes_sesion("/usuarios.html", "usuarios.html", "login.html", false));
+//Carga de vistas
+app.get("/", routes_session("/", "dashboard.html", "login.html", false));
+app.get("/login.html", routes_session("/login.html", "dashboard.html", "login.html", false));
+app.get("/logout.html", routes_session("/out.html", "login.html", "login.html", true));
+app.get("/dashboard.html", routes_session("/dashboard.html", "dashboard.html", "login.html", false));
+app.get("/escuelas.html", routes_session("/escuelas.html", "escuelas.html", "login.html", false));
+app.get("/usuarios.html", routes_session("/usuarios.html", "usuarios.html", "login.html", false));
 
 //Escuelas
 app.post("/api/v1/escuelas/consultar_escuelas", consultar_escuelas);

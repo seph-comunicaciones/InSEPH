@@ -14,8 +14,10 @@ const consultar_usuario = async (request, response) => {
   const query = await pool_query_unique(`Select * From usuario Where usuario = '${usuario}' And Contrasena = '${contrasena}' And activo = true`, "Usuario consultado existosamente", "Error, no se pudo consultar el usuario");
 
   if (!query.response) {
-    return response.status(400).json(message_failure("Usuario o contraseña no encontrados"));
+    return response.status(200).json(message_failure("Usuario o contraseña no encontrados"));
   } else if (query.success) {
+    request.session.login = true;
+    request.session.id_usuario = query.response.id_usuario;
     return response.status(200).json(query);
   } else {
     return response.status(400).json(query);

@@ -4,7 +4,8 @@ $.extend(window.Parsley.options, {
   excluded:
     "input[type=button], input[type=submit], input[type=reset], .search, .ignore",
   triggerAfterFailure: "change blur",
-  errorsContainer: function (element) {},
+  errorsContainer: function (element) {
+  },
   trigger: "change",
   successClass: "is-valid",
   errorClass: "is-invalid",
@@ -19,21 +20,21 @@ $.extend(window.Parsley.options, {
 });
 
 Parsley.on("field:validated", function (el) {
-  var elNode = $(el)[0];
+  let elNode = $(el)[0];
   if (elNode && !elNode.isValid()) {
-    var rqeuiredValResult = elNode.validationResult.filter(function (vr) {
+    let rqeuiredValResult = elNode.validationResult.filter(function (vr) {
       return vr.assert.name === "required";
     });
     if (rqeuiredValResult.length > 0) {
-      var fieldNode = $(elNode.element);
-      var formGroupNode = fieldNode.closest(".form-group");
-      var lblNode = formGroupNode.find(".form-label:first");
+      let fieldNode = $(elNode.element);
+      let formGroupNode = fieldNode.closest(".form-group");
+      let lblNode = formGroupNode.find(".form-label:first");
       if (lblNode.length > 0) {
-        var errorNode = formGroupNode.find(
+        let errorNode = formGroupNode.find(
           "div.parsley-error span[class*=parsley-]"
         );
         if (errorNode.length > 0) {
-          var lblText = lblNode.text();
+          let lblText = lblNode.text();
           if (lblText) {
             errorNode.html(lblText + " es necesario.");
           }
@@ -48,8 +49,24 @@ $("#form_login").on("submit", (event) => event.preventDefault());
 
 $("#btn_login").click(() => {
   if ($("#usuario").val().length > 0 && $("#password").val().length > 0) {
-    const a = document.createElement("a");
-    a.href = "dashboard.html";
-    a.click();
+    request_post("/api/v1/usuarios/consultar_usuario", {
+      "usuario": $("#usuario").val(),
+      "contrasena": $("#password").val()
+    }).then((response) => {
+      const {success, message} = response;
+      if (success) {
+        const a = document.createElement("a");
+        a.href = "dashboard.html";
+        a.click();
+      } else {
+        Toastify({
+          text: message,
+          duration: 3000,
+          close: true,
+          gravity: "top",
+          position: "right",
+        }).showToast();
+      }
+    })
   }
 });
