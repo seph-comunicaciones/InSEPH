@@ -224,7 +224,7 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
       const { success, response: escuelas } = response;
 
       if (success) {
-        notificacion("Escuelas consutadas");
+        notificacion("Escuelas consultadas");
         pintar_tabla_escuelas(escuelas);
       }
     });
@@ -372,7 +372,7 @@ $("#escuelas_select_municipio").on("change", () => {
     const { success, response: escuelas } = response;
 
     if (success) {
-      notificacion("Escuelas consutadas");
+      notificacion("Escuelas consultadas");
       pintar_tabla_escuelas(escuelas);
     }
   });

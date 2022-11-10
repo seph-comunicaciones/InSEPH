@@ -8,7 +8,7 @@ const {consultar_modelos} = require("./js/services/modelos");
 const {consultar_sostenimientos} = require("./js/services/sostenimientos");
 const {consultar_controles} = require("./js/services/controles");
 const {consultar_niveles, consultar_servicios, consultar_tipos} = require("./js/services/sistemas_educativos");
-const {consultar_usuario} = require("./js/services/usuarios");
+const {consultar_usuario, consultar_usuarios} = require("./js/services/usuarios");
 
 const app = express();
 
@@ -24,30 +24,32 @@ app.use(bodyParser.json());
 app.listen(process.env.PORT || 3000);
 
 //Session cookie
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "575c4bd0-2e5c-4102-a1cf-c49b1ecb6b3b",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      expires: Date.now() + 30 * 24 * 60 * 60 * 1000,
-      id_usuario: 0,
-      login: false,
-    },
-  })
-);
+app.use(session({
+  secret: process.env.SESSION_SECRET || "575c4bd0-2e5c-4102-a1cf-c49b1ecb6b3b",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    expires: Date.now() + 30 * 24 * 60 * 60 * 1000,
+    id_usuario: 0,
+    rol_id: 0,
+    login: false,
+  },
+}));
 
 let my_session;
 
 app.use((request, response, next) => {
   my_session = request.session;
   my_session.login = my_session.cookie.login ? my_session.cookie.login : my_session.login;
+  my_session.rol_id = my_session.cookie.rol_id ? my_session.cookie.rol_id : my_session.rol_id;
   my_session.id_usuario = my_session.cookie.id_usuario ? my_session.cookie.id_usuario : my_session.id_usuario;
   next();
 });
 
 const routes_session = (route, session_true, session_false, log_out) => (request, response) => {
+  console.log("Accediendo a la ruta", route)
+
   if (log_out) {
     request.session.login = false;
     request.session.id_usuario = 0;
@@ -55,10 +57,34 @@ const routes_session = (route, session_true, session_false, log_out) => (request
 
   console.log(request.session);
 
-  if (request.session.login) {
-    response.sendFile(__dirname + `/public/${session_true}`);
+  if (request.session.rol_id && request.session.rol_id !== 1) {
+    if (request.session.login) {
+      switch (route) {
+        case "/dashboard.html":
+          response.sendFile(__dirname + `/public/dashboard_us.html`);
+          break
+        case "/escuelas.html":
+          response.sendFile(__dirname + `/public/escuelas_us.html`);
+          break
+        case "/usuarios.html":
+          response.sendFile(__dirname + `/public/dashboard_us.html`);
+          break
+        case "/logout.html":
+          response.sendFile(__dirname + `/public/login.html`);
+          break
+        default:
+          response.sendFile(__dirname + `/public/dashboard_us.html`);
+      }
+    } else {
+      response.sendFile(__dirname + `/public/${session_false}`);
+    }
+
   } else {
-    response.sendFile(__dirname + `/public/${session_false}`);
+    if (request.session.login) {
+      response.sendFile(__dirname + `/public/${session_true}`);
+    } else {
+      response.sendFile(__dirname + `/public/${session_false}`);
+    }
   }
 };
 
@@ -91,12 +117,13 @@ app.get("/api/v1/controles/consultar_controles", consultar_controles);
 
 //Usuario
 app.post("/api/v1/usuarios/consultar_usuario", consultar_usuario);
+app.post("/api/v1/usuarios/consultar_usuarios", consultar_usuarios);
 
 
 //Carga de vistas
 app.get("/", routes_session("/", "dashboard.html", "login.html", false));
 app.get("/login.html", routes_session("/login.html", "dashboard.html", "login.html", false));
-app.get("/logout.html", routes_session("/out.html", "login.html", "login.html", true));
+app.get("/logout.html", routes_session("/logout.html", "login.html", "login.html", true));
 app.get("/dashboard.html", routes_session("/dashboard.html", "dashboard.html", "login.html", false));
 app.get("/escuelas.html", routes_session("/escuelas.html", "escuelas.html", "login.html", false));
 app.get("/usuarios.html", routes_session("/usuarios.html", "usuarios.html", "login.html", false));

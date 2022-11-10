@@ -1,4 +1,83 @@
-//Validar que el formulario este lleno para enviar
+let escuelas_datatable
+let usuarios_locales
+
+//Notficaciones
+const notificacion = (mensaje) => {
+  Toastify({
+    text: mensaje,
+    duration: 3000,
+    close: true,
+    gravity: "top",
+    position: "right",
+  }).showToast();
+};
+
+const notificacion_carga = () => {
+  Toastify({
+    text: "Cargando...",
+    duration: 3000,
+    close: true,
+    gravity: "top",
+    position: "right",
+  }).showToast();
+};
+
+
+//Funciones
+const pintar_tabla_usuarios = (usuarios) => {
+  $("#container_table_usuarios").empty();
+  escuelas_datatable = null;
+  usuarios_locales = usuarios;
+
+  let table = `<table class="table" id="table_usuarios">
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Nombre (s)</th>
+                    <th>Apellidos</th>
+                    <th>Visualizar</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                  </tr>
+                </thead>
+                <tbody> `;
+
+  usuarios.forEach((usuario) => {
+    table += `<tr>
+                <td>${usuario.usuario}</td>
+                <td>${usuario.nombre}</td>
+                <td>${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
+                <td style="text-align: center">
+                  <button data-id="${usuario.id_usuario}" data-type="visualizar_usuario" class="btn btn-success control_usuario">
+                    <i class="bi bi-eye-fill"></i>
+                  </button>
+                </td>
+                <td style="text-align: center">
+                  <button data-id="${usuario.id_usuario}" data-type="editar_usuario" class="btn btn-primary control_usuario">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </td>
+                <td style="text-align: center">
+                  <button data-id="${usuario.id_usuario}" data-type="eliminar_usuario" class="btn btn-danger control_usuario">
+                    <i class="bi bi-trash3-fill"></i>
+                  </button>
+                </td>
+              </tr>`;
+  });
+
+  table += ` </tbody> 
+            </table>`;
+
+  $("#container_table_usuarios").append(table);
+
+  //Datatable
+  escuelas_datatable = $("#table_usuarios").DataTable({
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+    },
+  });
+}
+
 const validar_form_usuario = () => {
   for (let i = 0; i < $(".validacion").length; i++) {
     if (
@@ -25,12 +104,16 @@ const validar_form_edit_usuario = () => {
   return true;
 };
 
-//Datatable
-let jquery_datatable = $("#table_usuarios").DataTable({
-  language: {
-    url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-  },
-});
+notificacion_carga()
+//Cargas usuarios
+request_post("/api/v1/usuarios/consultar_usuarios", {}).then((response) => {
+  const {success, response: usuarios} = response;
+
+  if (success) {
+    notificacion("Usuarios consultados")
+    pintar_tabla_usuarios(usuarios)
+  }
+})
 
 //Validacion formulario
 $.extend(window.Parsley.options, {
@@ -38,7 +121,8 @@ $.extend(window.Parsley.options, {
   excluded:
     "input[type=button], input[type=submit], input[type=reset], .search, .ignore",
   triggerAfterFailure: "change blur",
-  errorsContainer: function (element) {},
+  errorsContainer: function (element) {
+  },
   trigger: "change",
   successClass: "is-valid",
   errorClass: "is-invalid",
