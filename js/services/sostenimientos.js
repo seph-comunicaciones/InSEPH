@@ -2,7 +2,7 @@ const { pool_query } = require("../functions/servicios");
 
 const consultar_sostenimientos = async (request, response) => {
   //Consulta query
-  const query = await pool_query("Select * From sostenimiento;", "Sostenimientos educativos consultados existosamente", "Error, no se pudieron consultar los sostenimientos educativo");
+  const query = await pool_query("Select * From sostenimiento;", "Sostenimientos educativos consultados exitosamente", "Error, no se pudieron consultar los sostenimientos educativo");
 
   if (query.success) {
     return response.status(200).json(query);

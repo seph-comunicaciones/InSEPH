@@ -49,7 +49,7 @@ $("#form_login").on("submit", (event) => event.preventDefault());
 
 $("#btn_login").click(() => {
   if ($("#usuario").val().length > 0 && $("#password").val().length > 0) {
-    request_post("/api/v1/usuarios/consultar_usuario", {
+    request_post("/api/v1/usuarios/validar_usuario", {
       "usuario": $("#usuario").val(),
       "contrasena": $("#password").val()
     }).then((response) => {

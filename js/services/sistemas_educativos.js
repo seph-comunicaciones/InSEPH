@@ -2,7 +2,7 @@ const { pool_query } = require("../functions/servicios");
 
 const consultar_niveles = async (request, response) => {
   //Consulta query
-  const query = await pool_query("Select * From nivel;", "Niveles educativos consultados existosamente", "Error, no se pudieron consultar los niveles educativos");
+  const query = await pool_query("Select * From nivel;", "Niveles educativos consultados exitosamente", "Error, no se pudieron consultar los niveles educativos");
 
   if (query.success) {
     return response.status(200).json(query);
@@ -13,7 +13,7 @@ const consultar_niveles = async (request, response) => {
 
 const consultar_tipos = async (request, response) => {
   //Consulta query
-  const query = await pool_query("Select * From tipo;", "Tipos educativos consultados existosamente", "Error, no se pudieron consultar los tipos educativos");
+  const query = await pool_query("Select * From tipo;", "Tipos educativos consultados exitosamente", "Error, no se pudieron consultar los tipos educativos");
 
   if (query.success) {
     return response.status(200).json(query);
@@ -24,7 +24,7 @@ const consultar_tipos = async (request, response) => {
 
 const consultar_servicios = async (request, response) => {
   //Consulta query
-  const query = await pool_query("Select * From servicio_educativo;", "Servicios educativos consultados existosamente", "Error, no se pudieron consultar los servicios educativos");
+  const query = await pool_query("Select * From servicio_educativo;", "Servicios educativos consultados exitosamente", "Error, no se pudieron consultar los servicios educativos");
 
   if (query.success) {
     return response.status(200).json(query);

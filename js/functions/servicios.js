@@ -1,5 +1,6 @@
-const { pool } = require("../database/pg");
-const crypto = require("crypto").webcrypto;
+const {pool} = require("../database/pg");
+const crypto = require("crypto-js");
+const web_crypto = require("crypto").webcrypto;
 
 const validar_llaves = (llaves_obligatorias, body) => {
   return new Promise((resolve, reject) => {
@@ -21,14 +22,28 @@ const validar_llaves = (llaves_obligatorias, body) => {
   });
 };
 
+const filtrar_llaves = (body, llaves_filtrar) => {
+  return new Promise((resolve, reject) => {
+    const llaves_body = Object.keys(body);
+    const values_body = Object.values(body);
+    let llaves_filtradas = {}
+
+    llaves_filtrar.forEach((llave) => {
+      const indice = llaves_body.indexOf(llave)
+      if (indice >= 0) llaves_filtradas[llave] = values_body[indice]
+    })
+    resolve(llaves_filtradas)
+  });
+}
+
 const pool_query = (query, msg_success, msg_failure) => {
   console.log(query);
   return new Promise((resolve, reject) => {
     pool.query(query, (error, results) => {
       try {
         if (error) {
-          console.log("Error query", error);
           resolve(message_failure(msg_failure));
+          console.log("Error query", error);
         } else {
           resolve(message_success(msg_success, results.rows));
         }
@@ -57,11 +72,11 @@ const pool_query_unique = (query, msg_success, msg_failure) => {
   });
 };
 
-const pool_query_insert = (body, uuid) => {
+const pool_query_insert = (body, uuid, tabla) => {
   const llaves_body = Object.keys(body);
   const values_body = Object.values(body);
 
-  let query = "INSERT into escuela ( ";
+  let query = `INSERT into ${tabla} ( `;
   let values = "( ";
 
   if (uuid) {
@@ -70,8 +85,14 @@ const pool_query_insert = (body, uuid) => {
   }
 
   for (let i = 0; i < llaves_body.length; i++) {
-    query += ` ${llaves_body[i]}${i !== llaves_body.length - 1 ? "," : " )"} `;
-    values += ` '${values_body[i]}'${i !== llaves_body.length - 1 ? "," : " );"} `;
+    if (llaves_body[i] !== "token_acceso") {
+      query += ` ${llaves_body[i]}${i !== llaves_body.length - 1 ? "," : " )"} `;
+      if (llaves_body[i] === "contrasena") {
+        values += ` PGP_SYM_ENCRYPT('${values_body[i]}', 'AES_KEY')${i !== llaves_body.length - 1 ? "," : " );"} `;
+      } else {
+        values += ` '${values_body[i]}'${i !== llaves_body.length - 1 ? "," : " );"} `;
+      }
+    }
   }
 
   query += `Values ${values}`;
@@ -79,14 +100,14 @@ const pool_query_insert = (body, uuid) => {
   return query;
 };
 
-const pool_query_update = (body, where) => {
+const pool_query_update = (body, where, table) => {
   const llaves_body = Object.keys(body);
   const values_body = Object.values(body);
 
   const llaves_where = Object.keys(where);
   const values_where = Object.values(where);
 
-  let query = "UPDATE escuela SET ";
+  let query = `UPDATE ${table} SET `;
   let query_where = " Where ";
 
   for (let i = 0; i < llaves_body.length; i++) query += ` ${llaves_body[i]} = '${values_body[i]}'${i !== llaves_body.length - 1 ? "," : ""} `;
@@ -116,11 +137,12 @@ const message_failure = (message) => {
 };
 
 const uuidv4 = () => {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (web_crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
 };
 
 module.exports = {
   validar_llaves,
+  filtrar_llaves,
   message_failure,
   message_success,
   pool_query,

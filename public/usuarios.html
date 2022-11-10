@@ -120,20 +120,27 @@
             <div class="card-body">
               <form class="form" data-parsley-validate id="form_nuevo_usuario">
                 <div class="row">
-                  <div class="col-md-4 col-12">
+                  <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="usuario" class="form-label">Usuario </label>
                       <input type="text" id="usuario" class="form-control validacion" placeholder="Usuario" name="usuario" data-parsley-required="true"/>
                     </div>
                   </div>
 
-                  <div class="col-md-4 col-12">
+                  <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="correo" class="form-label"
                       >Correo Electrónico
                       </label>
                       <input type="text" id="correo" class="form-control validacion" placeholder="Correo Electrónico" name="correo" data-parsley-required="true"/>
                     </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <label for="telefono" class="form-label"
+                    >Correo Electrónico
+                    </label>
+                    <input type="number" min="1" step="1" id="telefono" class="form-control" placeholder="Teléfono" name="telefono"/>
                   </div>
 
                   <div class="col-md-4 col-12">
@@ -172,12 +179,7 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="rol" class="form-label">Rol </label>
-                      <select id="rol" name="rol" class="form-select validacion" data-parsley-required="true">
-                        <option value="">Elige una opción</option>
-                        <option value="Administrador">Administrador</option>
-                        <option value="Registrador">Registrador</option>
-                        <option value="Visualizador">Visualizador</option>
-                      </select>
+                      <select id="rol" name="rol" class="form-select validacion" data-parsley-required="true"></select>
                     </div>
                   </div>
 
@@ -255,12 +257,7 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="rol_edit" class="form-label">Rol </label>
-                      <select id="rol_edit" name="rol_edit" class="form-select validacion_edit" data-parsley-required="true">
-                        <option value="">Elige una opción</option>
-                        <option value="Administrador">Administrador</option>
-                        <option value="Registrador">Registrador</option>
-                        <option value="Visualizador">Visualizador</option>
-                      </select>
+                      <select id="rol_edit" name="rol_edit" class="form-select validacion_edit" data-parsley-required="true"></select>
                     </div>
                   </div>
 

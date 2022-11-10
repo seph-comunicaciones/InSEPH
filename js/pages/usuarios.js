@@ -1,5 +1,6 @@
 let escuelas_datatable
 let usuarios_locales
+let roles_locales
 
 //Notficaciones
 const notificacion = (mensaje) => {
@@ -21,7 +22,6 @@ const notificacion_carga = () => {
     position: "right",
   }).showToast();
 };
-
 
 //Funciones
 const pintar_tabla_usuarios = (usuarios) => {
@@ -104,12 +104,29 @@ const validar_form_edit_usuario = () => {
   return true;
 };
 
-notificacion_carga()
 //Cargas usuarios
+notificacion_carga()
 request_post("/api/v1/usuarios/consultar_usuarios", {}).then((response) => {
   const {success, response: usuarios} = response;
 
   if (success) {
+    request_post("/api/v1/usuarios/consultar_roles", {}).then((response) => {
+      const {success, response: roles} = response;
+
+      if (success){
+        roles_locales = roles;
+
+        $(`#rol`).empty();
+        $(`#rol_edit`).empty();
+        let opciones_select = `<option value="">Elige una opción</option> `;
+
+        roles.forEach((rol) => (opciones_select += ` <option value="${rol.id_rol}">${rol.nom_rol}</option> `));
+
+        $(`#rol`).append(opciones_select);
+        $(`#rol_edit`).append(opciones_select);
+      }
+    })
+
     notificacion("Usuarios consultados")
     pintar_tabla_usuarios(usuarios)
   }

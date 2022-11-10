@@ -8,7 +8,7 @@ const {consultar_modelos} = require("./js/services/modelos");
 const {consultar_sostenimientos} = require("./js/services/sostenimientos");
 const {consultar_controles} = require("./js/services/controles");
 const {consultar_niveles, consultar_servicios, consultar_tipos} = require("./js/services/sistemas_educativos");
-const {consultar_usuario, consultar_usuarios} = require("./js/services/usuarios");
+const {validar_usuario, consultar_usuarios, consultar_roles, agregar_usuario, eliminar_usuario, consultar_usuario, editar_usuario} = require("./js/services/usuarios");
 
 const app = express();
 
@@ -116,9 +116,13 @@ app.get("/api/v1/sostenimientos/consultar_sostenimientos", consultar_sostenimien
 app.get("/api/v1/controles/consultar_controles", consultar_controles);
 
 //Usuario
-app.post("/api/v1/usuarios/consultar_usuario", consultar_usuario);
+app.post("/api/v1/usuarios/validar_usuario", validar_usuario);
 app.post("/api/v1/usuarios/consultar_usuarios", consultar_usuarios);
-
+app.post("/api/v1/usuarios/consultar_usuario", consultar_usuario);
+app.post("/api/v1/usuarios/consultar_roles", consultar_roles);
+app.post("/api/v1/usuarios/agregar_usuario", agregar_usuario);
+app.post("/api/v1/usuarios/eliminar_usuario", eliminar_usuario);
+app.post("/api/v1/usuarios/editar_usuario", editar_usuario);
 
 //Carga de vistas
 app.get("/", routes_session("/", "dashboard.html", "login.html", false));
@@ -130,7 +134,6 @@ app.get("/usuarios.html", routes_session("/usuarios.html", "usuarios.html", "log
 
 app.use((request, response) => {
   response.status(404);
-
   console.log("Not found")
   response.sendFile(__dirname + `/public/error-404.html`);
 });

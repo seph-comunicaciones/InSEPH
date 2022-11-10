@@ -1,4 +1,4 @@
-const { pool_query, pool_query_unique, pool_query_insert, pool_query_update, message_success, message_failure, validar_llaves } = require("../functions/servicios");
+const {pool_query, pool_query_unique, pool_query_insert, pool_query_update, message_success, message_failure, validar_llaves} = require("../functions/servicios");
 
 const consultar_escuelas = async (request, response) => {
   //Validar llaves obligatorias
@@ -11,14 +11,14 @@ const consultar_escuelas = async (request, response) => {
   }
 
   //Consulta query
-  const { id_municipio } = request.body;
+  const {id_municipio} = request.body;
 
   const query = await pool_query(
     `Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
     From escuela
     Join turno On escuela.turno_id = turno.id_turno
     Join municipio On escuela.municipio_id = municipio.id_municipio ${id_municipio !== "" ? ` Where municipio.id_municipio = ${id_municipio} And escuela.activo = true ` : " Where escuela.activo = true "};`,
-    "Escuelas consultadas existosamente",
+    "Escuelas consultadas exitosamente",
     "Error, no se pudieron consultar las escuelas"
   );
 
@@ -38,7 +38,7 @@ const consultar_escuela = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const { id_escuela } = request.body;
+  const {id_escuela} = request.body;
 
   const query = await pool_query_unique(
     `Select escuela.*, turno.nom_turno, control.nom_control, modelo.nom_modelo, sostenimiento.nom_sostenimiento, municipio.nom_municipio, nivel.nom_nivel, tipo.nom_tipo, servicio_educativo.nom_servicio_educativo
@@ -51,8 +51,8 @@ const consultar_escuela = async (request, response) => {
     Join nivel On escuela.nivel_id = nivel.id_nivel
 	  Join tipo On escuela.tipo_id = tipo.id_tipo
 	  Join servicio_educativo On escuela.servicio_educativo_id = servicio_educativo.id_servicio_educativo
-    Where escuela.id_escuela = '${id_escuela}';`,
-    "Escuela consultada existosamente",
+    Where escuela.id_escuela = '${id_escuela}' AND escuela.activo = true;`,
+    "Escuela consultada exitosamente",
     "Error, no se pudo consultar la escuela"
   );
 
@@ -72,7 +72,7 @@ const agregar_escuela = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const query = await pool_query(pool_query_insert(request.body, true), "Escuela registrada existosamente", "Error, no se pudo registrar la escuela");
+  const query = await pool_query(pool_query_insert(request.body, true, "escuela"), "Escuela registrada exitosamente", "Error, no se pudo registrar la escuela");
 
   if (query.success) {
     return response.status(200).json(query);
@@ -85,16 +85,14 @@ const editar_escuela = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_escuela"];
 
-  const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
+  const validacion_llaves = await validar_llaves|(llaves_obligatorias, request.body);
 
-  if (!validacion_llaves.success) {
-    return response.status(400).json(message_failure(validacion_llaves.message));
-  }
+  if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const { id_escuela } = request.body;
-  const where = { id_escuela: id_escuela };
-  const query = await pool_query(pool_query_update(request.body, where), "Escuela editada existosamente", "Error, no se pudo editar la escuela");
+  const {id_escuela} = request.body;
+  const where = {id_escuela: id_escuela};
+  const query = await pool_query(pool_query_update(request.body, where, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
 
   if (query.success) {
     return response.status(200).json(query);
@@ -112,9 +110,9 @@ const aliminar_escuela = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const { id_escuela } = request.body;
+  const {id_escuela} = request.body;
 
-  const query = await pool_query(`Update escuela Set activo = 'false' Where id_escuela = '${id_escuela}';`, "Escuela eliminada existosamente", "Error, no se pudo eliminar la escuela");
+  const query = await pool_query(`Update escuela Set activo = 'false' Where id_escuela = '${id_escuela}';`, "Escuela eliminada exitosamente", "Error, no se pudo eliminar la escuela");
 
   if (query.success) {
     return response.status(200).json(query);
