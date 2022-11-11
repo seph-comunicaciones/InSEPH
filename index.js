@@ -8,7 +8,7 @@ const {consultar_modelos} = require("./js/services/modelos");
 const {consultar_sostenimientos} = require("./js/services/sostenimientos");
 const {consultar_controles} = require("./js/services/controles");
 const {consultar_niveles, consultar_servicios, consultar_tipos} = require("./js/services/sistemas_educativos");
-const {validar_usuario, consultar_usuarios, consultar_roles, agregar_usuario, eliminar_usuario, consultar_usuario, editar_usuario} = require("./js/services/usuarios");
+const {validar_usuario, consultar_usuarios, consultar_roles, agregar_usuario, eliminar_usuario, consultar_usuario, editar_usuario, consultar_rol_usuario} = require("./js/services/usuarios");
 
 const app = express();
 
@@ -120,6 +120,7 @@ app.get("/api/v1/controles/consultar_controles", consultar_controles);
 app.post("/api/v1/usuarios/validar_usuario", validar_usuario);
 app.post("/api/v1/usuarios/consultar_usuarios", consultar_usuarios);
 app.post("/api/v1/usuarios/consultar_usuario", consultar_usuario);
+app.post("/api/v1/usuarios/consultar_rol_usuario", consultar_rol_usuario);
 app.post("/api/v1/usuarios/consultar_roles", consultar_roles);
 app.post("/api/v1/usuarios/agregar_usuario", agregar_usuario);
 app.post("/api/v1/usuarios/eliminar_usuario", eliminar_usuario);

@@ -42,6 +42,26 @@ const validar_usuario = async (request, response) => {
   }
 };
 
+const consultar_rol_usuario = async (request, response) => {
+  //Validar llaves obligatorias
+  const llaves_obligatorias = ["id_usuario"];
+
+  const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
+
+  if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
+
+  //Consulta query
+  const {id_usuario} = request.body;
+
+  const query = await pool_query_unique(`SELECT rol_id FROM usuario WHERE id_usuario = '${id_usuario}' And activo = true;`, "Rol consultado exitosamente", "Error, no se pudo consultar el rol");
+
+  if (query.success) {
+    return response.status(200).json(query);
+  } else {
+    return response.status(400).json(query);
+  }
+};
+
 const consultar_usuario = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_usuario"];
@@ -54,9 +74,7 @@ const consultar_usuario = async (request, response) => {
   const {token_acceso, id_usuario} = request.body;
 
   if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
-    const query = await pool_query_unique(`Select usuario.*, rol.nom_rol From usuario
-                                                 JOIN rol  on rol.id_rol = usuario.rol_id
-                                                 Where usuario.id_usuario = '${id_usuario}' And usuario.activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+    const query = await pool_query_unique(`SELECT usuario, correo, nombre, apellido_materno, apellido_paterno, telefono, rol_id, id_usuario FROM usuario WHERE id_usuario = '${id_usuario}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
 
     if (query.success) {
       return response.status(200).json(query);
@@ -73,7 +91,7 @@ const consultar_usuarios = async (request, response) => {
   const {token_acceso} = request.body;
 
   if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
-    const query = await pool_query(`SELECT * FROM usuario WHERE activo = true;`, "Usuarios consultados exitosamente", "Error, no se pudieron consultar los usuarios");
+    const query = await pool_query(`SELECT usuario, correo, nombre, apellido_materno, apellido_paterno, telefono, rol_id, id_usuario FROM usuario WHERE activo = true;`, "Usuarios consultados exitosamente", "Error, no se pudieron consultar los usuarios");
 
     if (query.success) {
       return response.status(200).json(query);
@@ -176,6 +194,7 @@ module.exports = {
   validar_usuario,
   consultar_usuarios,
   consultar_roles,
+  consultar_rol_usuario,
   agregar_usuario,
   eliminar_usuario,
   consultar_usuario,
