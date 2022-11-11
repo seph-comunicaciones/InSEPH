@@ -3,6 +3,7 @@ let escuelas_local = [];
 let servicios_local = [];
 let tipos_local = [];
 let escuela_actual = null;
+let rol = false
 
 //Notficaciones
 const notificacion = (mensaje) => {
@@ -48,8 +49,10 @@ const pintar_tabla_escuelas = (escuelas) => {
                     <th>Nombre del municipio</th>
                     <th>Nombre del turno</th>
                     <th>Visualizar</th>
-                    <th>Editar</th>
+                    ${rol === 1 ? `
+                    <th>Editar</th> 
                     <th>Eliminar</th>
+                    ` : ``}
                   </tr>
                 </thead>
                 <tbody> `;
@@ -65,6 +68,7 @@ const pintar_tabla_escuelas = (escuelas) => {
                     <i class="bi bi-eye-fill"></i>
                   </button>
                 </td>
+                ${rol === 1 ? `
                 <td style="text-align: center">
                   <button data-id="${escuela.id_escuela}" data-type="editar_escuela" class="btn btn-primary control_escuela">
                     <i class="bi bi-pencil-square"></i>
@@ -75,6 +79,7 @@ const pintar_tabla_escuelas = (escuelas) => {
                     <i class="bi bi-trash3-fill"></i>
                   </button>
                 </td>
+                ` : ``}
               </tr>`;
   });
 
@@ -154,53 +159,72 @@ const editar_escuela = (escuela) => {
   $("#editar_escuela").removeClass("d-none");
 };
 
-//Cargar municipios
 notificacion_carga();
-request_get("/api/v1/municipios/consultar_municipios").then((response) => {
-  const {success, response: municipios} = response;
+request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
+  const {success, message, response: {rol_id}} = response;
 
   if (success) {
-    $(`#municipio`).empty();
-    $(`#municipio_edit`).empty();
-    $(`#municipio_vis`).empty();
-    let opciones_select = `<option value="">Elige una opción</option> `;
+    //Cargar el rol
+    rol = rol_id
 
-    municipios.forEach((municipio) => (opciones_select += ` <option value="${municipio.id_municipio}">${municipio.nom_municipio}</option> `));
-
-    $(`#municipio`).append(opciones_select);
-    $(`#municipio_edit`).append(opciones_select);
-    $(`#municipio_vis`).append(opciones_select);
-
-    pintar_select_menu_municipios(municipios);
-
-    //Estilo choice select
-    let choices = document.querySelectorAll(".choices");
-    let initChoice;
-    for (let i = 0; i < choices.length; i++) {
-      if (choices[i].classList.contains("multiple-remove")) {
-        initChoice = new Choices(choices[i], {
-          delimiter: ",",
-          editItems: true,
-          maxItemCount: -1,
-          removeItemButton: true,
-        });
-      } else {
-        initChoice = new Choices(choices[i]);
-      }
+    if (rol_id === 1 || rol_id === 2) {
+      $("#container_nueva_escuela").append(`<button type="button" id="btn_nueva_escuela" class="btn btn-success">
+                                              <i class="bi bi-plus-circle"></i> Agregar escuela
+                                            </button>`)
     }
 
-    request_post("/api/v1/escuelas/consultar_escuelas", {
-      id_municipio: $("#escuelas_select_municipio").val(),
-    }).then((response) => {
-      const {success, response: escuelas} = response;
+    //Cargar municipios
+    request_get("/api/v1/municipios/consultar_municipios").then((response) => {
+      const {success, response: municipios} = response;
 
       if (success) {
-        notificacion("Escuelas consultadas");
-        pintar_tabla_escuelas(escuelas);
+        $(`#municipio`).empty();
+        $(`#municipio_edit`).empty();
+        $(`#municipio_vis`).empty();
+        let opciones_select = `<option value="">Elige una opción</option> `;
+
+        municipios.forEach((municipio) => (opciones_select += ` <option value="${municipio.id_municipio}">${municipio.nom_municipio}</option> `));
+
+        $(`#municipio`).append(opciones_select);
+        $(`#municipio_edit`).append(opciones_select);
+        $(`#municipio_vis`).append(opciones_select);
+
+        pintar_select_menu_municipios(municipios);
+
+        //Estilo choice select
+        let choices = document.querySelectorAll(".choices");
+        let initChoice;
+        for (let i = 0; i < choices.length; i++) {
+          if (choices[i].classList.contains("multiple-remove")) {
+            initChoice = new Choices(choices[i], {
+              delimiter: ",",
+              editItems: true,
+              maxItemCount: -1,
+              removeItemButton: true,
+            });
+          } else {
+            initChoice = new Choices(choices[i]);
+          }
+        }
+
+        request_post("/api/v1/escuelas/consultar_escuelas", {
+          id_municipio: $("#escuelas_select_municipio").val(),
+        }).then((response) => {
+          const {success, response: escuelas} = response;
+
+          if (success) {
+            notificacion("Escuelas consultadas");
+            pintar_tabla_escuelas(escuelas);
+          } else {
+            Swal.fire("Error", message, "error");
+          }
+        });
       }
     });
+  } else {
+    Swal.fire("Error", message, "error");
   }
-});
+})
 
 //Carga de catalogos
 
@@ -614,7 +638,7 @@ $("#main").on("click", ".control_escuela", (event) => {
         if (result.isConfirmed) {
           notificacion_carga();
 
-          request_post("/api/v1/escuelas/aliminar_escuela", {
+          request_post("/api/v1/escuelas/eliminar_escuela", {
             id_escuela: id,
           }).then((response) => {
             const {success, message} = response;

@@ -43,22 +43,19 @@ const validar_usuario = async (request, response) => {
 };
 
 const consultar_rol_usuario = async (request, response) => {
-  //Validar llaves obligatorias
-  const llaves_obligatorias = ["id_usuario"];
-
-  const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
-
-  if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
-
   //Consulta query
   const {id_usuario} = request.body;
 
-  const query = await pool_query_unique(`SELECT rol_id FROM usuario WHERE id_usuario = '${id_usuario}' And activo = true;`, "Rol consultado exitosamente", "Error, no se pudo consultar el rol");
+  if (request.session.login || id_usuario) {
+    const query = await pool_query_unique(`SELECT rol_id FROM usuario WHERE id_usuario = '${request.session.login? request.session.id_usuario: id_usuario}' And activo = true;`, "Rol consultado exitosamente", "Error, no se pudo consultar el rol");
 
-  if (query.success) {
-    return response.status(200).json(query);
+    if (query.success) {
+      return response.status(200).json(query);
+    } else {
+      return response.status(400).json(query);
+    }
   } else {
-    return response.status(400).json(query);
+    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
   }
 };
 

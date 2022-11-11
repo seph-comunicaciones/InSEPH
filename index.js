@@ -1,7 +1,7 @@
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const {consultar_escuelas, agregar_escuela, consultar_escuela, aliminar_escuela, editar_escuela} = require("./js/services/escuelas");
+const {consultar_escuelas, agregar_escuela, consultar_escuela, eliminar_escuela, editar_escuela} = require("./js/services/escuelas");
 const {consultar_municipios} = require("./js/services/municipios");
 const {consultar_turnos} = require("./js/services/turnos");
 const {consultar_modelos} = require("./js/services/modelos");
@@ -94,7 +94,7 @@ app.post("/api/v1/escuelas/consultar_escuelas", consultar_escuelas);
 app.post("/api/v1/escuelas/consultar_escuela", consultar_escuela);
 app.post("/api/v1/escuelas/agregar_escuela", agregar_escuela);
 app.post("/api/v1/escuelas/editar_escuela", editar_escuela);
-app.post("/api/v1/escuelas/aliminar_escuela", aliminar_escuela);
+app.post("/api/v1/escuelas/eliminar_escuela", eliminar_escuela);
 
 //Sistemas educativos
 app.get("/api/v1/sistemas_educativos/consultar_niveles", consultar_niveles);

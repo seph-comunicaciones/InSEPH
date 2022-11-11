@@ -72,12 +72,18 @@ const agregar_escuela = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const query = await pool_query(pool_query_insert(request.body, true, "escuela"), "Escuela registrada exitosamente", "Error, no se pudo registrar la escuela");
+  const {token_acceso} = request.body;
 
-  if (query.success) {
-    return response.status(200).json(query);
+  if ((request.session.rol_id === 1 || request.session.rol_id === 2) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
+    const query = await pool_query(pool_query_insert(request.body, true, "escuela"), "Escuela registrada exitosamente", "Error, no se pudo registrar la escuela");
+
+    if (query.success) {
+      return response.status(200).json(query);
+    } else {
+      return response.status(400).json(query);
+    }
   } else {
-    return response.status(400).json(query);
+    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
   }
 };
 
@@ -90,18 +96,22 @@ const editar_escuela = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const {id_escuela} = request.body;
-  const where = {id_escuela: id_escuela};
-  const query = await pool_query(pool_query_update(request.body, where, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
+  const {id_escuela, token_acceso} = request.body;
+  if ((request.session.rol_id === 1) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
+    const where = {id_escuela: id_escuela};
+    const query = await pool_query(pool_query_update(request.body, where, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
 
-  if (query.success) {
-    return response.status(200).json(query);
+    if (query.success) {
+      return response.status(200).json(query);
+    } else {
+      return response.status(400).json(query);
+    }
   } else {
-    return response.status(400).json(query);
+    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
   }
 };
 
-const aliminar_escuela = async (request, response) => {
+const eliminar_escuela = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_escuela"];
 
@@ -110,14 +120,17 @@ const aliminar_escuela = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const {id_escuela} = request.body;
+  const {id_escuela, token_acceso} = request.body;
+  if ((request.session.rol_id === 1) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
+    const query = await pool_query(`Update escuela Set activo = 'false' Where id_escuela = '${id_escuela}';`, "Escuela eliminada exitosamente", "Error, no se pudo eliminar la escuela");
 
-  const query = await pool_query(`Update escuela Set activo = 'false' Where id_escuela = '${id_escuela}';`, "Escuela eliminada exitosamente", "Error, no se pudo eliminar la escuela");
-
-  if (query.success) {
-    return response.status(200).json(query);
+    if (query.success) {
+      return response.status(200).json(query);
+    } else {
+      return response.status(400).json(query);
+    }
   } else {
-    return response.status(400).json(query);
+    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
   }
 };
 
@@ -126,5 +139,5 @@ module.exports = {
   consultar_escuela,
   agregar_escuela,
   editar_escuela,
-  aliminar_escuela,
+  eliminar_escuela: eliminar_escuela,
 };
