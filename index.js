@@ -52,6 +52,7 @@ const routes_session = (route, session_true, session_false, log_out) => (request
 
   if (log_out) {
     request.session.login = false;
+    request.session.rol_id = 0;
     request.session.id_usuario = 0;
   }
 

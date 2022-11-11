@@ -1,5 +1,4 @@
 const {pool} = require("../database/pg");
-const crypto = require("crypto-js");
 const web_crypto = require("crypto").webcrypto;
 
 const validar_llaves = (llaves_obligatorias, body) => {
