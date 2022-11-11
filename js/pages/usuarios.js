@@ -79,38 +79,6 @@ const pintar_tabla_usuarios = (usuarios) => {
   });
 }
 
-const validar_campo_modal_usuario = (campo, nombre, row) => {
-  return `${
-    campo
-      ? `<div class='col-md-${row} col-12'>
-        <label class="form-label">
-          ${nombre}: ${campo}
-        </label>
-      </div>`
-      : ""
-  }`;
-};
-
-const visualizar_usuario = (usuario) => {
-  $("#modal_label").text("Información del usuario");
-
-  $("#modal_body").html(`<div class="row">
-                          ${validar_campo_modal_usuario(usuario.usuario, "Usuario", "6")}
-                          ${validar_campo_modal_usuario(usuario.correo, "Correo", "6")}
-                          ${validar_campo_modal_usuario(usuario.telefono, "Teléfono", "6")}
-                          ${validar_campo_modal_usuario(usuario.nombre, "Nombre", "6")}
-                          ${validar_campo_modal_usuario(usuario.apellido_paterno + " " + usuario.apellido_materno, "Apellidos", "6")}
-                          ${validar_campo_modal_usuario(usuario.nom_rol, "Rol", "6")}
-                        </div>`);
-
-  $("#modal_footer").html(`<button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                            <i class="bx bx-check d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Cerrar</span>
-                          </button>`);
-
-  $("#modal_datos_usuario").click();
-};
-
 const validar_form_usuario = () => {
   for (let i = 0; i < $(".validacion").length; i++) {
     if (
@@ -137,22 +105,37 @@ const validar_form_edit_usuario = () => {
   return true;
 };
 
-const validar_campo_edit_usuario = (campo, id) => {
+const validar_campo_usuario = (campo, id) => {
   if (campo && $(`#${id}`).length > 0) {
     $(`#${id}`).val(campo);
   }
 };
 
+const visualizar_usuario = (usuario) => {
+  $("#form_vis_usuario")[0].reset();
+
+  validar_campo_usuario(usuario.usuario, "usuario_vis");
+  validar_campo_usuario(usuario.correo, "correo_vis");
+  validar_campo_usuario(usuario.telefono, "telefono_vis");
+  validar_campo_usuario(usuario.nombre, "nombre_vis");
+  validar_campo_usuario(usuario.apellido_paterno, "apellido_paterno_vis");
+  validar_campo_usuario(usuario.apellido_materno, "apellido_materno_vis");
+  validar_campo_usuario(usuario.rol_id, "rol_vis");
+
+  $("#menu_usuarios").addClass("d-none");
+  $("#visualizar_usuario").removeClass("d-none");
+};
+
 const editar_usuario = (usuario) => {
   $("#form_edit_usuario")[0].reset();
 
-  validar_campo_edit_usuario(usuario.usuario, "usuario_edit");
-  validar_campo_edit_usuario(usuario.correo, "correo_edit");
-  validar_campo_edit_usuario(usuario.telefono, "telefono_edit");
-  validar_campo_edit_usuario(usuario.nombre, "nombre_edit");
-  validar_campo_edit_usuario(usuario.apellido_paterno, "apellido_paterno_edit");
-  validar_campo_edit_usuario(usuario.apellido_materno, "apellido_materno_edit");
-  validar_campo_edit_usuario(usuario.rol_id, "rol_edit");
+  validar_campo_usuario(usuario.usuario, "usuario_edit");
+  validar_campo_usuario(usuario.correo, "correo_edit");
+  validar_campo_usuario(usuario.telefono, "telefono_edit");
+  validar_campo_usuario(usuario.nombre, "nombre_edit");
+  validar_campo_usuario(usuario.apellido_paterno, "apellido_paterno_edit");
+  validar_campo_usuario(usuario.apellido_materno, "apellido_materno_edit");
+  validar_campo_usuario(usuario.rol_id, "rol_edit");
 
   $("#menu_usuarios").addClass("d-none");
   $("#editar_usuario").removeClass("d-none");
@@ -172,12 +155,14 @@ request_post("/api/v1/usuarios/consultar_usuarios", {}).then((response) => {
 
         $(`#rol`).empty();
         $(`#rol_edit`).empty();
+        $(`#rol_vis`).empty();
         let opciones_select = `<option value="">Elige una opción</option> `;
 
         roles.forEach((rol) => (opciones_select += ` <option value="${rol.id_rol}">${rol.nom_rol}</option> `));
 
         $(`#rol`).append(opciones_select);
         $(`#rol_edit`).append(opciones_select);
+        $(`#rol_vis`).append(opciones_select);
       }
     })
 
@@ -372,7 +357,15 @@ $("#main").on("click", ".control_usuario", (event) => {
   }
 })
 
-//Cancelar editar escuela
+//Regresar vista usuario
+$("#btn_regresar_vis_usuario").click(() => {
+  $("#form_vis_usuario")[0].reset();
+
+  $("#menu_usuarios").removeClass("d-none");
+  $("#visualizar_usuario").addClass("d-none");
+});
+
+//Cancelar editar usuario
 $("#btn_cancelar_edit_usuario").click(() => {
   $("#form_edit_usuario")[0].reset();
 
@@ -380,7 +373,7 @@ $("#btn_cancelar_edit_usuario").click(() => {
   $("#editar_usuario").addClass("d-none");
 });
 
-//Guardar editar escuela
+//Guardar editar usuario
 $("#form_edit_usuario").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_edit_usuario").click(() => {

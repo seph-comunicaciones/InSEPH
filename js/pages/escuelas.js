@@ -91,95 +91,64 @@ const pintar_tabla_escuelas = (escuelas) => {
   });
 };
 
-const validar_campo_modal_escuela = (campo, nombre, row) => {
-  return `${
-    campo
-      ? `<div class='col-md-${row} col-12'>
-        <label class="form-label">
-          ${nombre}: ${campo}
-        </label>
-      </div>`
-      : ""
-  }`;
-};
-
-const visualizar_escuela = (escuela) => {
-  $("#modal_label").text("Información de la escuela");
-
-  $("#modal_body").html(`<div class="row">
-                          <div class="col-12"><label class="form-label">Imagen escuela</label></div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                          ${validar_campo_modal_escuela(escuela.clave, "Clave", "6")}
-                          ${validar_campo_modal_escuela(escuela.nombre, "Nombre", "6")}
-                          ${validar_campo_modal_escuela(escuela.direccion, "Dirección", "6")}
-                          ${validar_campo_modal_escuela(escuela.nom_municipio, "Municipio", "6")}
-                          ${validar_campo_modal_escuela(escuela.nom_modelo, "Modelo", "6")}
-                          ${validar_campo_modal_escuela(escuela.nom_control, "Control", "6")}
-                          ${validar_campo_modal_escuela(escuela.nom_turno, "Turno", "6")}
-                          ${validar_campo_modal_escuela(escuela.nom_nivel, "Nivel", "6")}
-                          ${validar_campo_modal_escuela(escuela.pag_web, "Pagina web", "6")}
-                          ${validar_campo_modal_escuela(escuela.telefono, "Telefono", "6")}
-                        </div>
-                        <hr>
-                        <div class="row">
-                          ${validar_campo_modal_escuela(escuela.alum_muj, "Alumnos (Mujeres)", "4")}
-                          ${validar_campo_modal_escuela(escuela.alum_hom, "Alumnos (Hombres)", "4")}
-                          ${validar_campo_modal_escuela(escuela.alum_muj + escuela.alum_hom, "Alumnos (Total)", "4")}
-                          ${validar_campo_modal_escuela(escuela.doc_muj, "Docentes (Mujeres)", "4")}
-                          ${validar_campo_modal_escuela(escuela.doc_hom, "Docentes (Hombres)", "4")}
-                          ${validar_campo_modal_escuela(escuela.doc_muj + escuela.doc_hom, "Docentes (Total)", "4")}
-                          ${validar_campo_modal_escuela(escuela.aulas_exist, "Aulas (Existentes)", "4")}
-                          ${validar_campo_modal_escuela(escuela.aulas_uso, "Aulas (En uso)", "4")}
-                        </div>
-                        <hr>
-                        <div class="col-12">
-                          <div style="display: flex; justify-content: center">
-                            <div class="googlemaps">
-                              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126748.6091242787!2d107.57311654129782!3d-6.903273917028756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e6398252477f%3A0x146a1f93d3e815b2!2sBandung%2C%20Bandung%20City%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1633023222539!5m2!1sen!2sid" width="600" height="450" style="border: 0" allowfullscreen="" loading="lazy"></iframe>
-                            </div>
-                          </div>
-                        </div>`);
-
-  $("#modal_footer").html(`<button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                            <i class="bx bx-check d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Cerrar</span>
-                          </button>`);
-
-  $("#modal_datos_escuela").click();
-};
-
-const validar_campo_edit_escuela = (campo, id) => {
+const validar_campo_escuela = (campo, id) => {
   if (campo && $(`#${id}`).length > 0) {
     $(`#${id}`).val(campo);
   }
+};
+
+const visualizar_escuela = (escuela) => {
+  $("#form_vis_escuela")[0].reset();
+
+  validar_campo_escuela(escuela.clave, "clave_centro_vis");
+  validar_campo_escuela(escuela.nombre, "nombre_centro_vis");
+  validar_campo_escuela(escuela.pag_web, "pagina_vis");
+  validar_campo_escuela(escuela.telefono, "telefono_vis");
+  validar_campo_escuela(escuela.alum_muj, "alumnos_mujeres_vis");
+  validar_campo_escuela(escuela.alum_hom, "alumnos_hombres_vis");
+  validar_campo_escuela(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_vis");
+  validar_campo_escuela(escuela.doc_muj, "docentes_mujeres_vis");
+  validar_campo_escuela(escuela.doc_hom, "docentes_hombres_vis");
+  validar_campo_escuela(escuela.doc_hom + escuela.doc_muj, "docentes_totales_vis");
+  validar_campo_escuela(escuela.aulas_exist, "aulas_existentes_vis");
+  validar_campo_escuela(escuela.aulas_uso, "aulas_uso_vis");
+  validar_campo_escuela(escuela.turno_id, "turno_vis");
+  validar_campo_escuela(escuela.control_id, "control_vis");
+  validar_campo_escuela(escuela.modelo_id, "modelo_vis");
+  validar_campo_escuela(escuela.tipo_id, "tipo_vis");
+  validar_campo_escuela(escuela.servicio_educativo_id, "servicio_vis");
+  validar_campo_escuela(escuela.sostenimiento_id, "sostenimiento_vis");
+  validar_campo_escuela(escuela.municipio_id, "municipio_vis");
+  validar_campo_escuela(escuela.nivel_id, "nivel_vis");
+
+  $("#menu_escuelas").addClass("d-none");
+  $("#visualizar_escuela").removeClass("d-none");
 };
 
 const editar_escuela = (escuela) => {
   $("#form_edit_escuela")[0].reset();
   img_escuela_edit.removeFile();
 
-  validar_campo_edit_escuela(escuela.clave, "clave_centro_edit");
-  validar_campo_edit_escuela(escuela.nombre, "nombre_centro_edit");
-  validar_campo_edit_escuela(escuela.pag_web, "pagina_edit");
-  validar_campo_edit_escuela(escuela.telefono, "telefono_edit");
-  validar_campo_edit_escuela(escuela.alum_muj, "alumnos_mujeres_edit");
-  validar_campo_edit_escuela(escuela.alum_hom, "alumnos_hombres_edit");
-  validar_campo_edit_escuela(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_edit");
-  validar_campo_edit_escuela(escuela.doc_muj, "docentes_mujeres_edit");
-  validar_campo_edit_escuela(escuela.doc_hom, "docentes_hombres_edit");
-  validar_campo_edit_escuela(escuela.doc_hom + escuela.doc_muj, "docentes_totales_edit");
-  validar_campo_edit_escuela(escuela.aulas_exist, "aulas_existentes_edit");
-  validar_campo_edit_escuela(escuela.aulas_uso, "aulas_uso_edit");
-  validar_campo_edit_escuela(escuela.turno_id, "turno_edit");
-  validar_campo_edit_escuela(escuela.control_id, "control_edit");
-  validar_campo_edit_escuela(escuela.modelo_id, "modelo_edit");
-  validar_campo_edit_escuela(escuela.tipo_id, "tipo_edit");
-  validar_campo_edit_escuela(escuela.servicio_educativo_id, "servicio_edit");
-  validar_campo_edit_escuela(escuela.sostenimiento_id, "sostenimiento_edit");
-  validar_campo_edit_escuela(escuela.municipio_id, "municipio_edit");
-  validar_campo_edit_escuela(escuela.nivel_id, "nivel_edit");
+  validar_campo_escuela(escuela.clave, "clave_centro_edit");
+  validar_campo_escuela(escuela.nombre, "nombre_centro_edit");
+  validar_campo_escuela(escuela.pag_web, "pagina_edit");
+  validar_campo_escuela(escuela.telefono, "telefono_edit");
+  validar_campo_escuela(escuela.alum_muj, "alumnos_mujeres_edit");
+  validar_campo_escuela(escuela.alum_hom, "alumnos_hombres_edit");
+  validar_campo_escuela(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_edit");
+  validar_campo_escuela(escuela.doc_muj, "docentes_mujeres_edit");
+  validar_campo_escuela(escuela.doc_hom, "docentes_hombres_edit");
+  validar_campo_escuela(escuela.doc_hom + escuela.doc_muj, "docentes_totales_edit");
+  validar_campo_escuela(escuela.aulas_exist, "aulas_existentes_edit");
+  validar_campo_escuela(escuela.aulas_uso, "aulas_uso_edit");
+  validar_campo_escuela(escuela.turno_id, "turno_edit");
+  validar_campo_escuela(escuela.control_id, "control_edit");
+  validar_campo_escuela(escuela.modelo_id, "modelo_edit");
+  validar_campo_escuela(escuela.tipo_id, "tipo_edit");
+  validar_campo_escuela(escuela.servicio_educativo_id, "servicio_edit");
+  validar_campo_escuela(escuela.sostenimiento_id, "sostenimiento_edit");
+  validar_campo_escuela(escuela.municipio_id, "municipio_edit");
+  validar_campo_escuela(escuela.nivel_id, "nivel_edit");
 
   $("#menu_escuelas").addClass("d-none");
   $("#editar_escuela").removeClass("d-none");
@@ -188,17 +157,19 @@ const editar_escuela = (escuela) => {
 //Cargar municipios
 notificacion_carga();
 request_get("/api/v1/municipios/consultar_municipios").then((response) => {
-  const { success, response: municipios } = response;
+  const {success, response: municipios} = response;
 
   if (success) {
     $(`#municipio`).empty();
     $(`#municipio_edit`).empty();
+    $(`#municipio_vis`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     municipios.forEach((municipio) => (opciones_select += ` <option value="${municipio.id_municipio}">${municipio.nom_municipio}</option> `));
 
     $(`#municipio`).append(opciones_select);
     $(`#municipio_edit`).append(opciones_select);
+    $(`#municipio_vis`).append(opciones_select);
 
     pintar_select_menu_municipios(municipios);
 
@@ -221,7 +192,7 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
     request_post("/api/v1/escuelas/consultar_escuelas", {
       id_municipio: $("#escuelas_select_municipio").val(),
     }).then((response) => {
-      const { success, response: escuelas } = response;
+      const {success, response: escuelas} = response;
 
       if (success) {
         notificacion("Escuelas consultadas");
@@ -235,17 +206,19 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
 
 //Turnos
 request_get("/api/v1/turnos/consultar_turnos").then((response) => {
-  const { success, response: turnos } = response;
+  const {success, message, response: turnos} = response;
 
   if (success) {
     $(`#turno`).empty();
     $(`#turno_edit`).empty();
+    $(`#turno_vis`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     turnos.forEach((turno) => (opciones_select += ` <option value="${turno.id_turno}">${turno.nom_turno}</option> `));
 
     $(`#turno`).append(opciones_select);
     $(`#turno_edit`).append(opciones_select);
+    $(`#turno_vis`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -253,17 +226,19 @@ request_get("/api/v1/turnos/consultar_turnos").then((response) => {
 
 //Niveles educativos
 request_get("/api/v1/sistemas_educativos/consultar_niveles").then((response) => {
-  const { success, response: niveles } = response;
+  const {success, message, response: niveles} = response;
 
   if (success) {
     $(`#nivel`).empty();
     $(`#nivel_edit`).empty();
+    $(`#nivel_vis`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     niveles.forEach((nivel) => (opciones_select += ` <option value="${nivel.id_nivel}">${nivel.nom_nivel}</option> `));
 
     $(`#nivel`).append(opciones_select);
     $(`#nivel_edit`).append(opciones_select);
+    $(`#nivel_vis`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -271,19 +246,21 @@ request_get("/api/v1/sistemas_educativos/consultar_niveles").then((response) => 
 
 //Servicios educativos
 request_get("/api/v1/sistemas_educativos/consultar_servicios").then((response) => {
-  const { success, response: servicios } = response;
+  const {success, message, response: servicios} = response;
 
   if (success) {
     servicios_local = servicios;
 
     $(`#servicio`).empty();
     $(`#servicio_edit`).empty();
+    $(`#servicio_vis`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     servicios.forEach((servicio) => (opciones_select += ` <option value="${servicio.id_servicio_educativo}">${servicio.nom_servicio_educativo}</option> `));
 
     $(`#servicio`).append(opciones_select);
     $(`#servicio_edit`).append(opciones_select);
+    $(`#servicio_vis`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -291,19 +268,21 @@ request_get("/api/v1/sistemas_educativos/consultar_servicios").then((response) =
 
 //Tipos educativos
 request_get("/api/v1/sistemas_educativos/consultar_tipos").then((response) => {
-  const { success, response: tipos } = response;
+  const {success, message, response: tipos} = response;
 
   if (success) {
     tipos_local = tipos;
 
     $(`#tipo`).empty();
     $(`#tipo_edit`).empty();
+    $(`#tipo_vis`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     tipos.forEach((tipo) => (opciones_select += ` <option value="${tipo.id_tipo}">${tipo.nom_tipo}</option> `));
 
     $(`#tipo`).append(opciones_select);
     $(`#tipo_edit`).append(opciones_select);
+    $(`#tipo_vis`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -311,17 +290,19 @@ request_get("/api/v1/sistemas_educativos/consultar_tipos").then((response) => {
 
 //Controles
 request_get("/api/v1/controles/consultar_controles").then((response) => {
-  const { success, response: controles } = response;
+  const {success, message, response: controles} = response;
 
   if (success) {
     $(`#control`).empty();
     $(`#control_edit`).empty();
+    $(`#control_vis`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     controles.forEach((control) => (opciones_select += ` <option value="${control.id_control}">${control.nom_control}</option> `));
 
     $(`#control`).append(opciones_select);
     $(`#control_edit`).append(opciones_select);
+    $(`#control_vis`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -329,17 +310,19 @@ request_get("/api/v1/controles/consultar_controles").then((response) => {
 
 //Sostenimiento
 request_get("/api/v1/sostenimientos/consultar_sostenimientos").then((response) => {
-  const { success, response: sostenimientos } = response;
+  const {success, message, response: sostenimientos} = response;
 
   if (success) {
     $(`#sostenimiento`).empty();
     $(`#sostenimiento_edit`).empty();
+    $(`#sostenimiento_vis`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     sostenimientos.forEach((sostenimiento) => (opciones_select += ` <option value="${sostenimiento.id_sostenimiento}">${sostenimiento.nom_sostenimiento}</option> `));
 
     $(`#sostenimiento`).append(opciones_select);
     $(`#sostenimiento_edit`).append(opciones_select);
+    $(`#sostenimiento_vis`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -347,17 +330,19 @@ request_get("/api/v1/sostenimientos/consultar_sostenimientos").then((response) =
 
 //Modelos
 request_get("/api/v1/modelos/consultar_modelos").then((response) => {
-  const { success, response: modelos } = response;
+  const {success, message, response: modelos} = response;
 
   if (success) {
     $(`#modelo`).empty();
     $(`#modelo_edit`).empty();
+    $(`#modelo_vis`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
     modelos.forEach((modelo) => (opciones_select += ` <option value="${modelo.id_modelo}">${modelo.nom_modelo}</option> `));
 
     $(`#modelo`).append(opciones_select);
     $(`#modelo_edit`).append(opciones_select);
+    $(`#modelo_vis`).append(opciones_select);
   } else {
     Swal.fire("Error", message, "error");
   }
@@ -369,7 +354,7 @@ $("#escuelas_select_municipio").on("change", () => {
   request_post("/api/v1/escuelas/consultar_escuelas", {
     id_municipio: $("#escuelas_select_municipio").val(),
   }).then((response) => {
-    const { success, response: escuelas } = response;
+    const {success, response: escuelas} = response;
 
     if (success) {
       notificacion("Escuelas consultadas");
@@ -404,7 +389,8 @@ $.extend(window.Parsley.options, {
   focus: "first",
   excluded: "input[type=button], input[type=submit], input[type=reset], .search, .ignore",
   triggerAfterFailure: "change blur",
-  errorsContainer: function (element) {},
+  errorsContainer: function (element) {
+  },
   trigger: "change",
   successClass: "is-valid",
   errorClass: "is-invalid",
@@ -511,13 +497,13 @@ $("#btn_guardar_escuela").click(() => {
       municipio_id: $("#municipio").val(),
       nivel_id: $("#nivel").val(),
     }).then((response) => {
-      const { success, message } = response;
+      const {success, message} = response;
 
       if (success) {
         request_post("/api/v1/escuelas/consultar_escuelas", {
           id_municipio: $("#escuelas_select_municipio").val(),
         }).then((response) => {
-          const { success, response: escuelas } = response;
+          const {success, response: escuelas} = response;
 
           if (success) {
             pintar_tabla_escuelas(escuelas);
@@ -589,7 +575,7 @@ $("#main").on("click", ".control_escuela", (event) => {
       request_post("/api/v1/escuelas/consultar_escuela", {
         id_escuela: id,
       }).then((response) => {
-        const { success, message, response: escuela } = response;
+        const {success, message, response: escuela} = response;
 
         if (success) {
           notificacion("Escuela consultada");
@@ -604,7 +590,7 @@ $("#main").on("click", ".control_escuela", (event) => {
       request_post("/api/v1/escuelas/consultar_escuela", {
         id_escuela: id,
       }).then((response) => {
-        const { success, message, response: escuela } = response;
+        const {success, message, response: escuela} = response;
 
         if (success) {
           notificacion("Escuela consultada");
@@ -631,13 +617,13 @@ $("#main").on("click", ".control_escuela", (event) => {
           request_post("/api/v1/escuelas/aliminar_escuela", {
             id_escuela: id,
           }).then((response) => {
-            const { success, message } = response;
+            const {success, message} = response;
 
             if (success) {
               request_post("/api/v1/escuelas/consultar_escuelas", {
                 id_municipio: $("#escuelas_select_municipio").val(),
               }).then((response) => {
-                const { success, response: escuelas } = response;
+                const {success, response: escuelas} = response;
 
                 if (success) {
                   pintar_tabla_escuelas(escuelas);
@@ -653,6 +639,14 @@ $("#main").on("click", ".control_escuela", (event) => {
       });
       break;
   }
+});
+
+//Regresar visualizar escuela
+$("#btn_regresar_vis_escuela").click(() => {
+  $("#form_edit_escuela")[0].reset();
+
+  $("#menu_escuelas").removeClass("d-none");
+  $("#visualizar_escuela").addClass("d-none");
 });
 
 //Cancelar editar escuela
@@ -691,13 +685,13 @@ $("#btn_guardar_edit_escuela").click(() => {
       municipio_id: $("#municipio_edit").val(),
       nivel_id: $("#nivel_edit").val(),
     }).then((response) => {
-      const { success, message } = response;
+      const {success, message} = response;
 
       if (success) {
         request_post("/api/v1/escuelas/consultar_escuelas", {
           id_municipio: $("#escuelas_select_municipio").val(),
         }).then((response) => {
-          const { success, response: escuelas } = response;
+          const {success, response: escuelas} = response;
 
           if (success) {
             pintar_tabla_escuelas(escuelas);

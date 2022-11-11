@@ -261,27 +261,72 @@
           </div>
         </section>
 
-        <div class="me-1 mb-1 d-inline-block">
-          <button id="modal_datos_usuario" type="button" class="btn btn-outline-warning d-none" data-bs-toggle="modal" data-bs-target="#full-scrn">
-            Full Screen Modal
-          </button>
+        <section id="visualizar_usuario" class="section d-none">
+          <div class="card">
+            <div class="card-header">
+              <p>Información usuario</p>
+            </div>
+            <div class="card-body">
+              <form class="form" data-parsley-validate id="form_vis_usuario">
+                <div class="row">
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="usuario_vis" class="form-label">Usuario</label>
+                      <input type="text" id="usuario_vis" class="form-control validacion_vis" placeholder="Usuario" name="usuario_vis" data-parsley-required="true" disabled/>
+                    </div>
+                  </div>
 
-          <div class="modal fade text-left w-100" id="full-scrn" tabindex="-1" role="dialog" aria-labelledby="modal_label" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-full" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 class="modal-title" id="modal_label"></h4>
-                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <i data-feather="x"></i>
-                  </button>
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="correo_vis" class="form-label">Correo Electrónico</label>
+                      <input type="email" id="correo_vis" class="form-control validacion_vis" placeholder="Correo Electrónico" name="correo_vis" data-parsley-required="true" disabled/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <label for="telefono_vis" class="form-label">Teléfono
+                    </label>
+                    <input type="number" min="1" step="1" id="telefono_vis" class="form-control" placeholder="Teléfono" name="telefono_vis" disabled/>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label for="rol_vis" class="form-label">Rol </label>
+                      <select id="rol_vis" name="rol_vis" class="form-select validacion_vis" data-parsley-required="true" disabled></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="nombre_vis" class="form-label">Nombre (s)</label>
+                      <input type="text" id="nombre_vis" class="form-control validacion_vis" placeholder="Nombre (s)" name="nombre_vis" data-parsley-required="true" disabled/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="apellido_paterno_vis" class="form-label">Apellido Paterno</label>
+                      <input type="text" id="apellido_paterno_vis" class="form-control validacion_vis" placeholder="Apellido Paterno" name="apellido_paterno_vis" data-parsley-required="true" disabled/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="apellido_materno_vis" class="form-label">Apellido Materno</label>
+                      <input type="text" id="apellido_materno_vis" class="form-control validacion_vis" placeholder="Apellido Materno" name="apellido_materno_vis" data-parsley-required="true" disabled/>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div style="display: flex; justify-content: space-around">
+                      <button type="button" id="btn_regresar_vis_usuario" class="btn btn-primary">Cerrar</button>
+                    </div>
+                  </div>
                 </div>
-
-                <div class="modal-body" id="modal_body" style="text-align: center"></div>
-                <div class="modal-footer" id="modal_footer"></div>
-              </div>
+              </form>
             </div>
           </div>
-        </div>
+        </section>
 
       </div>
     </div>
