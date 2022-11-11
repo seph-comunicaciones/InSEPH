@@ -54,7 +54,9 @@ const consultar_usuario = async (request, response) => {
   const {token_acceso, id_usuario} = request.body;
 
   if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
-    const query = await pool_query_unique(`Select * From usuario Where id_usuario = '${id_usuario}' And activo = true`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+    const query = await pool_query_unique(`Select usuario.*, rol.nom_rol From usuario
+                                                 JOIN rol  on rol.id_rol = usuario.rol_id
+                                                 Where usuario.id_usuario = '${id_usuario}' And usuario.activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
 
     if (query.success) {
       return response.status(200).json(query);

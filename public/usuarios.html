@@ -129,24 +129,21 @@
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="correo" class="form-label"
-                      >Correo Electrónico
+                      <label for="correo" class="form-label">Correo Electrónico
                       </label>
-                      <input type="text" id="correo" class="form-control validacion" placeholder="Correo Electrónico" name="correo" data-parsley-required="true"/>
+                      <input type="email" id="correo" class="form-control validacion" placeholder="Correo Electrónico" name="correo" data-parsley-required="true"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
-                    <label for="telefono" class="form-label"
-                    >Correo Electrónico
+                    <label for="telefono" class="form-label">Teléfono
                     </label>
                     <input type="number" min="1" step="1" id="telefono" class="form-control" placeholder="Teléfono" name="telefono"/>
                   </div>
 
-                  <div class="col-md-4 col-12">
+                  <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="contrasena" class="form-label"
-                      >Contraseña
+                      <label for="contrasena" class="form-label">Contraseña
                       </label>
                       <input type="password" id="contrasena" class="form-control validacion" placeholder="Contraseña" name="contrasena" data-parsley-required="true"
                       />
@@ -204,54 +201,24 @@
             <div class="card-body">
               <form class="form" data-parsley-validate id="form_edit_usuario">
                 <div class="row">
-                  <div class="col-md-4 col-12">
+                  <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="usuario_edit" class="form-label"
-                      >Usuario
-                      </label>
-                      <input type="text" id="usuario_edit" class="form-control validacion_edit" placeholder="Usuario" name="usuario_edit" data-parsley-required="true"/>
-                    </div>
-                  </div>
-
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory">
-                      <label for="correo_edit" class="form-label">Correo Electrónico
-                      </label>
-                      <input type="text" id="correo_edit" class="form-control validacion_edit" placeholder="Correo Electrónico" name="correo_edit" data-parsley-required="true"/>
-                    </div>
-                  </div>
-
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory">
-                      <label for="contrasena_edit" class="form-label">Contraseña
-                      </label>
-                      <input type="password" id="contrasena_edit" class="form-control validacion_edit" placeholder="Contraseña" name="contrasena_edit" data-parsley-required="true"/>
+                      <label for="usuario_edit" class="form-label">Usuario</label>
+                      <input type="text" id="usuario_edit" class="form-control validacion_edit" placeholder="Usuario" name="usuario_edit" data-parsley-required="true" disabled/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="nombre_edit" class="form-label">Nombre (s)
-                      </label>
-                      <input type="text" id="nombre_edit" class="form-control validacion_edit" placeholder="Nombre (s)" name="nombre_edit" data-parsley-required="true"/>
+                      <label for="correo_edit" class="form-label">Correo Electrónico</label>
+                      <input type="email" id="correo_edit" class="form-control validacion_edit" placeholder="Correo Electrónico" name="correo_edit" data-parsley-required="true"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
-                    <div class="form-group mandatory">
-                      <label for="apellido_paterno_edit" class="form-label"
-                      >Apellido Paterno
-                      </label>
-                      <input type="text" id="apellido_paterno_edit" class="form-control validacion_edit" placeholder="Apellido Paterno" name="apellido_paterno_edit" data-parsley-required="true"/>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6 col-12">
-                    <div class="form-group mandatory">
-                      <label for="apellido_materno_edit" class="form-label">Apellido Materno
-                      </label>
-                      <input type="text" id="apellido_materno_edit" class="form-control validacion_edit" placeholder="Apellido Materno" name="apellido_materno_edit" data-parsley-required="true"/>
-                    </div>
+                    <label for="telefono_edit" class="form-label">Teléfono
+                    </label>
+                    <input type="number" min="1" step="1" id="telefono_edit" class="form-control" placeholder="Teléfono" name="telefono_edit"/>
                   </div>
 
                   <div class="col-md-6 col-12">
@@ -261,10 +228,30 @@
                     </div>
                   </div>
 
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="nombre_edit" class="form-label">Nombre (s)</label>
+                      <input type="text" id="nombre_edit" class="form-control validacion_edit" placeholder="Nombre (s)" name="nombre_edit" data-parsley-required="true" disabled/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="apellido_paterno_edit" class="form-label">Apellido Paterno</label>
+                      <input type="text" id="apellido_paterno_edit" class="form-control validacion_edit" placeholder="Apellido Paterno" name="apellido_paterno_edit" data-parsley-required="true" disabled/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 col-12">
+                    <div class="form-group mandatory">
+                      <label for="apellido_materno_edit" class="form-label">Apellido Materno</label>
+                      <input type="text" id="apellido_materno_edit" class="form-control validacion_edit" placeholder="Apellido Materno" name="apellido_materno_edit" data-parsley-required="true" disabled/>
+                    </div>
+                  </div>
+
                   <div class="row">
                     <div style="display: flex; justify-content: space-around">
-                      <button type="button" id="btn_cancelar_edit_usuario" class="btn btn-danger">Cancelar
-                      </button>
+                      <button type="button" id="btn_cancelar_edit_usuario" class="btn btn-danger">Cancelar</button>
                       <button type="submit" id="btn_guardar_edit_usuario" class="btn btn-success">Guardar</button>
                     </div>
                   </div>
@@ -273,6 +260,28 @@
             </div>
           </div>
         </section>
+
+        <div class="me-1 mb-1 d-inline-block">
+          <button id="modal_datos_usuario" type="button" class="btn btn-outline-warning d-none" data-bs-toggle="modal" data-bs-target="#full-scrn">
+            Full Screen Modal
+          </button>
+
+          <div class="modal fade text-left w-100" id="full-scrn" tabindex="-1" role="dialog" aria-labelledby="modal_label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-full" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="modal_label"></h4>
+                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <i data-feather="x"></i>
+                  </button>
+                </div>
+
+                <div class="modal-body" id="modal_body" style="text-align: center"></div>
+                <div class="modal-footer" id="modal_footer"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
