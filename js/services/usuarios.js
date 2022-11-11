@@ -1,6 +1,4 @@
-const crypto = require("crypto-js");
 const {pool_query, pool_query_unique, pool_query_insert, pool_query_update, message_success, message_failure, validar_llaves, filtrar_llaves} = require("../functions/servicios");
-const CryptoJS = require("crypto-js");
 
 const consultar_roles = async (request, response) => {
   //Consulta query
