@@ -85,7 +85,7 @@ const editar_escuela = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_escuela"];
 
-  const validacion_llaves = await validar_llaves|(llaves_obligatorias, request.body);
+  const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
