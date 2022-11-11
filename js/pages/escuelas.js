@@ -171,6 +171,15 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
       $("#container_nueva_escuela").append(`<button type="button" id="btn_nueva_escuela" class="btn btn-success">
                                               <i class="bi bi-plus-circle"></i> Agregar escuela
                                             </button>`)
+
+      //Agregar nueva escuela
+      $("#btn_nueva_escuela").click(() => {
+        $("#form_nueva_escuela")[0].reset();
+        img_escuela.removeFile();
+
+        $("#menu_escuelas").addClass("d-none");
+        $("#nueva_escuela").removeClass("d-none");
+      });
     }
 
     //Cargar municipios
@@ -449,15 +458,6 @@ Parsley.on("field:validated", function (el) {
       }
     }
   }
-});
-
-//Agregar nueva escuela
-$("#btn_nueva_escuela").click(() => {
-  $("#form_nueva_escuela")[0].reset();
-  img_escuela.removeFile();
-
-  $("#menu_escuelas").addClass("d-none");
-  $("#nueva_escuela").removeClass("d-none");
 });
 
 // Filepond: Image Preview
