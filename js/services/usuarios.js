@@ -168,7 +168,7 @@ const editar_usuario = async (request, response) => {
 
   if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
     //Comparar el usuario y correo del nuevo usuario
-    const validacion = await pool_query_unique(`SELECT correo FROM usuario WHERE  correo = '${correo}';`, "", "Error, no se pudo agregar el usuario")
+    const validacion = await pool_query_unique(`SELECT correo FROM usuario WHERE  correo = '${correo}' AND id_usuario != ${id_usuario} AND activo = true;`, "", "Error, no se pudo agregar el usuario")
 
     if (validacion.response && validacion.success) {
       if (validacion.response.correo === correo) return response.status(200).json(message_failure("Correo no valido"));
