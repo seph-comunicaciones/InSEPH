@@ -88,7 +88,7 @@ const consultar_usuarios = async (request, response) => {
   const {token_acceso} = request.body;
 
   if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
-    const query = await pool_query(`SELECT usuario, correo, nombre, apellido_materno, apellido_paterno, telefono, rol_id, id_usuario FROM usuario WHERE activo = true;`, "Usuarios consultados exitosamente", "Error, no se pudieron consultar los usuarios");
+    const query = await pool_query(`SELECT usuario,  nombre, apellido_materno, apellido_paterno, id_usuario FROM usuario WHERE activo = true;`, "Usuarios consultados exitosamente", "Error, no se pudieron consultar los usuarios");
 
     if (query.success) {
       return response.status(200).json(query);
