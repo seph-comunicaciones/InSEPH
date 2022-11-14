@@ -227,14 +227,14 @@ const pintar_tabla_alumnos_docente_aulas = (alumnos_hombres, alumnos_mujeres, al
                       </thead>
                       <tbody>
                       <tr>
-                        <td>${alumnos_hombres}</td>
-                        <td>${alumnos_mujeres}</td>
-                        <td>${alumnos_total}</td>
-                        <td>${docentes_hombres}</td>
-                        <td>${docentes_mujeres}</td>
-                        <td>${docentes_total}</td>
-                        <td>${aulas_uso}</td>
-                        <td>${aulas_existentes}</td>
+                        <td>${alumnos_hombres ? alumnos_hombres : 0}</td>
+                        <td>${alumnos_mujeres ? alumnos_mujeres : 0}</td>
+                        <td>${alumnos_total ? alumnos_total : 0}</td>
+                        <td>${docentes_hombres ? docentes_hombres : 0}</td>
+                        <td>${docentes_mujeres ? docentes_mujeres : 0}</td>
+                        <td>${docentes_total ? docentes_total : 0}</td>
+                        <td>${aulas_uso ? aulas_uso : 0}</td>
+                        <td>${aulas_existentes ? aulas_existentes : 0}</td>
                       </tr>
                       </tbody>
                     </table>`)
@@ -255,12 +255,12 @@ const pintar_tabla_niveles = (preescolar, primaria, secundaria, bachiller, licen
                       </thead>
                       <tbody>
                       <tr>
-                        <td>${preescolar?preescolar:0}</td>
-                        <td>${primaria?primaria:0}</td>
-                        <td>${secundaria?secundaria:0}</td>
-                        <td>${bachiller?bachiller:0}</td>
-                        <td>${licenciatura?licenciatura:0}</td>
-                        <td>${posgrado?posgrado:0}</td>
+                        <td>${preescolar ? preescolar : 0}</td>
+                        <td>${primaria ? primaria : 0}</td>
+                        <td>${secundaria ? secundaria : 0}</td>
+                        <td>${bachiller ? bachiller : 0}</td>
+                        <td>${licenciatura ? licenciatura : 0}</td>
+                        <td>${posgrado ? posgrado : 0}</td>
                       </tr>
                       </tbody>
                     </table>`)
@@ -326,6 +326,7 @@ $("#bashboard_select_municipio").on("change", () => {
       pintar_aulas(aulas_uso, aulas_exist)
       pintar_tabla_alumnos_docente_aulas(alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_uso, aulas_exist)
       pintar_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)
-      pintar_tabla_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)    }
+      pintar_tabla_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)
+    }
   });
 });
