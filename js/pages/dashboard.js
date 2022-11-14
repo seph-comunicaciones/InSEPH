@@ -291,10 +291,10 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
     }
 
     //Consultar alumnos, docentes y aulas
-    request_post("/api/v1/dashboard/consultar_datos_alumnos_docentes_aulas", {
+    request_post("/api/v1/dashboard/consultar_datos_dashboard", {
       "municipio_id": $("#bashboard_select_municipio").val()
     }).then((response) => {
-      const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_preescolar: {preescolar}, datos_primaria: {primaria}, datos_secundaria: {secundaria}, datos_bachiller: {bachiller}, datos_licenciatura: {licenciatura}, datos_posgrado: {posgrado}}} = response;
+      const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_niveles: {preescolar, primaria, secundaria, bachiller, licenciatura, posgrado}}} = response;
 
       if (success) {
         notificacion("Datos consultados")
@@ -313,10 +313,10 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
 //On change select municipios
 $("#bashboard_select_municipio").on("change", () => {
   notificacion_carga();
-  request_post("/api/v1/dashboard/consultar_datos_alumnos_docentes_aulas", {
+  request_post("/api/v1/dashboard/consultar_datos_dashboard", {
     "municipio_id": $("#bashboard_select_municipio").val()
   }).then((response) => {
-    const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_preescolar: {preescolar}, datos_primaria: {primaria}, datos_secundaria: {secundaria}, datos_bachiller: {bachiller}, datos_licenciatura: {licenciatura}, datos_posgrado: {posgrado}}} = response;
+    const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_niveles: {preescolar, primaria, secundaria, bachiller, licenciatura, posgrado}}} = response;
 
     if (success) {
       notificacion("Datos consultados")

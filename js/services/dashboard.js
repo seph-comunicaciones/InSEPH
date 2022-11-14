@@ -1,8 +1,9 @@
-const {pool_query_unique, message_success, message_failure} = require("../functions/servicios");
+const {pool_query_unique, message_success, message_failure, pool_query} = require("../functions/servicios");
 
-const consultar_datos_alumnos_docentes_aulas = async (request, response) => {
+const consultar_datos_dashboard = async (request, response) => {
   //Consulta query
   const {municipio_id} = request.body
+  const datos_niveles = {}
 
   const query_datos_alumnos_docentes_aulas = await pool_query_unique(`SELECT SUM(alum_hom)            as alum_hom,
                                                        SUM(alum_muj)            as alum_muj,
@@ -15,22 +16,15 @@ const consultar_datos_alumnos_docentes_aulas = async (request, response) => {
                                                 FROM escuela
                                                 WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} activo = true;`, "", "");
 
-  const query_nivel_preescolar = await pool_query_unique(`SELECT SUM(tipo_id) AS preescolar FROM escuela WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} tipo_id = 1 AND activo = true;`, "", "")
-  const query_nivel_primaria = await pool_query_unique(`SELECT SUM(tipo_id) AS primaria FROM escuela WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} tipo_id = 2 AND activo = true;`, "", "")
-  const query_nivel_secundaria = await pool_query_unique(`SELECT SUM(tipo_id) AS secundaria FROM escuela WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} tipo_id = 3 AND activo = true;`, "", "")
-  const query_nivel_bachiller = await pool_query_unique(`SELECT SUM(tipo_id) AS bachiller FROM escuela WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} tipo_id = 4 AND activo = true;`, "", "")
-  const query_nivel_licenciatura = await pool_query_unique(`SELECT SUM(tipo_id) AS licenciatura FROM escuela WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} tipo_id = 5 AND activo = true;`, "", "")
-  const query_nivel_posgrado = await pool_query_unique(`SELECT SUM(tipo_id) AS posgrado FROM escuela WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} tipo_id = 6 AND activo = true;`, "", "")
+  const query_niveles = await pool_query(`SELECT tipo_id FROM escuela WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} activo = true;`, ``, ``)
 
-  if (query_datos_alumnos_docentes_aulas.success && query_nivel_preescolar.success) {
+  const niveles = [{"name": "preescolar", "id": 1}, {"name": "primaria", "id": 2}, {"name": "secundaria", "id": 3}, {"name": "bachiller", "id": 4}, {"name": "licenciatura", "id": 5}, {"name": "posgrado", "id": 6}]
+  niveles.forEach((nivel) => datos_niveles[nivel.name] = (query_niveles.response.filter(({tipo_id}) => tipo_id === nivel.id).length))
+
+  if (query_datos_alumnos_docentes_aulas.success && query_niveles.success) {
     const query = {
       "datos_alumnos_docentes_aulas": query_datos_alumnos_docentes_aulas.response,
-      "datos_preescolar": query_nivel_preescolar.response,
-      "datos_primaria": query_nivel_primaria.response,
-      "datos_secundaria": query_nivel_secundaria.response,
-      "datos_bachiller": query_nivel_bachiller.response,
-      "datos_licenciatura": query_nivel_licenciatura.response,
-      "datos_posgrado": query_nivel_posgrado.response,
+      "datos_niveles": datos_niveles,
     }
     return response.status(200).json(message_success("Datos consultados exitosamente", query));
   } else {
@@ -61,6 +55,6 @@ const consultar_niveles = async (request, response) => {
 };
 
 module.exports = {
-  consultar_datos_alumnos_docentes_aulas,
+  consultar_datos_dashboard,
   consultar_niveles
 };

@@ -9,7 +9,7 @@ const {consultar_sostenimientos} = require("./js/services/sostenimientos");
 const {consultar_controles} = require("./js/services/controles");
 const {consultar_niveles, consultar_servicios, consultar_tipos} = require("./js/services/sistemas_educativos");
 const {validar_usuario, consultar_usuarios, consultar_roles, agregar_usuario, eliminar_usuario, consultar_usuario, editar_usuario, consultar_rol_usuario} = require("./js/services/usuarios");
-const {consultar_datos_alumnos_docentes_aulas} = require("./js/services/dashboard")
+const {consultar_datos_dashboard} = require("./js/services/dashboard")
 
 const app = express();
 
@@ -98,7 +98,7 @@ app.post("/api/v1/escuelas/editar_escuela", editar_escuela);
 app.post("/api/v1/escuelas/eliminar_escuela", eliminar_escuela);
 
 //Dashboard
-app.post("/api/v1/dashboard/consultar_datos_alumnos_docentes_aulas", consultar_datos_alumnos_docentes_aulas);
+app.post("/api/v1/dashboard/consultar_datos_dashboard", consultar_datos_dashboard);
 
 //Sistemas educativos
 app.get("/api/v1/sistemas_educativos/consultar_niveles", consultar_niveles);
