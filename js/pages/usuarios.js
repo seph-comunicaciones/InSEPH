@@ -122,6 +122,8 @@ const visualizar_usuario = (usuario) => {
   validar_campo_usuario(usuario.apellido_materno, "apellido_materno_vis");
   validar_campo_usuario(usuario.rol_id, "rol_vis");
 
+  $("#usuario_modificacion_vis").text(`Ultima modificación el ${usuario.fecha_modificacion} a las ${usuario.hora_modificacion} por ${usuario.usuario_nombre_modificacion} ${usuario.usuario_apellido_paterno_modificacion} ${usuario.usuario_apellido_materno_modificacion}`)
+
   $("#menu_usuarios").addClass("d-none");
   $("#visualizar_usuario").removeClass("d-none");
 };
@@ -136,6 +138,8 @@ const editar_usuario = (usuario) => {
   validar_campo_usuario(usuario.apellido_paterno, "apellido_paterno_edit");
   validar_campo_usuario(usuario.apellido_materno, "apellido_materno_edit");
   validar_campo_usuario(usuario.rol_id, "rol_edit");
+
+  $("#usuario_modificacion_edit").text(`Ultima modificación el ${usuario.fecha_modificacion} a las ${usuario.hora_modificacion} por ${usuario.usuario_nombre_modificacion} ${usuario.usuario_apellido_paterno_modificacion} ${usuario.usuario_apellido_materno_modificacion}`)
 
   $("#menu_usuarios").addClass("d-none");
   $("#editar_usuario").removeClass("d-none");

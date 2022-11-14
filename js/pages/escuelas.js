@@ -126,6 +126,8 @@ const visualizar_escuela = (escuela) => {
   validar_campo_escuela(escuela.municipio_id, "municipio_vis");
   validar_campo_escuela(escuela.nivel_id, "nivel_vis");
 
+  $("#escuela_modificacion_vis").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
+
   $("#menu_escuelas").addClass("d-none");
   $("#visualizar_escuela").removeClass("d-none");
 };
@@ -154,6 +156,8 @@ const editar_escuela = (escuela) => {
   validar_campo_escuela(escuela.sostenimiento_id, "sostenimiento_edit");
   validar_campo_escuela(escuela.municipio_id, "municipio_edit");
   validar_campo_escuela(escuela.nivel_id, "nivel_edit");
+
+  $("#escuela_modificacion_edit").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
 
   $("#menu_escuelas").addClass("d-none");
   $("#editar_escuela").removeClass("d-none");

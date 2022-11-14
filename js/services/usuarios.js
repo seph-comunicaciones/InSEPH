@@ -71,10 +71,19 @@ const consultar_usuario = async (request, response) => {
   const {token_acceso, id_usuario} = request.body;
 
   if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
-    const query = await pool_query_unique(`SELECT usuario, correo, nombre, apellido_materno, apellido_paterno, telefono, rol_id, id_usuario FROM usuario WHERE id_usuario = '${id_usuario}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+    const query = await pool_query_unique(`SELECT usuario, correo, nombre, apellido_materno, apellido_paterno, telefono, rol_id, id_usuario, usuario_id_modificacion, hora_modificacion, LEFT(cast(fecha_modificacion AS varchar),10) AS fecha_modificacion FROM usuario WHERE id_usuario = '${id_usuario}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
 
     if (query.success) {
-      return response.status(200).json(query);
+      const query_us_mod = await pool_query_unique(`SELECT nombre, apellido_materno, apellido_paterno FROM usuario WHERE id_usuario = '${query.response.usuario_id_modificacion}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+
+      if (query_us_mod.success) {
+        query.response["usuario_nombre_modificacion"] = query_us_mod.response.nombre
+        query.response["usuario_apellido_paterno_modificacion"] = query_us_mod.response.apellido_materno
+        query.response["usuario_apellido_materno_modificacion"] = query_us_mod.response.apellido_paterno
+        return response.status(200).json(query);
+      } else {
+        return response.status(400).json(query);
+      }
     } else {
       return response.status(400).json(query);
     }
@@ -103,6 +112,12 @@ const consultar_usuarios = async (request, response) => {
 const agregar_usuario = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["usuario", "correo", "contrasena", "nombre", "apellido_paterno", "apellido_materno", "rol_id"];
+
+  if (!request.session.id_usuario || request.session.id_usuario === 0) {
+    llaves_obligatorias.push("usuario_id_modificacion")
+  } else {
+    request.body["usuario_id_modificacion"] = request.session.id_usuario
+  }
 
   const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
@@ -136,6 +151,12 @@ const eliminar_usuario = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_usuario"];
 
+  if (!request.session.id_usuario || request.session.id_usuario === 0) {
+    llaves_obligatorias.push("usuario_id_modificacion")
+  } else {
+    request.body["usuario_id_modificacion"] = request.session.id_usuario
+  }
+
   const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
@@ -143,7 +164,8 @@ const eliminar_usuario = async (request, response) => {
   const {token_acceso, id_usuario} = request.body;
 
   if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
-    const query = await pool_query(`Update usuario Set activo = 'false' Where id_usuario = '${id_usuario}';`, "Usuario eliminado exitosamente", "Error, no se pudo eliminar el usuario");
+    request.body["activo"] = false
+    const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, ["activo", "usuario_id_modificacion"]), {id_usuario: id_usuario}, "usuario"), "Usuario eliminado exitosamente", "Error, no se pudo eliminar el usuario");
 
     if (query.success) {
       return response.status(200).json(query);
@@ -158,6 +180,12 @@ const eliminar_usuario = async (request, response) => {
 const editar_usuario = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_usuario"];
+
+  if (!request.session.id_usuario || request.session.id_usuario === 0) {
+    llaves_obligatorias.push("usuario_id_modificacion")
+  } else {
+    request.body["usuario_id_modificacion"] = request.session.id_usuario
+  }
 
   const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
@@ -174,8 +202,7 @@ const editar_usuario = async (request, response) => {
       if (validacion.response.correo === correo) return response.status(200).json(message_failure("Correo no valido"));
     }
 
-    const where = {id_usuario: id_usuario};
-    const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, ["correo", "telefono", "rol_id"]), where, "usuario"), "Usuario exitosamente", "Error, no se pudo editar el usuario");
+    const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, ["correo", "telefono", "rol_id", "usuario_id_modificacion"]), {id_usuario: id_usuario}, "usuario"), "Usuario actualizado exitosamente", "Error, no se pudo editar el usuario");
 
     if (query.success) {
       return response.status(200).json(query);

@@ -1,4 +1,4 @@
-const {pool_query, pool_query_unique, pool_query_insert, pool_query_update, message_success, message_failure, validar_llaves} = require("../functions/servicios");
+const {pool_query, pool_query_unique, pool_query_insert, pool_query_update, message_success, message_failure, validar_llaves, filtrar_llaves} = require("../functions/servicios");
 
 const consultar_escuelas = async (request, response) => {
   //Validar llaves obligatorias
@@ -41,17 +41,31 @@ const consultar_escuela = async (request, response) => {
   const {id_escuela} = request.body;
 
   const query = await pool_query_unique(
-    `Select escuela.*, turno.nom_turno, control.nom_control, modelo.nom_modelo, sostenimiento.nom_sostenimiento, municipio.nom_municipio, nivel.nom_nivel, tipo.nom_tipo, servicio_educativo.nom_servicio_educativo
-    From escuela 
-    Join turno On escuela.turno_id = turno.id_turno
-    Join control On escuela.control_id = control.id_control
-    Join modelo On escuela.modelo_id = modelo.id_modelo
-    Join sostenimiento On escuela.sostenimiento_id = sostenimiento.id_sostenimiento
-    Join municipio On escuela.municipio_id = municipio.id_municipio
-    Join nivel On escuela.nivel_id = nivel.id_nivel
-	  Join tipo On escuela.tipo_id = tipo.id_tipo
-	  Join servicio_educativo On escuela.servicio_educativo_id = servicio_educativo.id_servicio_educativo
-    Where escuela.id_escuela = '${id_escuela}' AND escuela.activo = true;`,
+    `Select escuela.*,
+                   LEFT(cast(escuela.fecha_modificacion AS varchar),10) AS fecha_modificacion,
+                   turno.nom_turno,
+                   control.nom_control,
+                   modelo.nom_modelo,
+                   sostenimiento.nom_sostenimiento,
+                   municipio.nom_municipio,
+                   nivel.nom_nivel,
+                   tipo.nom_tipo,
+                   servicio_educativo.nom_servicio_educativo,
+                   usuario.nombre           AS usuario_nombre_modificacion,
+                   usuario.apellido_paterno AS usuario_apellido_paterno_modificacion,
+                   usuario.apellido_materno AS usuario_apellido_materno_modificacion
+            From escuela
+                     Join turno On escuela.turno_id = turno.id_turno
+                     Join control On escuela.control_id = control.id_control
+                     Join modelo On escuela.modelo_id = modelo.id_modelo
+                     Join sostenimiento On escuela.sostenimiento_id = sostenimiento.id_sostenimiento
+                     Join municipio On escuela.municipio_id = municipio.id_municipio
+                     Join nivel On escuela.nivel_id = nivel.id_nivel
+                     Join tipo On escuela.tipo_id = tipo.id_tipo
+                     Join servicio_educativo On escuela.servicio_educativo_id = servicio_educativo.id_servicio_educativo
+                     JOIN usuario on escuela.usuario_id_modificacion = usuario.id_usuario
+            Where escuela.id_escuela = '${id_escuela}'
+              AND escuela.activo = true;`,
     "Escuela consultada exitosamente",
     "Error, no se pudo consultar la escuela"
   );
@@ -66,6 +80,12 @@ const consultar_escuela = async (request, response) => {
 const agregar_escuela = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["clave", "nombre", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "sostenimiento_id", "municipio_id", "nivel_id", "tipo_id", "servicio_educativo_id"];
+
+  if (!request.session.id_usuario || request.session.id_usuario === 0) {
+    llaves_obligatorias.push("usuario_id_modificacion")
+  } else {
+    request.body["usuario_id_modificacion"] = request.session.id_usuario
+  }
 
   const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
@@ -91,6 +111,12 @@ const editar_escuela = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_escuela"];
 
+  if (!request.session.id_usuario || request.session.id_usuario === 0) {
+    llaves_obligatorias.push("usuario_id_modificacion")
+  } else {
+    request.body["usuario_id_modificacion"] = request.session.id_usuario
+  }
+
   const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
@@ -115,6 +141,12 @@ const eliminar_escuela = async (request, response) => {
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_escuela"];
 
+  if (!request.session.id_usuario || request.session.id_usuario === 0) {
+    llaves_obligatorias.push("usuario_id_modificacion")
+  } else {
+    request.body["usuario_id_modificacion"] = request.session.id_usuario
+  }
+
   const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
@@ -122,7 +154,8 @@ const eliminar_escuela = async (request, response) => {
   //Consulta query
   const {id_escuela, token_acceso} = request.body;
   if ((request.session.rol_id === 1) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
-    const query = await pool_query(`Update escuela Set activo = 'false' Where id_escuela = '${id_escuela}';`, "Escuela eliminada exitosamente", "Error, no se pudo eliminar la escuela");
+    request.body["activo"] = false
+    const query = await pool_query(pool_query_update(request.body, {id_escuela: id_escuela}, "escuela"), "Escuela eliminada exitosamente", "Error, no se pudo eliminar la escuela");
 
     if (query.success) {
       return response.status(200).json(query);
