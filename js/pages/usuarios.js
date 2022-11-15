@@ -216,6 +216,7 @@ $("#main").on("input", ".validacion_input", (event) => {
   const input = event.currentTarget
   const value = input.value
   const name = input.dataset.name
+  const limit = Number.isInteger(parseInt(input.dataset.limit)) ? parseInt(input.dataset.limit) : 0
   const validacion_espacios = Boolean(input.dataset.validacionEspacios ? input.dataset.validacionEspacios : false)
   const validacion_contrasena = Boolean(input.dataset.validacionContrasena ? input.dataset.validacionContrasena : false)
   const validacion_numero = Boolean(input.dataset.validacionNumero ? input.dataset.validacionNumero : false)
@@ -242,9 +243,10 @@ $("#main").on("input", ".validacion_input", (event) => {
   }
   if (validacion_numero) {
     for (let val of value) if (Number.isInteger(parseInt(val))) numero_validacion_numero += val
-    input.value = numero_validacion_numero.slice(0, 10)
+    input.value = numero_validacion_numero.slice(0, limit)
 
-    if (numero_validacion_numero.length > 0 && numero_validacion_numero.length < 10) mensajes_error_validacion_numero += `<span class="error_input">Debe de ser de 10 números</span><br>`
+    if (numero_validacion_numero.length > 0 && numero_validacion_numero.length < limit) mensajes_error_validacion_numero += `<span class="error_input">Debe de ser de ${limit} números</span><br>`
+
     $(`#errores_${name}`).append(mensajes_error_validacion_numero)
     if (mensajes_error_validacion_numero !== "") $(`#container_${name}`).addClass("is-invalid input_invalido")
   }
