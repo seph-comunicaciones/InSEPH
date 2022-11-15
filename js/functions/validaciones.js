@@ -6,10 +6,12 @@ $("#main").on("input", ".validacion_input", (event) => {
   const validacion_espacios = Boolean(input.dataset.validacionEspacios ? input.dataset.validacionEspacios : false)
   const validacion_contrasena = Boolean(input.dataset.validacionContrasena ? input.dataset.validacionContrasena : false)
   const validacion_numero = Boolean(input.dataset.validacionNumero ? input.dataset.validacionNumero : false)
+  const validacion_clave = Boolean(input.dataset.validacionClave ? input.dataset.validacionClave : false)
 
   let mensajes_error_validacion_contrasena = ""
+  let mensajes_error_validacion_clave = ""
   let mensajes_error_validacion_numero = ""
-  let numero_validacion_numero = ""
+  let numero_validacion = ""
 
   $(`#container_${name}`).removeClass("is-invalid input_invalido")
   $(`#errores_${name}`).empty()
@@ -28,12 +30,21 @@ $("#main").on("input", ".validacion_input", (event) => {
     if (mensajes_error_validacion_contrasena !== "") $(`#container_${name}`).addClass("is-invalid input_invalido")
   }
   if (validacion_numero) {
-    for (let val of value) if (Number.isInteger(parseInt(val))) numero_validacion_numero += val
-    input.value = numero_validacion_numero.slice(0, limit)
+    for (let val of value) if (Number.isInteger(parseInt(val))) numero_validacion += val
+    input.value = limit !== 0 ? numero_validacion.slice(0, limit) : numero_validacion;
 
-    if (numero_validacion_numero.length > 0 && numero_validacion_numero.length < limit) mensajes_error_validacion_numero += `<span class="error_input">Debe de ser de ${limit} números</span><br>`
+    if (limit !== 0 && numero_validacion.length > 0 && numero_validacion.length < limit) mensajes_error_validacion_numero += `<span class="error_input">Debe de ser de ${limit} números</span><br>`
 
     $(`#errores_${name}`).append(mensajes_error_validacion_numero)
     if (mensajes_error_validacion_numero !== "") $(`#container_${name}`).addClass("is-invalid input_invalido")
+  }
+  if (validacion_clave) {
+    input.value = value.slice(0, limit).toUpperCase()
+
+    if (value.length < limit) mensajes_error_validacion_clave += `<span class="error_input">Debe de ser de ${limit} caracteres</span><br>`
+    if (value.match(/[.,\/#!$%^&*;:{}=\-_`~()”“"…]/)) mensajes_error_validacion_clave += `<span class="error_input">No debe de contener signos de puntación</span><br>`
+
+    $(`#errores_${name}`).append(mensajes_error_validacion_clave)
+    if (mensajes_error_validacion_clave !== "") $(`#container_${name}`).addClass("is-invalid input_invalido")
   }
 })
