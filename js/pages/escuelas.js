@@ -407,8 +407,7 @@ const validar_form_escuela = () => {
       return false;
     }
   }
-
-  return true;
+  return $(".error_input").length <= 0;
 };
 
 const validar_form_edit_escuela = () => {
@@ -417,8 +416,7 @@ const validar_form_edit_escuela = () => {
       return false;
     }
   }
-
-  return true;
+  return $(".error_input").length <= 0;
 };
 
 //Validacion formulario
