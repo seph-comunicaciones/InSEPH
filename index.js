@@ -465,8 +465,8 @@ app.post("/api/v1/usuarios/agregar_usuario", async (request, response) => {
     const validacion = await pool_query_unique(`SELECT usuario, correo FROM usuario WHERE usuario = '${usuario}' OR correo = '${correo}';`, "", "Error, no se pudo agregar el usuario")
 
     if (validacion.response && validacion.success) {
-      if (validacion.response.usuario === usuario) return response.status(200).json(message_failure("Usuario no valido"))
-      if (validacion.response.correo === correo) return response.status(200).json(message_failure("Correo no valido"));
+      if (validacion.response.usuario === usuario) return response.status(200).json(message_failure("Usuario no disponible"))
+      if (validacion.response.correo === correo) return response.status(200).json(message_failure("Correo no disponible"));
     }
 
     const query = await pool_query(pool_query_insert(request.body, true, "usuario"), "Usuario agregado exitosamente", "Error, no se pudo agregar el usuario");
