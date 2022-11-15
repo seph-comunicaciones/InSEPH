@@ -20,7 +20,7 @@ $("#main").on("input", ".validacion_input", (event) => {
     input.value = value.trim()
   }
   if (validacion_contrasena) {
-    if (input.value.length < 8) mensajes_error_validacion_contrasena += `<span class="error_input">Debe de ser de 8 caracteres</span><br>`
+    if (limit !== 0 && input.value.length < limit) mensajes_error_validacion_contrasena += `<span class="error_input">Debe de ser de ${limit} caracteres</span><br>`
     if (!(value.match(/[0-9]+/))) mensajes_error_validacion_contrasena += `<span class="error_input">Debe de contar por lo menos con un numero</span><br>`
     if (!(value.match(/[A-z]/))) mensajes_error_validacion_contrasena += `<span class="error_input">Debe de contar por lo menos con una letra</span><br>`
     if (!(value.match(/[A-Z]/))) mensajes_error_validacion_contrasena += `<span class="error_input">Debe de contar por lo menos con una letra mayúscula</span><br>`
