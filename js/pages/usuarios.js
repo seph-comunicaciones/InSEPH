@@ -240,22 +240,6 @@ $("#btn_guardar_usuario").click(() => {
       const {success, message} = response;
 
       if (success) {
-        request_post("/api/v1/usuarios/consultar_usuarios", {}).then((response) => {
-          const {success, response: usuarios} = response;
-
-          if (success) {
-            pintar_tabla_usuarios(usuarios)
-          }
-        })
-
-        Swal.fire({
-          icon: "success",
-          title: "Exito",
-          text: "Usuario registrado",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Aceptar",
-        });
-
         $("#form_nuevo_usuario")[0].reset();
         $(".validacion_input").empty()
 
@@ -336,14 +320,6 @@ $("#main").on("click", ".control_usuario", (event) => {
             const {success, message} = response;
 
             if (success) {
-              request_post("/api/v1/usuarios/consultar_usuarios", {}).then((response) => {
-                const {success, response: usuarios} = response;
-
-                if (success) {
-                  pintar_tabla_usuarios(usuarios)
-                }
-              })
-
               Swal.fire("Eliminado", message, "success");
             } else {
               Swal.fire("Error", message, "error");
@@ -387,14 +363,6 @@ $("#btn_guardar_edit_usuario").click(() => {
       const {success, message} = response;
 
       if (success) {
-        request_post("/api/v1/usuarios/consultar_usuarios", {}).then((response) => {
-          const {success, response: usuarios} = response;
-
-          if (success) {
-            pintar_tabla_usuarios(usuarios);
-          }
-        });
-
         Swal.fire({
           icon: "success",
           title: "Exito",
@@ -414,3 +382,33 @@ $("#btn_guardar_edit_usuario").click(() => {
   }
 });
 
+//Socket
+const socket = io.connect();
+
+socket.on("agregar_usuario", mensaje_socket => {
+  console.log("agregar_usuario", mensaje_socket)
+  const validacion_existente = usuarios_locales.find(({id_usuario}) => id_usuario === parseInt(mensaje_socket.id_usuario))
+  if (!validacion_existente) {
+    usuarios_locales.push(mensaje_socket)
+    pintar_tabla_usuarios(usuarios_locales)
+    notificacion("Nuevo usuario registrado")
+  }
+});
+
+socket.on("editar_usuario", mensaje_socket => {
+  console.log("editar_usuario", mensaje_socket)
+  const validacion_existente = usuarios_locales.find(({id_usuario}) => id_usuario === parseInt(mensaje_socket.id_usuario))
+  if (validacion_existente) {
+    usuarios_locales = usuarios_locales.filter(({id_usuario}) => id_usuario !== parseInt(mensaje_socket.id_usuario))
+    usuarios_locales.push(mensaje_socket)
+    pintar_tabla_usuarios(usuarios_locales)
+    notificacion("Usuario editado")
+  }
+});
+
+socket.on("eliminar_usuario", mensaje_socket => {
+  console.log("eliminar_usuario", mensaje_socket)
+  usuarios_locales = usuarios_locales.filter(({id_usuario}) => id_usuario !== parseInt(mensaje_socket.id_usuario))
+  pintar_tabla_usuarios(usuarios_locales)
+  notificacion("Usuario eliminado")
+});
