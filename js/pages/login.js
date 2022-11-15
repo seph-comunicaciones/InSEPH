@@ -1,8 +1,7 @@
 //Validacion formulario
 $.extend(window.Parsley.options, {
   focus: "first",
-  excluded:
-    "input[type=button], input[type=submit], input[type=reset], .search, .ignore",
+  excluded: "input[type=button], input[type=submit], input[type=reset], .search, .ignore",
   triggerAfterFailure: "change blur",
   errorsContainer: function (element) {
   },
@@ -30,9 +29,7 @@ Parsley.on("field:validated", function (el) {
       let formGroupNode = fieldNode.closest(".form-group");
       let lblNode = formGroupNode.find(".form-label:first");
       if (lblNode.length > 0) {
-        let errorNode = formGroupNode.find(
-          "div.parsley-error span[class*=parsley-]"
-        );
+        let errorNode = formGroupNode.find("div.parsley-error span[class*=parsley-]");
         if (errorNode.length > 0) {
           let lblText = lblNode.text();
           if (lblText) {

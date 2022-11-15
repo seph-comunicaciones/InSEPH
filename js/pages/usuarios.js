@@ -81,28 +81,20 @@ const pintar_tabla_usuarios = (usuarios) => {
 
 const validar_form_usuario = () => {
   for (let i = 0; i < $(".validacion").length; i++) {
-    if (
-      $(`#${$(".validacion")[i].id}`).val() === "" ||
-      $(`#${$(".validacion")[i].id}`).val() === 0
-    ) {
+    if ($(`#${$(".validacion")[i].id}`).val() === "" || $(`#${$(".validacion")[i].id}`).val() === 0) {
       return false;
     }
   }
-
-  return true;
+  return $(".error_input").length <= 0;
 };
 
 const validar_form_edit_usuario = () => {
   for (let i = 0; i < $(".validacion_edit").length; i++) {
-    if (
-      $(`#${$(".validacion_edit")[i].id}`).val() === "" ||
-      $(`#${$(".validacion_edit")[i].id}`).val() === 0
-    ) {
+    if ($(`#${$(".validacion_edit")[i].id}`).val() === "" || $(`#${$(".validacion_edit")[i].id}`).val() === 0) {
       return false;
     }
   }
-
-  return true;
+  return $(".error_input").length <= 0;
 };
 
 const validar_campo_usuario = (campo, id) => {
@@ -178,8 +170,7 @@ request_post("/api/v1/usuarios/consultar_usuarios", {}).then((response) => {
 //Validacion formulario
 $.extend(window.Parsley.options, {
   focus: "first",
-  excluded:
-    "input[type=button], input[type=submit], input[type=reset], .search, .ignore",
+  excluded: "input[type=button], input[type=submit], input[type=reset], .search, .ignore",
   triggerAfterFailure: "change blur",
   errorsContainer: function (element) {
   },
@@ -197,21 +188,21 @@ $.extend(window.Parsley.options, {
 });
 
 Parsley.on("field:validated", function (el) {
-  var elNode = $(el)[0];
+  let elNode = $(el)[0];
   if (elNode && !elNode.isValid()) {
-    var rqeuiredValResult = elNode.validationResult.filter(function (vr) {
+    let rqeuiredValResult = elNode.validationResult.filter(function (vr) {
       return vr.assert.name === "required";
     });
     if (rqeuiredValResult.length > 0) {
-      var fieldNode = $(elNode.element);
-      var formGroupNode = fieldNode.closest(".form-group");
-      var lblNode = formGroupNode.find(".form-label:first");
+      let fieldNode = $(elNode.element);
+      let formGroupNode = fieldNode.closest(".form-group");
+      let lblNode = formGroupNode.find(".form-label:first");
       if (lblNode.length > 0) {
-        var errorNode = formGroupNode.find(
+        let errorNode = formGroupNode.find(
           "div.parsley-error span[class*=parsley-]"
         );
         if (errorNode.length > 0) {
-          var lblText = lblNode.text();
+          let lblText = lblNode.text();
           if (lblText) {
             errorNode.html(lblText + " es necesario.");
           }
@@ -221,9 +212,48 @@ Parsley.on("field:validated", function (el) {
   }
 });
 
+$("#main").on("input", ".validacion_input", (event) => {
+  const input = event.currentTarget
+  const value = input.value
+  const name = input.dataset.name
+  const validacion_espacios = Boolean(input.dataset.validacionEspacios ? input.dataset.validacionEspacios : false)
+  const validacion_contrasena = Boolean(input.dataset.validacionContrasena ? input.dataset.validacionContrasena : false)
+  const validacion_numero = Boolean(input.dataset.validacionNumero ? input.dataset.validacionNumero : false)
+
+  let mensajes_error_validacion_contrasena = ""
+  let mensajes_error_validacion_numero = ""
+  let numero_validacion_numero = ""
+
+  $(`#container_${name}`).removeClass("is-invalid input_invalido")
+  $(`#errores_${name}`).empty()
+
+  if (validacion_espacios) {
+    input.value = value.trim()
+  }
+  if (validacion_contrasena) {
+    if (input.value.length < 8) mensajes_error_validacion_contrasena += `<span class="error_input">Debe de ser de 8 caracteres</span><br>`
+    if (!(value.match(/[0-9]+/))) mensajes_error_validacion_contrasena += `<span class="error_input">Debe de contar por lo menos con un numero</span><br>`
+    if (!(value.match(/[A-z]/))) mensajes_error_validacion_contrasena += `<span class="error_input">Debe de contar por lo menos con una letra</span><br>`
+    if (!(value.match(/[A-Z]/))) mensajes_error_validacion_contrasena += `<span class="error_input">Debe de contar por lo menos con una letra mayúscula</span><br>`
+    if (!(value.match(/[a-z]/))) mensajes_error_validacion_contrasena += `<span class="error_input">Debe de contar por lo menos con una letra minúscula</span><br>`
+
+    $(`#errores_${name}`).append(mensajes_error_validacion_contrasena)
+    if (mensajes_error_validacion_contrasena !== "") $(`#container_${name}`).addClass("is-invalid input_invalido")
+  }
+  if (validacion_numero) {
+    for (let val of value) if (Number.isInteger(parseInt(val))) numero_validacion_numero += val
+    input.value = numero_validacion_numero.slice(0, 10)
+
+    if (numero_validacion_numero.length > 0 && numero_validacion_numero.length < 10) mensajes_error_validacion_numero += `<span class="error_input">Debe de ser de 10 números</span><br>`
+    $(`#errores_${name}`).append(mensajes_error_validacion_numero)
+    if (mensajes_error_validacion_numero !== "") $(`#container_${name}`).addClass("is-invalid input_invalido")
+  }
+})
+
 //Agregar nuevo usuario
 $("#btn_nuevo_usuario").click(() => {
   $("#form_nuevo_usuario")[0].reset();
+  $(".validacion_input").empty()
 
   $("#menu_usuarios").addClass("d-none");
   $("#nuevo_usuario").removeClass("d-none");
@@ -238,7 +268,7 @@ $("#btn_guardar_usuario").click(() => {
     request_post("/api/v1/usuarios/agregar_usuario", {
       "usuario": $("#usuario").val(),
       "correo": $("#correo").val(),
-      "telefono": $("#telefono").val(),
+      "telefono": $("#telefono").val() > 0 ? $("#telefono").val() : "",
       "contrasena": $("#contrasena").val(),
       "nombre": $("#nombre").val(),
       "apellido_paterno": $("#apellido_paterno").val(),
@@ -265,6 +295,7 @@ $("#btn_guardar_usuario").click(() => {
         });
 
         $("#form_nuevo_usuario")[0].reset();
+        $(".validacion_input").empty()
 
         $("#menu_usuarios").removeClass("d-none");
         $("#nuevo_usuario").addClass("d-none");
@@ -278,6 +309,7 @@ $("#btn_guardar_usuario").click(() => {
 //Cancelar nuevo usuario
 $("#btn_cancelar_usuario").click(() => {
   $("#form_nuevo_usuario")[0].reset();
+  $(".validacion_input").empty()
 
   $("#nuevo_usuario").addClass("d-none");
   $("#menu_usuarios").removeClass("d-none");

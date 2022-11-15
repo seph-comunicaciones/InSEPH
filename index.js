@@ -12,6 +12,7 @@ const {validar_usuario, consultar_usuarios, consultar_roles, agregar_usuario, el
 const {consultar_datos_dashboard} = require("./js/services/dashboard")
 
 const app = express();
+let my_session;
 
 app.use("/js", express.static(__dirname + "/js"));
 app.use("/extensions", express.static(__dirname + "/extensions"));
@@ -38,8 +39,6 @@ app.use(session({
   },
 }));
 
-let my_session;
-
 app.use((request, response, next) => {
   my_session = request.session;
   my_session.login = my_session.cookie.login ? my_session.cookie.login : my_session.login;
@@ -47,48 +46,6 @@ app.use((request, response, next) => {
   my_session.id_usuario = my_session.cookie.id_usuario ? my_session.cookie.id_usuario : my_session.id_usuario;
   next();
 });
-
-const routes_session = (route, session_true, session_false, log_out) => (request, response) => {
-  console.log("Accediendo a la ruta", route)
-
-  if (log_out) {
-    request.session.login = false;
-    request.session.rol_id = 0;
-    request.session.id_usuario = 0;
-  }
-
-  console.log(request.session);
-
-  if (request.session.rol_id && request.session.rol_id !== 1) {
-    if (request.session.login) {
-      switch (route) {
-        case "/dashboard.html":
-          response.sendFile(__dirname + `/public/dashboard_us.html`);
-          break
-        case "/escuelas.html":
-          response.sendFile(__dirname + `/public/escuelas_us.html`);
-          break
-        case "/usuarios.html":
-          response.sendFile(__dirname + `/public/dashboard_us.html`);
-          break
-        case "/logout.html":
-          response.sendFile(__dirname + `/public/login.html`);
-          break
-        default:
-          response.sendFile(__dirname + `/public/dashboard_us.html`);
-      }
-    } else {
-      response.sendFile(__dirname + `/public/${session_false}`);
-    }
-
-  } else {
-    if (request.session.login) {
-      response.sendFile(__dirname + `/public/${session_true}`);
-    } else {
-      response.sendFile(__dirname + `/public/${session_false}`);
-    }
-  }
-};
 
 //Escuelas
 app.post("/api/v1/escuelas/consultar_escuelas", consultar_escuelas);
@@ -131,6 +88,48 @@ app.post("/api/v1/usuarios/eliminar_usuario", eliminar_usuario);
 app.post("/api/v1/usuarios/editar_usuario", editar_usuario);
 
 //Carga de vistas
+const routes_session = (route, session_true, session_false, log_out) => (request, response) => {
+  console.log("Accediendo a la ruta", route)
+
+  if (log_out) {
+    request.session.login = false;
+    request.session.rol_id = 0;
+    request.session.id_usuario = 0;
+  }
+
+  console.log(request.session);
+
+  if (request.session.rol_id && request.session.rol_id !== 1) {
+    if (request.session.login) {
+      switch (route) {
+        case "/dashboard.html":
+          response.sendFile(__dirname + `/public/dashboard_us.html`);
+          break
+        case "/escuelas.html":
+          response.sendFile(__dirname + `/public/escuelas_us.html`);
+          break
+        case "/usuarios.html":
+          response.sendFile(__dirname + `/public/dashboard_us.html`);
+          break
+        case "/logout.html":
+          response.sendFile(__dirname + `/public/login.html`);
+          break
+        default:
+          response.sendFile(__dirname + `/public/dashboard_us.html`);
+      }
+    } else {
+      response.sendFile(__dirname + `/public/${session_false}`);
+    }
+
+  } else {
+    if (request.session.login) {
+      response.sendFile(__dirname + `/public/${session_true}`);
+    } else {
+      response.sendFile(__dirname + `/public/${session_false}`);
+    }
+  }
+};
+
 app.get("/", routes_session("/", "dashboard.html", "login.html", false));
 app.get("/login.html", routes_session("/login.html", "dashboard.html", "login.html", false));
 app.get("/logout.html", routes_session("/logout.html", "login.html", "login.html", true));

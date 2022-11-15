@@ -20,7 +20,7 @@ async function request_get(url) {
     responseJSON = JSON.parse(responseText);
   } catch (e) {
     console.error(e);
-    responseJSON = { success: false, failure: true, mensaje: "UNRESOLVE" };
+    responseJSON = {success: false, failure: true, message: "UNRESOLVE"};
   }
   return responseJSON;
 }
@@ -46,7 +46,7 @@ async function request_post(url, json) {
     responseJSON = JSON.parse(responseText);
   } catch (e) {
     console.error(e);
-    responseJSON = { success: false, failure: true, mensaje: "UNRESOLVE" };
+    responseJSON = {success: false, failure: true, message: "UNRESOLVE"};
   }
   return responseJSON;
 }

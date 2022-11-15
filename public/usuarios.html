@@ -123,30 +123,30 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label for="usuario" class="form-label">Usuario </label>
-                      <input type="text" id="usuario" class="form-control validacion" placeholder="Usuario" name="usuario" data-parsley-required="true"/>
+                      <input type="text" id="usuario" class="form-control validacion validacion_input" data-validacion-espacios="true" placeholder="Usuario" name="usuario" data-parsley-required="true"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="correo" class="form-label">Correo Electrónico
-                      </label>
-                      <input type="email" id="correo" class="form-control validacion" placeholder="Correo Electrónico" name="correo" data-parsley-required="true"/>
+                      <label for="correo" class="form-label">Correo Electrónico</label>
+                      <input type="email" id="correo" class="form-control validacion validacion_input" data-validacion-espacios="true" placeholder="Correo Electrónico" name="correo" data-parsley-required="true"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
-                    <label for="telefono" class="form-label">Teléfono
-                    </label>
-                    <input type="number" min="1" step="1" id="telefono" class="form-control" placeholder="Teléfono" name="telefono"/>
+                    <div class="form-group" id="container_validacion_numero">
+                      <label for="telefono" class="form-label">Teléfono</label>
+                      <input type="text" id="telefono" class="form-control validacion_input" data-name="validacion_numero" data-validacion-espacios="true" data-validacion-numero="true" placeholder="Teléfono" name="telefono"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-6 col-12">
-                    <div class="form-group mandatory">
-                      <label for="contrasena" class="form-label">Contraseña
-                      </label>
-                      <input type="password" id="contrasena" class="form-control validacion" placeholder="Contraseña" name="contrasena" data-parsley-required="true"
-                      />
+                    <div class="form-group mandatory" id="container_validacion_contrasena">
+                      <label for="contrasena" class="form-label">Contraseña</label>
+                      <input type="password" id="contrasena" class="form-control validacion validacion_input" data-name="validacion_contrasena" data-validacion-espacios="true" data-validacion-contrasena="true" placeholder="Contraseña" name="contrasena" data-parsley-required="true"/>
+                      <div class="parsley-error filled" id="errores_validacion_contrasena"></div>
                     </div>
                   </div>
 
@@ -159,17 +159,15 @@
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="apellido_paterno" class="form-label">Apellido Paterno
-                      </label>
-                      <input type="text" id="apellido_paterno" class="form-control validacion" placeholder="Apellido Paterno" name="apellido_paterno" data-parsley-required="true"/>
+                      <label for="apellido_paterno" class="form-label">Apellido Paterno</label>
+                      <input type="text" id="apellido_paterno" class="form-control validacion " placeholder="Apellido Paterno" name="apellido_paterno" data-parsley-required="true"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="apellido_materno" class="form-label">Apellido Materno
-                      </label>
-                      <input type="text" id="apellido_materno" class="form-control validacion" placeholder="Apellido Materno" name="apellido_materno" data-parsley-required="true"/>
+                      <label for="apellido_materno" class="form-label">Apellido Materno</label>
+                      <input type="text" id="apellido_materno" class="form-control validacion " placeholder="Apellido Materno" name="apellido_materno" data-parsley-required="true"/>
                     </div>
                   </div>
 
@@ -182,8 +180,7 @@
 
                   <div class="row">
                     <div style="display: flex; justify-content: space-around">
-                      <button type="button" id="btn_cancelar_usuario" class="btn btn-danger">Cancelar
-                      </button>
+                      <button type="button" id="btn_cancelar_usuario" class="btn btn-danger">Cancelar</button>
                       <button type="submit" id="btn_guardar_usuario" class="btn btn-success">Guardar</button>
                     </div>
                   </div>
@@ -216,9 +213,11 @@
                   </div>
 
                   <div class="col-md-6 col-12">
-                    <label for="telefono_edit" class="form-label">Teléfono
-                    </label>
-                    <input type="number" min="1" step="1" id="telefono_edit" class="form-control" placeholder="Teléfono" name="telefono_edit"/>
+                    <div class="form-group" id="container_validacion_numero_edit">
+                      <label for="telefono_edit" class="form-label">Teléfono</label>
+                      <input type="text" id="telefono_edit" class="form-control validacion_input"  data-name="validacion_numero_edit" data-validacion-espacios="true" data-validacion-numero="true" placeholder="Teléfono" name="telefono_edit"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero_edit"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-6 col-12">
@@ -288,8 +287,7 @@
                   </div>
 
                   <div class="col-md-6 col-12">
-                    <label for="telefono_vis" class="form-label">Teléfono
-                    </label>
+                    <label for="telefono_vis" class="form-label">Teléfono</label>
                     <input type="number" min="1" step="1" id="telefono_vis" class="form-control" placeholder="Teléfono" name="telefono_vis" disabled/>
                   </div>
 
