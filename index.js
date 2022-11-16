@@ -177,7 +177,7 @@ app.post("/api/v1/escuelas/editar_escuela", async (request, response) => {
   const {id_escuela, token_acceso} = request.body;
   if ((request.session.rol_id === 1) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
     const where = {id_escuela: id_escuela};
-    const llaves_filtrar = ["id_escuela", "nombre", "pag_web", "telefono", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "tipo_id", "servicio_educativo_id", "sostenimiento_id", "municipio_id", "nivel_id"]
+    const llaves_filtrar = ["id_escuela", "nombre", "pag_web", "telefono", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "tipo_id", "servicio_educativo_id", "sostenimiento_id", "municipio_id", "nivel_id", "usuario_id_modificacion"]
     const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, llaves_filtrar), where, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
 
     if (query.success) {
@@ -411,8 +411,8 @@ app.post("/api/v1/usuarios/consultar_usuario", async (request, response) => {
 
       if (query_us_mod.success) {
         query.response["usuario_nombre_modificacion"] = query_us_mod.response.nombre
-        query.response["usuario_apellido_paterno_modificacion"] = query_us_mod.response.apellido_materno
-        query.response["usuario_apellido_materno_modificacion"] = query_us_mod.response.apellido_paterno
+        query.response["usuario_apellido_paterno_modificacion"] = query_us_mod.response.apellido_paterno
+        query.response["usuario_apellido_materno_modificacion"] = query_us_mod.response.apellido_materno
         return response.status(200).json(query);
       } else {
         return response.status(400).json(query);
