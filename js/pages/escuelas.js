@@ -41,17 +41,17 @@ const pintar_tabla_escuelas = (escuelas) => {
   escuelas_datatable = null;
   escuelas_local = escuelas;
 
-  let table = `<table class="table" id="table_escuelas">
+  let table = `<table class="table" style="text-align: center" id="table_escuelas">
                 <thead>
                   <tr>
-                    <th>Clave del centro de trabajo</th>
-                    <th>Nombre del centro de trabajo</th>
-                    <th>Nombre del municipio</th>
-                    <th>Nombre del turno</th>
-                    <th>Visualizar</th>
+                    <th style="text-align: center">Clave del centro de trabajo</th>
+                    <th style="text-align: center">Nombre del centro de trabajo</th>
+                    <th style="text-align: center">Nombre del municipio</th>
+                    <th style="text-align: center">Nombre del turno</th>
+                    <th style="text-align: center">Visualizar</th>
                     ${rol === 1 ? `
-                    <th>Editar</th> 
-                    <th>Eliminar</th>
+                    <th style="text-align: center">Editar</th> 
+                    <th style="text-align: center">Eliminar</th>
                     ` : ``}
                   </tr>
                 </thead>
@@ -63,22 +63,10 @@ const pintar_tabla_escuelas = (escuelas) => {
                 <td>${escuela.nombre}</td>
                 <td>${escuela.nom_municipio}</td>
                 <td>${escuela.nom_turno}</td>
-                <td style="text-align: center">
-                  <button data-id="${escuela.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela">
-                    <i class="bi bi-eye-fill"></i>
-                  </button>
-                </td>
+                <td><button id="row_${escuela.clave}" data-id="${escuela.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela"><i class="bi bi-eye-fill"></i></button></td>
                 ${rol === 1 ? `
-                <td style="text-align: center">
-                  <button data-id="${escuela.id_escuela}" data-type="editar_escuela" class="btn btn-primary control_escuela">
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                </td>
-                <td style="text-align: center">
-                  <button data-id="${escuela.id_escuela}" data-type="eliminar_escuela" class="btn btn-danger control_escuela">
-                    <i class="bi bi-trash3-fill"></i>
-                  </button>
-                </td>
+                <td><button data-id="${escuela.id_escuela}" data-type="editar_escuela" class="btn btn-primary control_escuela"><i class="bi bi-pencil-square"></i></button></td>
+                <td><button data-id="${escuela.id_escuela}" data-type="eliminar_escuela" class="btn btn-danger control_escuela"><i class="bi bi-trash3-fill"></i></button></td>
                 ` : ``}
               </tr>`;
   });
@@ -526,16 +514,6 @@ $("#btn_guardar_escuela").click(() => {
       const {success, message} = response;
 
       if (success) {
-        request_post("/api/v1/escuelas/consultar_escuelas", {
-          id_municipio: $("#escuelas_select_municipio").val(),
-        }).then((response) => {
-          const {success, response: escuelas} = response;
-
-          if (success) {
-            pintar_tabla_escuelas(escuelas);
-          }
-        });
-
         Swal.fire({
           icon: "success",
           title: "Exito",
@@ -646,16 +624,6 @@ $("#main").on("click", ".control_escuela", (event) => {
             const {success, message} = response;
 
             if (success) {
-              request_post("/api/v1/escuelas/consultar_escuelas", {
-                id_municipio: $("#escuelas_select_municipio").val(),
-              }).then((response) => {
-                const {success, response: escuelas} = response;
-
-                if (success) {
-                  pintar_tabla_escuelas(escuelas);
-                }
-              });
-
               Swal.fire("Eliminado", message, "success");
             } else {
               Swal.fire("Error", message, "error");
@@ -692,7 +660,6 @@ $("#btn_guardar_edit_escuela").click(() => {
     notificacion_carga();
     request_post("/api/v1/escuelas/editar_escuela", {
       id_escuela: escuela_actual,
-      clave: $("#clave_centro_edit").val(),
       nombre: $("#nombre_centro_edit").val(),
       pag_web: $("#pagina_edit").val(),
       telefono: $("#telefono_edit").val(),
@@ -714,16 +681,6 @@ $("#btn_guardar_edit_escuela").click(() => {
       const {success, message} = response;
 
       if (success) {
-        request_post("/api/v1/escuelas/consultar_escuelas", {
-          id_municipio: $("#escuelas_select_municipio").val(),
-        }).then((response) => {
-          const {success, response: escuelas} = response;
-
-          if (success) {
-            pintar_tabla_escuelas(escuelas);
-          }
-        });
-
         Swal.fire({
           icon: "success",
           title: "Exito",
@@ -741,5 +698,55 @@ $("#btn_guardar_edit_escuela").click(() => {
         Swal.fire("Error", message, "error");
       }
     });
+  }
+});
+
+//Socket
+const socket = io.connect();
+
+socket.on("agregar_escuela", mensaje_socket => {
+  console.log("agregar_escuela")
+  let validacion_existente = false
+  for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
+    if (escuelas_datatable.data()[i][0] === mensaje_socket.clave) {
+      validacion_existente = true
+      break
+    }
+  }
+  if (!validacion_existente) {
+    const new_row = [mensaje_socket.clave, mensaje_socket.nombre, mensaje_socket.nom_municipio, mensaje_socket.nom_turno, `<td><button id="row_${mensaje_socket.clave}" data-id="${mensaje_socket.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela"><i class="bi bi-eye-fill"></i></button></td>`]
+
+    if (rol === 1) {
+      new_row.push(`<td><button data-id="${mensaje_socket.id_escuela}" data-type="editar_escuela" class="btn btn-primary control_escuela"><i class="bi bi-pencil-square"></i></button></td>`)
+      new_row.push(`<td><button data-id="${mensaje_socket.id_escuela}" data-type="eliminar_escuela" class="btn btn-danger control_escuela"><i class="bi bi-trash3-fill"></i></button></td>`)
+    }
+
+    escuelas_datatable.row.add(new_row).draw(false);
+    notificacion("Nueva escuela registrada")
+  }
+});
+
+socket.on("editar_escuela", mensaje_socket => {
+  console.log("editar_escuela", mensaje_socket)
+  for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
+    if (escuelas_datatable.data()[i][0] === mensaje_socket.clave) {
+      escuelas_datatable.cell({row: i, column: 0}).data(mensaje_socket.clave);
+      escuelas_datatable.cell({row: i, column: 1}).data(mensaje_socket.nombre);
+      escuelas_datatable.cell({row: i, column: 2}).data(mensaje_socket.nom_municipio);
+      escuelas_datatable.cell({row: i, column: 3}).data(mensaje_socket.nom_turno);
+      notificacion("Escuela editada")
+      break
+    }
+  }
+});
+
+socket.on("eliminar_escuela", mensaje_socket => {
+  console.log("eliminar_escuela", mensaje_socket)
+  for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
+    if (escuelas_datatable.data()[i][0] === mensaje_socket.clave) {
+      escuelas_datatable.row($(`#row_${mensaje_socket.clave}`).parents("tr")).remove().draw(false)
+      notificacion("Escuela eliminada")
+      break
+    }
   }
 });

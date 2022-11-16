@@ -1,4 +1,4 @@
-let escuelas_datatable
+let usuarios_datatable
 let usuarios_locales
 let roles_locales
 let usuario_actual
@@ -27,7 +27,7 @@ const notificacion_carga = () => {
 //Funciones
 const pintar_tabla_usuarios = (usuarios) => {
   $("#container_table_usuarios").empty();
-  escuelas_datatable = null;
+  usuarios_datatable = null;
   usuarios_locales = usuarios;
 
   let table = `<table class="table" style="text-align: center" id="table_usuarios">
@@ -60,7 +60,7 @@ const pintar_tabla_usuarios = (usuarios) => {
   $("#container_table_usuarios").append(table);
 
   //Datatable
-  escuelas_datatable = $("#table_usuarios").DataTable({
+  usuarios_datatable = $("#table_usuarios").DataTable({
     language: {
       url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
     },
@@ -376,15 +376,15 @@ const socket = io.connect();
 socket.on("agregar_usuario", mensaje_socket => {
   console.log("agregar_usuario")
   let validacion_existente = false
-  for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
-    if (escuelas_datatable.data()[i][0] === mensaje_socket.usuario) {
+  for (let i = 0; i < usuarios_datatable.rows().data().length; i++) {
+    if (usuarios_datatable.data()[i][0] === mensaje_socket.usuario) {
       validacion_existente = true
       break
     }
   }
 
   if (!validacion_existente) {
-    escuelas_datatable.row.add([
+    usuarios_datatable.row.add([
       mensaje_socket.usuario,
       mensaje_socket.nombre,
       `${mensaje_socket.apellido_materno} ${mensaje_socket.apellido_paterno}`,
@@ -398,11 +398,11 @@ socket.on("agregar_usuario", mensaje_socket => {
 
 socket.on("editar_usuario", mensaje_socket => {
   console.log("editar_usuario")
-  for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
-    if (escuelas_datatable.data()[i][0] === mensaje_socket.usuario) {
-      escuelas_datatable.cell({row: i, column: 0}).data(mensaje_socket.usuario);
-      escuelas_datatable.cell({row: i, column: 1}).data(mensaje_socket.nombre);
-      escuelas_datatable.cell({row: i, column: 2}).data(`${mensaje_socket.apellido_materno} ${mensaje_socket.apellido_paterno}`);
+  for (let i = 0; i < usuarios_datatable.rows().data().length; i++) {
+    if (usuarios_datatable.data()[i][0] === mensaje_socket.usuario) {
+      usuarios_datatable.cell({row: i, column: 0}).data(mensaje_socket.usuario);
+      usuarios_datatable.cell({row: i, column: 1}).data(mensaje_socket.nombre);
+      usuarios_datatable.cell({row: i, column: 2}).data(`${mensaje_socket.apellido_materno} ${mensaje_socket.apellido_paterno}`);
       notificacion("Usuario editado")
       break
     }
@@ -411,9 +411,9 @@ socket.on("editar_usuario", mensaje_socket => {
 
 socket.on("eliminar_usuario", mensaje_socket => {
   console.log("eliminar_usuario")
-  for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
-    if (escuelas_datatable.data()[i][0] === mensaje_socket.usuario) {
-      escuelas_datatable.row($(`#row_${mensaje_socket.id_usuario}`).parents("tr")).remove().draw(false)
+  for (let i = 0; i < usuarios_datatable.rows().data().length; i++) {
+    if (usuarios_datatable.data()[i][0] === mensaje_socket.usuario) {
+      usuarios_datatable.row($(`#row_${mensaje_socket.id_usuario}`).parents("tr")).remove().draw(false)
       notificacion("Usuario eliminado")
       break
     }

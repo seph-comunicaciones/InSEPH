@@ -368,7 +368,7 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory" id="container_validacion_clave_edit">
                       <label for="clave_centro_edit" class="form-label">Clave del centro de trabajo </label>
-                      <input type="text" id="clave_centro_edit" class="form-control validacion_edit validacion_input" data-limit="10" data-name="validacion_clave_edit" data-validacion-espacios="true" data-validacion-clave="true" placeholder="Clave del centro de trabajo" name="clave_centro_edit" data-parsley-required="true"/>
+                      <input type="text" id="clave_centro_edit" class="form-control validacion_edit validacion_input" data-limit="10" data-name="validacion_clave_edit" data-validacion-espacios="true" data-validacion-clave="true" placeholder="Clave del centro de trabajo" name="clave_centro_edit" data-parsley-required="true" disabled/>
                       <div class="parsley-error filled" id="errores_validacion_clave_edit"></div>
                     </div>
                   </div>
@@ -823,6 +823,7 @@
 
       </div>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/js/functions/request.js"></script>
     <script src="/extensions/jquery/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>

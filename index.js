@@ -140,12 +140,17 @@ app.post("/api/v1/escuelas/agregar_escuela", async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const {token_acceso} = request.body;
+  const {token_acceso, clave} = request.body;
 
   if ((request.session.rol_id === 1 || request.session.rol_id === 2) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
     const query = await pool_query(pool_query_insert(request.body, true, "escuela"), "Escuela registrada exitosamente", "Error, no se pudo registrar la escuela");
 
     if (query.success) {
+      const query_socket = await pool_query_unique(`Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
+        From escuela
+        Join turno On escuela.turno_id = turno.id_turno
+        Join municipio On escuela.municipio_id = municipio.id_municipio  Where escuela.clave = '${clave}' And escuela.activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+      socket.emit("agregar_escuela", query_socket.response)
       return response.status(200).json(query);
     } else {
       return response.status(400).json(query);
@@ -172,9 +177,15 @@ app.post("/api/v1/escuelas/editar_escuela", async (request, response) => {
   const {id_escuela, token_acceso} = request.body;
   if ((request.session.rol_id === 1) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
     const where = {id_escuela: id_escuela};
-    const query = await pool_query(pool_query_update(request.body, where, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
+    const llaves_filtrar = ["id_escuela", "nombre", "pag_web", "telefono", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "tipo_id", "servicio_educativo_id", "sostenimiento_id", "municipio_id", "nivel_id"]
+    const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, llaves_filtrar), where, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
 
     if (query.success) {
+      const query_socket = await pool_query_unique(`Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
+        From escuela
+        Join turno On escuela.turno_id = turno.id_turno
+        Join municipio On escuela.municipio_id = municipio.id_municipio  Where escuela.id_escuela = ${id_escuela} And escuela.activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+      socket.emit("editar_escuela", query_socket.response)
       return response.status(200).json(query);
     } else {
       return response.status(400).json(query);
@@ -204,6 +215,8 @@ app.post("/api/v1/escuelas/eliminar_escuela", async (request, response) => {
     const query = await pool_query(pool_query_update(request.body, {id_escuela: id_escuela}, "escuela"), "Escuela eliminada exitosamente", "Error, no se pudo eliminar la escuela");
 
     if (query.success) {
+      const query_socket = await pool_query_unique(`Select clave From escuela Where id_escuela = ${id_escuela};`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+      socket.emit("eliminar_escuela", query_socket.response)
       return response.status(200).json(query);
     } else {
       return response.status(400).json(query);

@@ -35,6 +35,16 @@ const filtrar_llaves = (body, llaves_filtrar) => {
   });
 }
 
+const eliminar_llaves = (body, llaves_eliminar) => {
+  return new Promise((resolve, reject) => {
+    let llaves_filtradas = {...body}
+
+    llaves_eliminar.forEach((llave) => delete llaves_filtradas[llave])
+
+    resolve(llaves_filtradas)
+  });
+}
+
 const pool_query = (query, msg_success, msg_failure) => {
   console.log(query);
   return new Promise((resolve, reject) => {
@@ -157,6 +167,7 @@ const get_hora = () => {
 module.exports = {
   validar_llaves,
   filtrar_llaves,
+  eliminar_llaves,
   message_failure,
   message_success,
   pool_query,
