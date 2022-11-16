@@ -266,8 +266,27 @@ const pintar_tabla_niveles = (preescolar, primaria, secundaria, bachiller, licen
                     </table>`)
 }
 
-notificacion_carga()
+const pintar_dashboard = () => {
+  request_post("/api/v1/dashboard/consultar_datos_dashboard", {
+    "municipio_id": $("#bashboard_select_municipio").val()
+  }).then((response) => {
+    const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_niveles: {preescolar, primaria, secundaria, bachiller, licenciatura, posgrado}}} = response;
+
+    if (success) {
+      notificacion("Datos consultados")
+
+      pintar_alumnos(alum_hom, alum_muj, alum_tot)
+      pintar_docentes(doc_hom, doc_muj, doc_tot)
+      pintar_aulas(aulas_uso, aulas_exist)
+      pintar_tabla_alumnos_docente_aulas(alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_uso, aulas_exist)
+      pintar_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)
+      pintar_tabla_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)
+    }
+  });
+}
+
 //Consultar municipios
+notificacion_carga()
 request_get("/api/v1/municipios/consultar_municipios").then((response) => {
   const {success, response: municipios} = response;
 
@@ -291,42 +310,33 @@ request_get("/api/v1/municipios/consultar_municipios").then((response) => {
     }
 
     //Consultar alumnos, docentes y aulas
-    request_post("/api/v1/dashboard/consultar_datos_dashboard", {
-      "municipio_id": $("#bashboard_select_municipio").val()
-    }).then((response) => {
-      const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_niveles: {preescolar, primaria, secundaria, bachiller, licenciatura, posgrado}}} = response;
-
-      if (success) {
-        notificacion("Datos consultados")
-
-        pintar_alumnos(alum_hom, alum_muj, alum_tot)
-        pintar_docentes(doc_hom, doc_muj, doc_tot)
-        pintar_aulas(aulas_uso, aulas_exist)
-        pintar_tabla_alumnos_docente_aulas(alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_uso, aulas_exist)
-        pintar_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)
-        pintar_tabla_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)
-      }
-    });
+    pintar_dashboard()
   }
 });
 
 //On change select municipios
 $("#bashboard_select_municipio").on("change", () => {
   notificacion_carga();
-  request_post("/api/v1/dashboard/consultar_datos_dashboard", {
-    "municipio_id": $("#bashboard_select_municipio").val()
-  }).then((response) => {
-    const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_niveles: {preescolar, primaria, secundaria, bachiller, licenciatura, posgrado}}} = response;
+  pintar_dashboard()
+});
 
-    if (success) {
-      notificacion("Datos consultados")
+//Socket
+const socket = io.connect();
 
-      pintar_alumnos(alum_hom, alum_muj, alum_tot)
-      pintar_docentes(doc_hom, doc_muj, doc_tot)
-      pintar_aulas(aulas_uso, aulas_exist)
-      pintar_tabla_alumnos_docente_aulas(alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_uso, aulas_exist)
-      pintar_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)
-      pintar_tabla_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)
-    }
-  });
+socket.on("agregar_escuela", () => {
+  console.log("agregar_escuela")
+  pintar_dashboard()
+  notificacion("Nueva escuela registrada")
+});
+
+socket.on("editar_escuela", () => {
+  console.log("editar_escuela")
+  pintar_dashboard()
+  notificacion("Escuela editada")
+});
+
+socket.on("eliminar_escuela", () => {
+  console.log("eliminar_escuela")
+  pintar_dashboard()
+  notificacion("Escuela eliminada")
 });

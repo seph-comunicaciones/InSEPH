@@ -727,7 +727,7 @@ socket.on("agregar_escuela", mensaje_socket => {
 });
 
 socket.on("editar_escuela", mensaje_socket => {
-  console.log("editar_escuela", mensaje_socket)
+  console.log("editar_escuela")
   for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
     if (escuelas_datatable.data()[i][0] === mensaje_socket.clave) {
       escuelas_datatable.cell({row: i, column: 0}).data(mensaje_socket.clave);
@@ -741,7 +741,7 @@ socket.on("editar_escuela", mensaje_socket => {
 });
 
 socket.on("eliminar_escuela", mensaje_socket => {
-  console.log("eliminar_escuela", mensaje_socket)
+  console.log("eliminar_escuela")
   for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
     if (escuelas_datatable.data()[i][0] === mensaje_socket.clave) {
       escuelas_datatable.row($(`#row_${mensaje_socket.clave}`).parents("tr")).remove().draw(false)
