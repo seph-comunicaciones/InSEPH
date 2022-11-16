@@ -503,7 +503,8 @@ app.post("/api/v1/usuarios/eliminar_usuario", async (request, response) => {
     const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, ["activo", "usuario_id_modificacion"]), {id_usuario: id_usuario}, "usuario"), "Usuario eliminado exitosamente", "Error, no se pudo eliminar el usuario");
 
     if (query.success) {
-      socket.emit("eliminar_usuario", {id_usuario: id_usuario})
+      const query_socket = await pool_query_unique(`SELECT usuario, id_usuario FROM usuario WHERE id_usuario = '${id_usuario}';`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+      socket.emit("eliminar_usuario", query_socket.response)
       return response.status(200).json(query);
     } else {
       return response.status(400).json(query);

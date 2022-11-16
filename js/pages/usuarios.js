@@ -30,15 +30,15 @@ const pintar_tabla_usuarios = (usuarios) => {
   escuelas_datatable = null;
   usuarios_locales = usuarios;
 
-  let table = `<table class="table" id="table_usuarios">
+  let table = `<table class="table" style="text-align: center" id="table_usuarios">
                 <thead>
                   <tr>
-                    <th>Usuario</th>
-                    <th>Nombre (s)</th>
-                    <th>Apellidos</th>
-                    <th>Visualizar</th>
-                    <th>Editar</th>
-                    <th>Eliminar</th>
+                    <th style="text-align: center">Usuario</th>
+                    <th style="text-align: center">Nombre (s)</th>
+                    <th style="text-align: center">Apellidos</th>
+                    <th style="text-align: center">Visualizar</th>
+                    <th style="text-align: center">Editar</th>
+                    <th style="text-align: center">Eliminar</th>
                   </tr>
                 </thead>
                 <tbody> `;
@@ -48,21 +48,9 @@ const pintar_tabla_usuarios = (usuarios) => {
                 <td>${usuario.usuario}</td>
                 <td>${usuario.nombre}</td>
                 <td>${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
-                <td style="text-align: center">
-                  <button data-id="${usuario.id_usuario}" data-type="visualizar_usuario" class="btn btn-success control_usuario">
-                    <i class="bi bi-eye-fill"></i>
-                  </button>
-                </td>
-                <td style="text-align: center">
-                  <button data-id="${usuario.id_usuario}" data-type="editar_usuario" class="btn btn-primary control_usuario">
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                </td>
-                <td style="text-align: center">
-                  <button data-id="${usuario.id_usuario}" data-type="eliminar_usuario" class="btn btn-danger control_usuario">
-                    <i class="bi bi-trash3-fill"></i>
-                  </button>
-                </td>
+                <td><button data-id="${usuario.id_usuario}" data-type="visualizar_usuario" class="btn btn-success control_usuario"><i class="bi bi-eye-fill"></i></button></td>
+                <td><button data-id="${usuario.id_usuario}" data-type="editar_usuario" class="btn btn-primary control_usuario"><i class="bi bi-pencil-square"></i></button></td>
+                <td><button id="row_${usuario.id_usuario}" data-id="${usuario.id_usuario}" data-type="eliminar_usuario" class="btn btn-danger control_usuario"><i class="bi bi-trash3-fill"></i></button></td>
               </tr>`;
   });
 
@@ -386,29 +374,48 @@ $("#btn_guardar_edit_usuario").click(() => {
 const socket = io.connect();
 
 socket.on("agregar_usuario", mensaje_socket => {
-  console.log("agregar_usuario", mensaje_socket)
-  const validacion_existente = usuarios_locales.find(({id_usuario}) => id_usuario === parseInt(mensaje_socket.id_usuario))
+  console.log("agregar_usuario")
+  let validacion_existente = false
+  for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
+    if (escuelas_datatable.data()[i][0] === mensaje_socket.usuario) {
+      validacion_existente = true
+      break
+    }
+  }
+
   if (!validacion_existente) {
-    usuarios_locales.push(mensaje_socket)
-    pintar_tabla_usuarios(usuarios_locales)
+    escuelas_datatable.row.add([
+      mensaje_socket.usuario,
+      mensaje_socket.nombre,
+      `${mensaje_socket.apellido_materno} ${mensaje_socket.apellido_paterno}`,
+      `<td><button data-id="${mensaje_socket.id_usuario}" data-type="visualizar_usuario" class="btn btn-success control_usuario"><i class="bi bi-eye-fill"></i></button></td>`,
+      `<td><button data-id="${mensaje_socket.id_usuario}" data-type="editar_usuario" class="btn btn-primary control_usuario"><i class="bi bi-pencil-square"></i></button></td>`,
+      `<td><button id="row_${mensaje_socket.id_usuario}" data-id="${mensaje_socket.id_usuario}" data-type="eliminar_usuario" class="btn btn-danger control_usuario"><i class="bi bi-trash3-fill"></i></button></td>`,
+    ]).draw(false);
     notificacion("Nuevo usuario registrado")
   }
 });
 
 socket.on("editar_usuario", mensaje_socket => {
-  console.log("editar_usuario", mensaje_socket)
-  const validacion_existente = usuarios_locales.find(({id_usuario}) => id_usuario === parseInt(mensaje_socket.id_usuario))
-  if (validacion_existente) {
-    usuarios_locales = usuarios_locales.filter(({id_usuario}) => id_usuario !== parseInt(mensaje_socket.id_usuario))
-    usuarios_locales.push(mensaje_socket)
-    pintar_tabla_usuarios(usuarios_locales)
-    notificacion("Usuario editado")
+  console.log("editar_usuario")
+  for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
+    if (escuelas_datatable.data()[i][0] === mensaje_socket.usuario) {
+      escuelas_datatable.cell({row: i, column: 0}).data(mensaje_socket.usuario);
+      escuelas_datatable.cell({row: i, column: 1}).data(mensaje_socket.nombre);
+      escuelas_datatable.cell({row: i, column: 2}).data(`${mensaje_socket.apellido_materno} ${mensaje_socket.apellido_paterno}`);
+      notificacion("Usuario editado")
+      break
+    }
   }
 });
 
 socket.on("eliminar_usuario", mensaje_socket => {
-  console.log("eliminar_usuario", mensaje_socket)
-  usuarios_locales = usuarios_locales.filter(({id_usuario}) => id_usuario !== parseInt(mensaje_socket.id_usuario))
-  pintar_tabla_usuarios(usuarios_locales)
-  notificacion("Usuario eliminado")
+  console.log("eliminar_usuario")
+  for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
+    if (escuelas_datatable.data()[i][0] === mensaje_socket.usuario) {
+      escuelas_datatable.row($(`#row_${mensaje_socket.id_usuario}`).parents("tr")).remove().draw(false)
+      notificacion("Usuario eliminado")
+      break
+    }
+  }
 });
