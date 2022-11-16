@@ -143,6 +143,15 @@ app.post("/api/v1/escuelas/agregar_escuela", async (request, response) => {
   const {token_acceso, clave} = request.body;
 
   if ((request.session.rol_id === 1 || request.session.rol_id === 2) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
+    //Validar que no exista esta clave
+    const validacion = await pool_query_unique(`SELECT clave FROM escuela where clave = '${clave}';`, "", "Error, no se pudo agregar la escuela")
+
+    if (validacion.response && validacion.success) {
+      if (validacion.response.clave === clave.toString()) {
+        return response.status(200).json(message_failure("Clave no disponible"))
+      }
+    }
+
     const query = await pool_query(pool_query_insert(request.body, true, "escuela"), "Escuela registrada exitosamente", "Error, no se pudo registrar la escuela");
 
     if (query.success) {
