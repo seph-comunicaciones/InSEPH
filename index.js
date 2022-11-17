@@ -360,7 +360,7 @@ app.get("/api/v1/sostenimientos/consultar_sostenimientos", async (request, respo
 //Controles
 app.get("/api/v1/controles/consultar_controles", async (request, response) => {
   //Consulta query
-  const query = await pool_query("Select * From control;", "Controles consultados exitosamente", "Error, no se pudieron consultar los controles");
+  const query = await pool_query("Select * From sost_control;", "Controles consultados exitosamente", "Error, no se pudieron consultar los controles");
 
   if (query.success) {
     return response.status(200).json(query);
