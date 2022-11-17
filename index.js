@@ -19,7 +19,7 @@ app.use("/css", express.static(__dirname + "/css"));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-server.listen(8080);
+server.listen(process.env.PORT || 8080);
 
 //Socket
 socket.on('connection', (socket) => {
