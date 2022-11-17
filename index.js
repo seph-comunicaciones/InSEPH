@@ -19,7 +19,7 @@ app.use("/css", express.static(__dirname + "/css"));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-server.listen(process.env.PORT || 3000);
+server.listen(8080);
 
 //Socket
 socket.on('connection', (socket) => {
@@ -42,8 +42,6 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    expires: Date.now() + 30 * 24 * 60 * 60 * 1000,
     id_usuario: 0,
     rol_id: 0,
     login: false,
