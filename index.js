@@ -23,8 +23,17 @@ server.listen(process.env.PORT || 3000);
 
 //Socket
 socket.on('connection', (socket) => {
-  const {address, time} = socket.handshake
-  console.log(`Nueva conexión socket: address: ${address}, time: ${time}`);
+  const {id} = socket
+  console.log(`Nueva conexión socket: ${id}`);
+
+  socket.on('disconnect', () => {
+    console.log(`Desconexión: ${id}`)
+  })
+
+  socket.on('error', error => {
+    console.log(`Error de: ${id}`)
+    console.log(error)
+  })
 });
 
 //Session cookie

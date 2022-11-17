@@ -1,6 +1,6 @@
 const entorno = null;
 
-async function request_get(url) {
+const request_get = async url => {
   const url_peticion = `${window.location.origin}${entorno ? `/${entorno}` : ""}${url}`;
   console.log(`request_get(${url_peticion})`);
   const response = await fetch(url_peticion, {
@@ -8,24 +8,21 @@ async function request_get(url) {
     mode: "cors",
     cache: "no-cache",
     credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: {"Content-Type": "application/json"},
     redirect: "follow",
     referrerPolicy: "no-referrer",
   });
-  let responseJSON, responseText;
+  let responseJSON;
   try {
-    responseText = await response.text();
-    responseJSON = JSON.parse(responseText);
+    responseJSON = JSON.parse(await response.text());
   } catch (e) {
     console.error(e);
     responseJSON = {success: false, failure: true, message: "UNRESOLVE"};
   }
   return responseJSON;
-}
+};
 
-async function request_post(url, json) {
+const request_post = async (url, json) => {
   const url_peticion = `${window.location.origin}${entorno ? `/${entorno}` : ""}${url}`;
   console.log(`request_post(${url_peticion})`, json);
   const response = await fetch(url_peticion, {
@@ -33,20 +30,17 @@ async function request_post(url, json) {
     mode: "cors",
     cache: "no-cache",
     credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: {"Content-Type": "application/json"},
     redirect: "follow",
     referrerPolicy: "no-referrer",
     body: JSON.stringify(json),
   });
-  let responseJSON, responseText;
+  let responseJSON;
   try {
-    responseText = await response.text();
-    responseJSON = JSON.parse(responseText);
+    responseJSON = JSON.parse(await response.text());
   } catch (e) {
     console.error(e);
     responseJSON = {success: false, failure: true, message: "UNRESOLVE"};
   }
   return responseJSON;
-}
+};

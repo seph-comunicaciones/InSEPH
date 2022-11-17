@@ -428,19 +428,19 @@ $.extend(window.Parsley.options, {
 });
 
 Parsley.on("field:validated", function (el) {
-  var elNode = $(el)[0];
+  let elNode = $(el)[0];
   if (elNode && !elNode.isValid()) {
-    var rqeuiredValResult = elNode.validationResult.filter(function (vr) {
+    let rqeuiredValResult = elNode.validationResult.filter(function (vr) {
       return vr.assert.name === "required";
     });
     if (rqeuiredValResult.length > 0) {
-      var fieldNode = $(elNode.element);
-      var formGroupNode = fieldNode.closest(".form-group");
-      var lblNode = formGroupNode.find(".form-label:first");
+      let fieldNode = $(elNode.element);
+      let formGroupNode = fieldNode.closest(".form-group");
+      let lblNode = formGroupNode.find(".form-label:first");
       if (lblNode.length > 0) {
-        var errorNode = formGroupNode.find("div.parsley-error span[class*=parsley-]");
+        let errorNode = formGroupNode.find("div.parsley-error span[class*=parsley-]");
         if (errorNode.length > 0) {
-          var lblText = lblNode.text();
+          let lblText = lblNode.text();
           if (lblText) {
             errorNode.html(lblText + " es necesario.");
           }
