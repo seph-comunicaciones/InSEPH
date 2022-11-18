@@ -114,6 +114,13 @@ const visualizar_escuela = (escuela) => {
   validar_campo_escuela(escuela.municipio_id, "municipio_vis");
   validar_campo_escuela(escuela.nivel_id, "nivel_vis");
 
+  validar_campo_escuela(escuela.direccion, "direccion_vis");
+  validar_campo_escuela(escuela.codigo_postal, "postal_maps_vis");
+  validar_campo_escuela(escuela.colonia, "colonia_maps_vis");
+  validar_campo_escuela(escuela.num_int, "num_int_maps_vis");
+  validar_campo_escuela(escuela.num_ext, "num_ext_maps_vis");
+  validar_campo_escuela(escuela.localidad, "localidad_maps_vis");
+
   $("#escuela_modificacion_vis").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
 
   $("#menu_escuelas").addClass("d-none");
@@ -144,6 +151,13 @@ const editar_escuela = (escuela) => {
   validar_campo_escuela(escuela.sostenimiento_id, "sostenimiento_edit");
   validar_campo_escuela(escuela.municipio_id, "municipio_edit");
   validar_campo_escuela(escuela.nivel_id, "nivel_edit");
+
+  validar_campo_escuela(escuela.direccion, "direccion_edit");
+  validar_campo_escuela(escuela.codigo_postal, "postal_maps_edit");
+  validar_campo_escuela(escuela.colonia, "colonia_maps_edit");
+  validar_campo_escuela(escuela.num_int, "num_int_maps_edit");
+  validar_campo_escuela(escuela.num_ext, "num_ext_maps_edit");
+  validar_campo_escuela(escuela.localidad, "localidad_maps_edit");
 
   $("#escuela_modificacion_edit").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
 
@@ -510,6 +524,12 @@ $("#btn_guardar_escuela").click(() => {
       sostenimiento_id: $("#sostenimiento").val(),
       municipio_id: $("#municipio").val(),
       nivel_id: $("#nivel").val(),
+      direccion: $("#direccion").val(),
+      localidad: $("#localidad_maps").val(),
+      colonia: $("#colonia_maps").val(),
+      codigo_postal: $("#postal_maps").val(),
+      num_int: $("#num_int_maps").val(),
+      num_ext: $("#num_ext_maps").val(),
     }).then((response) => {
       const {success, message} = response;
 
@@ -677,6 +697,12 @@ $("#btn_guardar_edit_escuela").click(() => {
       sostenimiento_id: $("#sostenimiento_edit").val(),
       municipio_id: $("#municipio_edit").val(),
       nivel_id: $("#nivel_edit").val(),
+      direccion: $("#direccion_edit").val(),
+      localidad: $("#localidad_maps_edit").val(),
+      colonia: $("#colonia_maps_edit").val(),
+      codigo_postal: $("#postal_maps_edit").val(),
+      num_int: $("#num_int_maps_edit").val(),
+      num_ext: $("#num_ext_maps_edit").val(),
     }).then((response) => {
       const {success, message} = response;
 
