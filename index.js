@@ -261,7 +261,7 @@ app.post("/api/v1/escuelas/eliminar_escuela", async (request, response) => {
     const query = await pool_query(pool_query_update(request.body, {id_escuela: id_escuela}, "escuela"), "Escuela eliminada exitosamente", "Error, no se pudo eliminar la escuela");
 
     if (query.success) {
-      const query_socket = await pool_query_unique(`Select clave From escuela Where id_escuela = ${id_escuela};`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+      const query_socket = await pool_query_unique(`Select clave, id_escuela From escuela Where id_escuela = ${id_escuela};`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
       socket.emit("eliminar_escuela", query_socket.response)
       return response.status(200).json(query);
     } else {

@@ -546,6 +546,7 @@ $("#btn_guardar_escuela").click(() => {
         img_escuela.removeFile();
 
         $("#menu_escuelas").removeClass("d-none");
+        escuela_actual = null;
         $("#nueva_escuela").addClass("d-none");
       } else {
         Swal.fire("Error", message, "error");
@@ -560,6 +561,7 @@ $("#btn_cancelar_escuela").click(() => {
   img_escuela.removeFile();
 
   $("#menu_escuelas").removeClass("d-none");
+  escuela_actual = null;
   $("#nueva_escuela").addClass("d-none");
 });
 
@@ -660,6 +662,7 @@ $("#btn_regresar_vis_escuela").click(() => {
   $("#form_edit_escuela")[0].reset();
 
   $("#menu_escuelas").removeClass("d-none");
+  escuela_actual = null;
   $("#visualizar_escuela").addClass("d-none");
 });
 
@@ -669,6 +672,7 @@ $("#btn_cancelar_edit_escuela").click(() => {
   img_escuela.removeFile();
 
   $("#menu_escuelas").removeClass("d-none");
+  escuela_actual = null;
   $("#editar_escuela").addClass("d-none");
 });
 
@@ -719,6 +723,7 @@ $("#btn_guardar_edit_escuela").click(() => {
         img_escuela_edit.removeFile();
 
         $("#menu_escuelas").removeClass("d-none");
+        escuela_actual = null;
         $("#editar_escuela").addClass("d-none");
       } else {
         Swal.fire("Error", message, "error");
@@ -764,6 +769,22 @@ socket.on("editar_escuela", mensaje_socket => {
       break
     }
   }
+
+  if (escuela_actual === mensaje_socket.id_escuela.toString()) {
+    request_post("/api/v1/escuelas/consultar_escuela", {
+      id_escuela: escuela_actual,
+    }).then((response) => {
+      const {success, message, response: escuela} = response;
+
+      if (success && $("#menu_escuelas").attr("class").match("d-none")) {
+        if ($("#editar_escuela").attr("class").match("d-none")) {
+          visualizar_escuela(escuela);
+        } else if ($("#visualizar_escuela").attr("class").match("d-none")) {
+          editar_escuela(escuela);
+        }
+      }
+    })
+  }
 });
 
 socket.on("eliminar_escuela", mensaje_socket => {
@@ -773,6 +794,20 @@ socket.on("eliminar_escuela", mensaje_socket => {
       escuelas_datatable.row($(`#row_${mensaje_socket.clave}`).parents("tr")).remove().draw(false)
       notificacion("Escuela eliminada")
       break
+    }
+  }
+
+  if (escuela_actual === mensaje_socket.id_escuela.toString()) {
+    if ($("#menu_escuelas").attr("class").match("d-none")) {
+      if ($("#editar_escuela").attr("class").match("d-none")) {
+        $("#menu_escuelas").removeClass("d-none");
+        $("#visualizar_escuela").addClass("d-none");
+        escuela_actual = null
+      } else if ($("#visualizar_escuela").attr("class").match("d-none")) {
+        $("#menu_escuelas").removeClass("d-none");
+        $("#editar_escuela").addClass("d-none");
+        escuela_actual = null
+      }
     }
   }
 });

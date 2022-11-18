@@ -1,7 +1,7 @@
 let usuarios_datatable
 let usuarios_locales
 let roles_locales
-let usuario_actual
+let usuario_actual = null
 
 //Notficaciones
 const notificacion = (mensaje) => {
@@ -232,6 +232,7 @@ $("#btn_guardar_usuario").click(() => {
         $(".validacion_input").empty()
 
         $("#menu_usuarios").removeClass("d-none");
+        usuario_actual = null
         $("#nuevo_usuario").addClass("d-none");
       } else {
         Swal.fire("Error", message, "error");
@@ -247,6 +248,7 @@ $("#btn_cancelar_usuario").click(() => {
 
   $("#nuevo_usuario").addClass("d-none");
   $("#menu_usuarios").removeClass("d-none");
+  usuario_actual = null
 });
 
 //Controles usuarios
@@ -324,6 +326,7 @@ $("#btn_regresar_vis_usuario").click(() => {
   $("#form_vis_usuario")[0].reset();
 
   $("#menu_usuarios").removeClass("d-none");
+  usuario_actual = null
   $("#visualizar_usuario").addClass("d-none");
 });
 
@@ -332,6 +335,7 @@ $("#btn_cancelar_edit_usuario").click(() => {
   $("#form_edit_usuario")[0].reset();
 
   $("#menu_usuarios").removeClass("d-none");
+  usuario_actual = null
   $("#editar_usuario").addClass("d-none");
 });
 
@@ -362,6 +366,7 @@ $("#btn_guardar_edit_usuario").click(() => {
         $("#form_edit_usuario")[0].reset();
 
         $("#menu_usuarios").removeClass("d-none");
+        usuario_actual = null
         $("#editar_usuario").addClass("d-none");
       } else {
         Swal.fire("Error", message, "error");
@@ -407,6 +412,22 @@ socket.on("editar_usuario", mensaje_socket => {
       break
     }
   }
+
+  if (usuario_actual === mensaje_socket.id_usuario.toString()) {
+    request_post("/api/v1/usuarios/consultar_usuario", {
+      id_usuario: usuario_actual,
+    }).then((response) => {
+      const {success, message, response: usuario} = response;
+
+      if (success && $("#menu_usuarios").attr("class").match("d-none")) {
+        if ($("#editar_usuario").attr("class").match("d-none")) {
+          visualizar_usuario(usuario);
+        } else if ($("#visualizar_usuario").attr("class").match("d-none")) {
+          editar_usuario(usuario);
+        }
+      }
+    })
+  }
 });
 
 socket.on("eliminar_usuario", mensaje_socket => {
@@ -416,6 +437,20 @@ socket.on("eliminar_usuario", mensaje_socket => {
       usuarios_datatable.row($(`#row_${mensaje_socket.id_usuario}`).parents("tr")).remove().draw(false)
       notificacion("Usuario eliminado")
       break
+    }
+  }
+
+  if (usuario_actual === mensaje_socket.id_usuario.toString()) {
+    if ($("#menu_usuarios").attr("class").match("d-none")) {
+      if ($("#editar_usuario").attr("class").match("d-none")) {
+        $("#menu_usuarios").removeClass("d-none");
+        $("#visualizar_usuario").addClass("d-none");
+        usuario_actual = null
+      } else if ($("#visualizar_usuario").attr("class").match("d-none")) {
+        $("#menu_usuarios").removeClass("d-none");
+        $("#editar_usuario").addClass("d-none");
+        usuario_actual = null
+      }
     }
   }
 });
