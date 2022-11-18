@@ -100,7 +100,7 @@ app.post("/api/v1/escuelas/consultar_escuela", async (request, response) => {
     `Select escuela.*,
                    LEFT(cast(escuela.fecha_modificacion AS varchar),10) AS fecha_modificacion,
                    turno.nom_turno,
-                   control.nom_control,
+                   sost_control.nom_sost_control,
                    modelo.nom_modelo,
                    sostenimiento.nom_sostenimiento,
                    municipio.nom_municipio,
@@ -112,7 +112,7 @@ app.post("/api/v1/escuelas/consultar_escuela", async (request, response) => {
                    usuario.apellido_materno AS usuario_apellido_materno_modificacion
             From escuela
                      Join turno On escuela.turno_id = turno.id_turno
-                     Join control On escuela.control_id = control.id_control
+                     Join sost_control On escuela.control_id = sost_control.id_sost_control
                      Join modelo On escuela.modelo_id = modelo.id_modelo
                      Join sostenimiento On escuela.sostenimiento_id = sostenimiento.id_sostenimiento
                      Join municipio On escuela.municipio_id = municipio.id_municipio

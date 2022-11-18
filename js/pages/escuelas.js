@@ -323,7 +323,7 @@ request_get("/api/v1/controles/consultar_controles").then((response) => {
     $(`#control_vis`).empty();
     let opciones_select = `<option value="">Elige una opción</option> `;
 
-    controles.forEach((control) => (opciones_select += ` <option value="${control.id_control}">${control.nom_control}</option> `));
+    controles.forEach((control) => (opciones_select += ` <option value="${control.id_sost_control}">${control.nom_sost_control}</option> `));
 
     $(`#control`).append(opciones_select);
     $(`#control_edit`).append(opciones_select);
