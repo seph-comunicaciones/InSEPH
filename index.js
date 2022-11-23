@@ -7,6 +7,9 @@ const server = http.createServer(app);
 const {Server} = require("socket.io");
 const socket = new Server(server);
 let my_session;
+const token_web = process.env.TOKEN_WEB ? process.env.TOKEN_WEB : "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
+
+console.log(process.env.TOKEN_WEB)
 
 const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_insert, pool_query_update, filtrar_llaves, message_success, message_redirect, message_reload} = require("./js/functions/servicios");
 
@@ -58,6 +61,11 @@ app.use((request, response, next) => {
 
 //Escuelas
 app.post("/api/v1/escuelas/consultar_escuelas", async (request, response) => {
+  const {id_municipio, token_acceso} = request.body;
+
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_municipio"];
 
@@ -68,24 +76,31 @@ app.post("/api/v1/escuelas/consultar_escuelas", async (request, response) => {
   }
 
   //Consulta query
-  const {id_municipio} = request.body;
-
-  const query = await pool_query(
-    `Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
+  if (request.session.login || (token_acceso === token_web)) {
+    const query = await pool_query(
+      `Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
     From escuela
     Join turno On escuela.turno_id = turno.id_turno
     Join municipio On escuela.municipio_id = municipio.id_municipio ${id_municipio !== "" ? ` Where municipio.id_municipio = ${id_municipio} And escuela.activo = true ` : " Where escuela.activo = true "};`,
-    "Escuelas consultadas exitosamente",
-    "Error, no se pudieron consultar las escuelas"
-  );
+      "Escuelas consultadas exitosamente",
+      "Error, no se pudieron consultar las escuelas"
+    );
 
-  if (query.success) {
-    return response.status(200).json(query);
+    if (query.success) {
+      return response.status(200).json(query);
+    } else {
+      return response.status(400).json(query);
+    }
   } else {
-    return response.status(400).json(query);
+    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
   }
 });
 app.post("/api/v1/escuelas/consultar_escuela", async (request, response) => {
+  const {id_escuela, token_acceso} = request.body;
+
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_escuela"];
 
@@ -94,10 +109,9 @@ app.post("/api/v1/escuelas/consultar_escuela", async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const {id_escuela} = request.body;
-
-  const query = await pool_query_unique(
-    `Select escuela.*,
+  if (request.session.login || (token_acceso === token_web)) {
+    const query = await pool_query_unique(
+      `Select escuela.*,
                LEFT(cast(escuela.fecha_modificacion AS varchar), 10) AS fecha_modificacion,
                turno.nom_turno,
                sost_control.nom_sost_control,
@@ -129,17 +143,25 @@ app.post("/api/v1/escuelas/consultar_escuela", async (request, response) => {
                  Left JOIN direccion on escuela.id_escuela = direccion.escuela_id
         Where escuela.id_escuela = '${id_escuela}'
           AND escuela.activo = true;`,
-    "Escuela consultada exitosamente",
-    "Error, no se pudo consultar la escuela"
-  );
+      "Escuela consultada exitosamente",
+      "Error, no se pudo consultar la escuela"
+    );
 
-  if (query.success) {
-    return response.status(200).json(query);
+    if (query.success) {
+      return response.status(200).json(query);
+    } else {
+      return response.status(400).json(query);
+    }
   } else {
-    return response.status(400).json(query);
+    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
   }
 });
 app.post("/api/v1/escuelas/agregar_escuela", async (request, response) => {
+  const {token_acceso, clave} = request.body;
+
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
   //Validar llaves obligatorias
   const llaves_obligatorias = ["clave", "nombre", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "sostenimiento_id", "municipio_id", "nivel_id", "tipo_id", "servicio_educativo_id"];
 
@@ -154,9 +176,7 @@ app.post("/api/v1/escuelas/agregar_escuela", async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const {token_acceso, clave} = request.body;
-
-  if ((request.session.rol_id === 1 || request.session.rol_id === 2) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
+  if ((request.session.rol_id === 1 || request.session.rol_id === 2) || (token_acceso === token_web)) {
     //Validar que no exista esta clave
     const validacion = await pool_query_unique(`SELECT clave FROM escuela where clave = '${clave}';`, "", "Error, no se pudo agregar la escuela")
 
@@ -192,6 +212,11 @@ app.post("/api/v1/escuelas/agregar_escuela", async (request, response) => {
   }
 });
 app.post("/api/v1/escuelas/editar_escuela", async (request, response) => {
+  const {id_escuela, token_acceso} = request.body;
+
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_escuela"];
 
@@ -206,8 +231,7 @@ app.post("/api/v1/escuelas/editar_escuela", async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const {id_escuela, token_acceso} = request.body;
-  if ((request.session.rol_id === 1) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
+  if ((request.session.rol_id === 1) || (token_acceso === token_web)) {
     const where = {id_escuela: id_escuela};
     const llaves_filtrar = ["id_escuela", "nombre", "pag_web", "telefono", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "tipo_id", "servicio_educativo_id", "sostenimiento_id", "municipio_id", "nivel_id", "usuario_id_modificacion"]
     const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, llaves_filtrar), where, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
@@ -241,6 +265,11 @@ app.post("/api/v1/escuelas/editar_escuela", async (request, response) => {
   }
 });
 app.post("/api/v1/escuelas/eliminar_escuela", async (request, response) => {
+  const {id_escuela, token_acceso} = request.body;
+
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_escuela"];
 
@@ -255,8 +284,7 @@ app.post("/api/v1/escuelas/eliminar_escuela", async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const {id_escuela, token_acceso} = request.body;
-  if ((request.session.rol_id === 1) || (token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2")) {
+  if ((request.session.rol_id === 1) || (token_acceso === token_web)) {
     request.body["activo"] = false
     const query = await pool_query(pool_query_update(request.body, {id_escuela: id_escuela}, "escuela"), "Escuela eliminada exitosamente", "Error, no se pudo eliminar la escuela");
 
@@ -274,11 +302,17 @@ app.post("/api/v1/escuelas/eliminar_escuela", async (request, response) => {
 
 //Dashboard
 app.post("/api/v1/dashboard/consultar_datos_dashboard", async (request, response) => {
-  //Consulta query
-  const {municipio_id} = request.body
-  const datos_niveles = {}
+  const {token_acceso} = request.body;
 
-  const query_datos_alumnos_docentes_aulas = await pool_query_unique(`SELECT SUM(alum_hom)            as alum_hom,
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
+  //Consulta query
+  if (token_acceso === token_web || request.session.login) {
+    const {municipio_id} = request.body
+    const datos_niveles = {}
+
+    const query_datos_alumnos_docentes_aulas = await pool_query_unique(`SELECT SUM(alum_hom)            as alum_hom,
                                                        SUM(alum_muj)            as alum_muj,
                                                        SUM(alum_hom + alum_muj) as alum_tot,
                                                        SUM(doc_hom)             as doc_hom,
@@ -289,19 +323,22 @@ app.post("/api/v1/dashboard/consultar_datos_dashboard", async (request, response
                                                 FROM escuela
                                                 WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} activo = true;`, "", "");
 
-  const query_niveles = await pool_query(`SELECT tipo_id FROM escuela WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} activo = true;`, ``, ``)
+    const query_niveles = await pool_query(`SELECT tipo_id FROM escuela WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} activo = true;`, ``, ``)
 
-  const niveles = [{"name": "preescolar", "id": 1}, {"name": "primaria", "id": 2}, {"name": "secundaria", "id": 3}, {"name": "bachiller", "id": 4}, {"name": "licenciatura", "id": 5}, {"name": "posgrado", "id": 6}]
-  niveles.forEach((nivel) => datos_niveles[nivel.name] = (query_niveles.response.filter(({tipo_id}) => tipo_id === nivel.id).length))
+    const niveles = [{"name": "preescolar", "id": 1}, {"name": "primaria", "id": 2}, {"name": "secundaria", "id": 3}, {"name": "bachiller", "id": 4}, {"name": "licenciatura", "id": 5}, {"name": "posgrado", "id": 6}]
+    niveles.forEach((nivel) => datos_niveles[nivel.name] = (query_niveles.response.filter(({tipo_id}) => tipo_id === nivel.id).length))
 
-  if (query_datos_alumnos_docentes_aulas.success && query_niveles.success) {
-    const query = {
-      "datos_alumnos_docentes_aulas": query_datos_alumnos_docentes_aulas.response,
-      "datos_niveles": datos_niveles,
+    if (query_datos_alumnos_docentes_aulas.success && query_niveles.success) {
+      const query = {
+        "datos_alumnos_docentes_aulas": query_datos_alumnos_docentes_aulas.response,
+        "datos_niveles": datos_niveles,
+      }
+      return response.status(200).json(message_success("Datos consultados exitosamente", query));
+    } else {
+      return response.status(400).json(message_failure("No se pudieron consultar los datos"));
     }
-    return response.status(200).json(message_success("Datos consultados exitosamente", query));
   } else {
-    return response.status(400).json(message_failure("No se pudieron consultar los datos"));
+    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
   }
 });
 
@@ -423,10 +460,13 @@ app.post("/api/v1/usuarios/validar_usuario", async (request, response) => {
   }
 });
 app.post("/api/v1/usuarios/consultar_usuarios", async (request, response) => {
-  //Consulta query
   const {token_acceso} = request.body;
 
-  if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
+  //Consulta query
+  if (request.session.rol_id === 1 || token_acceso === token_web) {
     const query = await pool_query(`SELECT usuario,  nombre, apellido_materno, apellido_paterno, id_usuario FROM usuario WHERE activo = true;`, "Usuarios consultados exitosamente", "Error, no se pudieron consultar los usuarios");
 
     if (query.success) {
@@ -439,6 +479,11 @@ app.post("/api/v1/usuarios/consultar_usuarios", async (request, response) => {
   }
 });
 app.post("/api/v1/usuarios/consultar_usuario", async (request, response) => {
+  const {token_acceso, id_usuario} = request.body;
+
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_usuario"];
 
@@ -447,9 +492,7 @@ app.post("/api/v1/usuarios/consultar_usuario", async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const {token_acceso, id_usuario} = request.body;
-
-  if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
+  if (request.session.rol_id === 1 || token_acceso === token_web) {
     const query = await pool_query_unique(`SELECT usuario, correo, nombre, apellido_materno, apellido_paterno, telefono, rol_id, id_usuario, usuario_id_modificacion, hora_modificacion, LEFT(cast(fecha_modificacion AS varchar),10) AS fecha_modificacion FROM usuario WHERE id_usuario = '${id_usuario}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
 
     if (query.success) {
@@ -471,10 +514,13 @@ app.post("/api/v1/usuarios/consultar_usuario", async (request, response) => {
   }
 });
 app.post("/api/v1/usuarios/consultar_rol_usuario", async (request, response) => {
-  //Consulta query
-  const {id_usuario} = request.body;
+  const {token_acceso, id_usuario} = request.body;
 
-  if (request.session.login || id_usuario) {
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
+  //Consulta query
+  if (request.session.login || id_usuario || token_acceso === token_web) {
     const query = await pool_query_unique(`SELECT rol_id, id_usuario FROM usuario WHERE id_usuario = '${request.session.login? request.session.id_usuario: id_usuario}' And activo = true;`, "Rol consultado exitosamente", "Error, no se pudo consultar el rol");
 
     if (query.success) {
@@ -487,10 +533,13 @@ app.post("/api/v1/usuarios/consultar_rol_usuario", async (request, response) => 
   }
 });
 app.post("/api/v1/usuarios/consultar_roles", async (request, response) => {
-  //Consulta query
   const {token_acceso} = request.body;
 
-  if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
+  //Consulta query
+  if (request.session.rol_id === 1 || token_acceso === token_web) {
     const query = await pool_query(`SELECT * FROM rol;`, "Roles consultados exitosamente", "Error, no se pudieron consultar los roles");
 
     if (query.success) {
@@ -503,6 +552,11 @@ app.post("/api/v1/usuarios/consultar_roles", async (request, response) => {
   }
 });
 app.post("/api/v1/usuarios/agregar_usuario", async (request, response) => {
+  const {token_acceso, usuario, correo} = request.body;
+
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
   //Validar llaves obligatorias
   const llaves_obligatorias = ["usuario", "correo", "contrasena", "nombre", "apellido_paterno", "apellido_materno", "rol_id"];
 
@@ -517,9 +571,7 @@ app.post("/api/v1/usuarios/agregar_usuario", async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const {token_acceso, usuario, correo} = request.body;
-
-  if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
+  if (request.session.rol_id === 1 || token_acceso === token_web) {
     //Comparar el usuario y correo del nuevo usuario
     const validacion = await pool_query_unique(`SELECT usuario, correo FROM usuario WHERE usuario = '${usuario}' OR correo = '${correo}';`, "", "Error, no se pudo agregar el usuario")
 
@@ -542,6 +594,11 @@ app.post("/api/v1/usuarios/agregar_usuario", async (request, response) => {
   }
 });
 app.post("/api/v1/usuarios/eliminar_usuario", async (request, response) => {
+  const {token_acceso, id_usuario} = request.body;
+
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_usuario"];
 
@@ -554,10 +611,9 @@ app.post("/api/v1/usuarios/eliminar_usuario", async (request, response) => {
   const validacion_llaves = await validar_llaves(llaves_obligatorias, request.body);
 
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
-  //Consulta query
-  const {token_acceso, id_usuario} = request.body;
 
-  if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
+  //Consulta query
+  if (request.session.rol_id === 1 || token_acceso === token_web) {
     request.body["activo"] = false
     const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, ["activo", "usuario_id_modificacion"]), {id_usuario: id_usuario}, "usuario"), "Usuario eliminado exitosamente", "Error, no se pudo eliminar el usuario");
 
@@ -573,6 +629,11 @@ app.post("/api/v1/usuarios/eliminar_usuario", async (request, response) => {
   }
 });
 app.post("/api/v1/usuarios/editar_usuario", async (request, response) => {
+  const {token_acceso, correo, id_usuario} = request.body;
+
+  const validacion_session = await validar_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
   //Validar llaves obligatorias
   const llaves_obligatorias = ["id_usuario"];
 
@@ -587,9 +648,7 @@ app.post("/api/v1/usuarios/editar_usuario", async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  const {token_acceso, correo, id_usuario} = request.body;
-
-  if (request.session.rol_id === 1 || token_acceso === "0012b5cc-0f3e-4c66-8fd3-24b828e359a2") {
+  if (request.session.rol_id === 1 || token_acceso === token_web) {
     //Comparar el usuario y correo del nuevo usuario
     const validacion = await pool_query_unique(`SELECT correo FROM usuario WHERE  correo = '${correo}' AND id_usuario != ${id_usuario} AND activo = true;`, "", "Error, no se pudo agregar el usuario")
 
@@ -612,17 +671,17 @@ app.post("/api/v1/usuarios/editar_usuario", async (request, response) => {
 });
 app.get("/api/v1/usuarios/validar_session", async (request, response) => {
   //Consulta query
-  const query_permisos = await pool_query_unique(`SELECT id_usuario, activo, rol_id FROM usuario WHERE id_usuario = ${request.session.id_usuario?request.session.id_usuario:0};`, "", "");
+  const query = await pool_query_unique(`SELECT id_usuario, activo, rol_id FROM usuario WHERE id_usuario = ${request.session.id_usuario?request.session.id_usuario:0};`, "", "");
 
-  const {id_usuario, activo, rol_id} = query_permisos.response
+  const {id_usuario, activo, rol_id} = query.response
 
-  if (!activo) {
+  if (query.response && !activo) {
     console.log("Sin permisos")
     request.session.login = false;
     request.session.rol_id = 0;
     request.session.id_usuario = 0;
     return response.status(200).json(message_redirect("/login.html"));
-  } else if (activo && id_usuario.toString() === request.session.id_usuario.toString() && rol_id.toString() !== request.session.rol_id.toString()) {
+  } else if (query.response && activo && id_usuario.toString() === request.session.id_usuario.toString() && rol_id.toString() !== request.session.rol_id.toString()) {
     console.log("Actualización de session")
     request.session.login = true;
     request.session.rol_id = rol_id;
@@ -630,6 +689,37 @@ app.get("/api/v1/usuarios/validar_session", async (request, response) => {
     return response.status(200).json(message_reload());
   }
 });
+
+const validar_session = async (request, response, token_acceso) => {
+  if (token_acceso !== "") {
+    //Consulta query
+    const query_permisos = await pool_query_unique(`SELECT id_usuario, activo, rol_id FROM usuario WHERE id_usuario = ${request.session.id_usuario?request.session.id_usuario:0};`, "", "");
+
+    let id_usuario = -1, activo = false, rol_id = -1
+
+    if (query_permisos.response) {
+      id_usuario = query_permisos.response.id_usuario
+      activo = query_permisos.response.activo
+      rol_id = query_permisos.response.rol_id
+    }
+
+    if (query_permisos.response && !activo) {
+      console.log("Sin permisos")
+      request.session.login = false;
+      request.session.rol_id = 0;
+      request.session.id_usuario = 0;
+      return message_redirect("/login.html")
+    } else if (query_permisos.response && activo && id_usuario.toString() === request.session.id_usuario.toString() && rol_id.toString() !== request.session.rol_id.toString()) {
+      console.log("Actualización de session")
+      request.session.login = true;
+      request.session.rol_id = rol_id;
+      request.session.id_usuario = id_usuario;
+      return message_reload()
+    }
+  }
+
+  return {}
+}
 
 //Carga de vistas
 const routes_session = (route, session_true, session_false, log_out) => (request, response) => {
