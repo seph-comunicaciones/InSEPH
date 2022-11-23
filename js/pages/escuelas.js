@@ -772,7 +772,7 @@ socket.on("editar_escuela", mensaje_socket => {
     }
   }
 
-  if (escuela_actual === mensaje_socket.id_escuela.toString()) {
+  if (escuela_actual === mensaje_socket.id_escuela.toString() && ($("#editar_escuela").attr("class").match("d-none") || $("#visualizar_escuela").attr("class").match("d-none"))) {
     request_post("/api/v1/escuelas/consultar_escuela", {
       id_escuela: escuela_actual,
     }).then((response) => {

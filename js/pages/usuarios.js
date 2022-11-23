@@ -427,7 +427,7 @@ socket.on("editar_usuario", mensaje_socket => {
     }
   }
 
-  if (usuario_actual === mensaje_socket.id_usuario.toString()) {
+  if (usuario_actual === mensaje_socket.id_usuario.toString() && ($("#menu_usuarios").attr("class").match("d-none") || $("#visualizar_usuario").attr("class").match("d-none"))) {
     request_post("/api/v1/usuarios/consultar_usuario", {
       id_usuario: usuario_actual,
     }).then((response) => {
