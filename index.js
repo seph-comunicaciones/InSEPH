@@ -8,7 +8,7 @@ const {Server} = require("socket.io");
 const socket = new Server(server);
 let my_session;
 const token_web = process.env.TOKEN_WEB ? process.env.TOKEN_WEB : "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
-const token_movil = process.env.TOKEN_MOBIL
+const token_movil = process.env.TOKEN_MOVIL
 
 const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_insert, pool_query_update, filtrar_llaves, message_success, message_redirect, message_reload} = require("./js/functions/servicios");
 
