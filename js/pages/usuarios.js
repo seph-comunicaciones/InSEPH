@@ -2,6 +2,8 @@ let usuarios_datatable
 let usuarios_locales
 let roles_locales
 let usuario_actual = null
+let rol = false
+let usuario = 0
 
 //Notficaciones
 const notificacion = (mensaje) => {
@@ -127,31 +129,43 @@ const editar_usuario = (usuario) => {
 
 //Cargas usuarios
 notificacion_carga()
-request_post("/api/v1/usuarios/consultar_usuarios", {}).then((response) => {
-  const {success, response: usuarios} = response;
+request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
+  const {success, message, response: {rol_id, id_usuario}} = response;
 
   if (success) {
-    request_post("/api/v1/usuarios/consultar_roles", {}).then((response) => {
-      const {success, response: roles} = response;
+    //Cargar el rol
+    rol = rol_id
+    usuario = id_usuario
+
+    request_post("/api/v1/usuarios/consultar_usuarios", {}).then((response) => {
+      const {success, response: usuarios} = response;
 
       if (success) {
-        roles_locales = roles;
+        request_post("/api/v1/usuarios/consultar_roles", {}).then((response) => {
+          const {success, response: roles} = response;
 
-        $(`#rol`).empty();
-        $(`#rol_edit`).empty();
-        $(`#rol_vis`).empty();
-        let opciones_select = `<option value="">Elige una opción</option> `;
+          if (success) {
+            roles_locales = roles;
 
-        roles.forEach((rol) => (opciones_select += ` <option value="${rol.id_rol}">${rol.nom_rol}</option> `));
+            $(`#rol`).empty();
+            $(`#rol_edit`).empty();
+            $(`#rol_vis`).empty();
+            let opciones_select = `<option value="">Elige una opción</option> `;
 
-        $(`#rol`).append(opciones_select);
-        $(`#rol_edit`).append(opciones_select);
-        $(`#rol_vis`).append(opciones_select);
+            roles.forEach((rol) => (opciones_select += ` <option value="${rol.id_rol}">${rol.nom_rol}</option> `));
+
+            $(`#rol`).append(opciones_select);
+            $(`#rol_edit`).append(opciones_select);
+            $(`#rol_vis`).append(opciones_select);
+          }
+        })
+
+        notificacion("Usuarios consultados")
+        pintar_tabla_usuarios(usuarios)
       }
     })
-
-    notificacion("Usuarios consultados")
-    pintar_tabla_usuarios(usuarios)
+  } else {
+    Swal.fire("Error", message, "error");
   }
 })
 
@@ -428,6 +442,12 @@ socket.on("editar_usuario", mensaje_socket => {
       }
     })
   }
+
+  if (mensaje_socket.id_usuario.toString() === usuario.toString()) {
+    request_get("/api/v1/usuarios/validar_session").then((response) => {
+      console.log(response);
+    })
+  }
 });
 
 socket.on("eliminar_usuario", mensaje_socket => {
@@ -452,5 +472,11 @@ socket.on("eliminar_usuario", mensaje_socket => {
         usuario_actual = null
       }
     }
+  }
+
+  if (mensaje_socket.id_usuario.toString() === usuario.toString()) {
+    request_get("/api/v1/usuarios/validar_session").then((response) => {
+      console.log(response);
+    })
   }
 });

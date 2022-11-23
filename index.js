@@ -8,7 +8,7 @@ const {Server} = require("socket.io");
 const socket = new Server(server);
 let my_session;
 
-const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_insert, pool_query_update, filtrar_llaves, message_success} = require("./js/functions/servicios");
+const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_insert, pool_query_update, filtrar_llaves, message_success, message_redirect, message_reload} = require("./js/functions/servicios");
 
 app.use("/js", express.static(__dirname + "/js"));
 app.use("/extensions", express.static(__dirname + "/extensions"));
@@ -475,7 +475,7 @@ app.post("/api/v1/usuarios/consultar_rol_usuario", async (request, response) => 
   const {id_usuario} = request.body;
 
   if (request.session.login || id_usuario) {
-    const query = await pool_query_unique(`SELECT rol_id FROM usuario WHERE id_usuario = '${request.session.login? request.session.id_usuario: id_usuario}' And activo = true;`, "Rol consultado exitosamente", "Error, no se pudo consultar el rol");
+    const query = await pool_query_unique(`SELECT rol_id, id_usuario FROM usuario WHERE id_usuario = '${request.session.login? request.session.id_usuario: id_usuario}' And activo = true;`, "Rol consultado exitosamente", "Error, no se pudo consultar el rol");
 
     if (query.success) {
       return response.status(200).json(query);
@@ -610,6 +610,26 @@ app.post("/api/v1/usuarios/editar_usuario", async (request, response) => {
     return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
   }
 });
+app.get("/api/v1/usuarios/validar_session", async (request, response) => {
+  //Consulta query
+  const query_permisos = await pool_query_unique(`SELECT id_usuario, activo, rol_id FROM usuario WHERE id_usuario = ${request.session.id_usuario?request.session.id_usuario:0};`, "", "");
+
+  const {id_usuario, activo, rol_id} = query_permisos.response
+
+  if (!activo) {
+    console.log("Sin permisos")
+    request.session.login = false;
+    request.session.rol_id = 0;
+    request.session.id_usuario = 0;
+    return response.status(200).json(message_redirect("/login.html"));
+  } else if (activo && id_usuario.toString() === request.session.id_usuario.toString() && rol_id.toString() !== request.session.rol_id.toString()) {
+    console.log("Actualización de session")
+    request.session.login = true;
+    request.session.rol_id = rol_id;
+    request.session.id_usuario = id_usuario;
+    return response.status(200).json(message_reload());
+  }
+});
 
 //Carga de vistas
 const routes_session = (route, session_true, session_false, log_out) => (request, response) => {
@@ -622,6 +642,10 @@ const routes_session = (route, session_true, session_false, log_out) => (request
   }
 
   console.log(request.session);
+
+  if (!request.session.login) {
+    response.sendFile(__dirname + `/public/${session_false}`);
+  }
 
   if (request.session.rol_id && request.session.rol_id !== 1) {
     if (request.session.login) {
@@ -641,15 +665,10 @@ const routes_session = (route, session_true, session_false, log_out) => (request
         default:
           response.sendFile(__dirname + `/public/dashboard_us.html`);
       }
-    } else {
-      response.sendFile(__dirname + `/public/${session_false}`);
     }
-
   } else {
     if (request.session.login) {
       response.sendFile(__dirname + `/public/${session_true}`);
-    } else {
-      response.sendFile(__dirname + `/public/${session_false}`);
     }
   }
 };

@@ -19,6 +19,12 @@ const request_get = async url => {
     console.error(e);
     responseJSON = {success: false, failure: true, message: "UNRESOLVE"};
   }
+  if (responseJSON.redirect) {
+    location.href = `${window.location.origin}${entorno ? `/${entorno}` : ""}${responseJSON.url}`;
+  }
+  if (responseJSON.reload) {
+    location.reload();
+  }
   return responseJSON;
 };
 
@@ -41,6 +47,12 @@ const request_post = async (url, json) => {
   } catch (e) {
     console.error(e);
     responseJSON = {success: false, failure: true, message: "UNRESOLVE"};
+  }
+  if (responseJSON.redirect) {
+    location.href = `${window.location.origin}${entorno ? `/${entorno}` : ""}${responseJSON.url}`;
+  }
+  if (responseJSON.reload) {
+    location.reload();
   }
   return responseJSON;
 };

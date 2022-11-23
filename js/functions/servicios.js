@@ -151,6 +151,19 @@ const message_failure = (message) => {
   };
 };
 
+const message_redirect = (url) => {
+  return {
+    redirect: true,
+    url: url,
+  };
+};
+
+const message_reload = () => {
+  return {
+    reload: true,
+  };
+};
+
 const get_uuid = () => {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (web_crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
 };
@@ -170,6 +183,8 @@ module.exports = {
   eliminar_llaves,
   message_failure,
   message_success,
+  message_redirect,
+  message_reload,
   pool_query,
   pool_query_unique,
   pool_query_insert,

@@ -4,6 +4,7 @@ let servicios_local = [];
 let tipos_local = [];
 let escuela_actual = null;
 let rol = false
+let usuario = 0
 
 //Notficaciones
 const notificacion = (mensaje) => {
@@ -167,11 +168,12 @@ const editar_escuela = (escuela) => {
 
 notificacion_carga();
 request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
-  const {success, message, response: {rol_id}} = response;
+  const {success, message, response: {rol_id, id_usuario}} = response;
 
   if (success) {
     //Cargar el rol
     rol = rol_id
+    usuario = id_usuario
 
     if (rol_id === 1 || rol_id === 2) {
       $("#container_nueva_escuela").append(`<button type="button" id="btn_nueva_escuela" class="btn btn-success">
@@ -809,5 +811,25 @@ socket.on("eliminar_escuela", mensaje_socket => {
         escuela_actual = null
       }
     }
+  }
+});
+
+socket.on("editar_usuario", mensaje_socket => {
+  console.log("editar_usuario")
+
+  if (mensaje_socket.id_usuario.toString() === usuario.toString()) {
+    request_get("/api/v1/usuarios/validar_session").then((response) => {
+      console.log(response);
+    })
+  }
+});
+
+socket.on("eliminar_usuario", mensaje_socket => {
+  console.log("eliminar_usuario")
+
+  if (mensaje_socket.id_usuario.toString() === usuario.toString()) {
+    request_get("/api/v1/usuarios/validar_session").then((response) => {
+      console.log(response);
+    })
   }
 });

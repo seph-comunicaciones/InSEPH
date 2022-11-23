@@ -1,3 +1,6 @@
+let rol = false
+let usuario = 0
+
 //Notficaciones
 const notificacion = (mensaje) => {
   Toastify({
@@ -287,32 +290,45 @@ const pintar_dashboard = () => {
 
 //Consultar municipios
 notificacion_carga()
-request_get("/api/v1/municipios/consultar_municipios").then((response) => {
-  const {success, response: municipios} = response;
+request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
+  const {success, message, response: {rol_id, id_usuario}} = response;
 
   if (success) {
-    pintar_select_menu_municipios(municipios);
+    //Cargar el rol
+    rol = rol_id
+    usuario = id_usuario
 
-    //Estilo choice select
-    let choices = document.querySelectorAll(".choices");
-    let initChoice;
-    for (let i = 0; i < choices.length; i++) {
-      if (choices[i].classList.contains("multiple-remove")) {
-        initChoice = new Choices(choices[i], {
-          delimiter: ",",
-          editItems: true,
-          maxItemCount: -1,
-          removeItemButton: true,
-        });
-      } else {
-        initChoice = new Choices(choices[i]);
+    //Cargar municipios
+    request_get("/api/v1/municipios/consultar_municipios").then((response) => {
+      const {success, response: municipios} = response;
+
+      if (success) {
+        pintar_select_menu_municipios(municipios);
+
+        //Estilo choice select
+        let choices = document.querySelectorAll(".choices");
+        let initChoice;
+        for (let i = 0; i < choices.length; i++) {
+          if (choices[i].classList.contains("multiple-remove")) {
+            initChoice = new Choices(choices[i], {
+              delimiter: ",",
+              editItems: true,
+              maxItemCount: -1,
+              removeItemButton: true,
+            });
+          } else {
+            initChoice = new Choices(choices[i]);
+          }
+        }
+
+        //Consultar alumnos, docentes y aulas
+        pintar_dashboard()
       }
-    }
-
-    //Consultar alumnos, docentes y aulas
-    pintar_dashboard()
+    });
+  } else {
+    Swal.fire("Error", message, "error");
   }
-});
+})
 
 //On change select municipios
 $("#bashboard_select_municipio").on("change", () => {
@@ -339,4 +355,24 @@ socket.on("eliminar_escuela", () => {
   console.log("eliminar_escuela")
   pintar_dashboard()
   notificacion("Escuela eliminada")
+});
+
+socket.on("editar_usuario", mensaje_socket => {
+  console.log("editar_usuario")
+
+  if (mensaje_socket.id_usuario.toString() === usuario.toString()) {
+    request_get("/api/v1/usuarios/validar_session").then((response) => {
+      console.log(response);
+    })
+  }
+});
+
+socket.on("eliminar_usuario", mensaje_socket => {
+  console.log("eliminar_usuario")
+
+  if (mensaje_socket.id_usuario.toString() === usuario.toString()) {
+    request_get("/api/v1/usuarios/validar_session").then((response) => {
+      console.log(response);
+    })
+  }
 });
