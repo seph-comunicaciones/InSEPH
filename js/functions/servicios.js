@@ -193,13 +193,13 @@ const name_file = (name) => {
   });
 }
 
-const create_directory = async path => {
+const create_directory = async (path) => {
   try {
     await mkdir(path);
-    console.log("Directorio creado");
+    console.log(`Directorio ${path} creado`);
   } catch (e) {
     if (e.code === "EEXIST") {
-      console.log("Directorio existente")
+      console.log(`Directorio ${path} existente`)
     } else {
       console.log(e);
     }
