@@ -91,9 +91,12 @@ const validar_campo_escuela = (campo, id) => {
   }
 };
 
-const visualizar_escuela = (escuela) => {
+const vista_visualizar_escuela = (escuela) => {
   $("#form_vis_escuela")[0].reset();
 
+  $("#container_vis_img").empty()
+  if (escuela.imagen && escuela.imagen !== "") $("#container_vis_img").append(`<img src='${window.location.origin}${escuela.imagen}' style="height: 20rem;" class="img-fluid" alt="Imagen escuela">`)
+  
   validar_campo_escuela(escuela.clave, "clave_centro_vis");
   validar_campo_escuela(escuela.nombre, "nombre_centro_vis");
   validar_campo_escuela(escuela.pag_web, "pagina_vis");
@@ -128,9 +131,12 @@ const visualizar_escuela = (escuela) => {
   $("#visualizar_escuela").removeClass("d-none");
 };
 
-const editar_escuela = (escuela) => {
+const vista_editar_escuela = (escuela) => {
   $("#form_edit_escuela")[0].reset();
   img_escuela_edit.removeFile();
+
+  $("#container_edit_img").empty()
+  if (escuela.imagen && escuela.imagen !== "") $("#container_edit_img").append(`<img src='${window.location.origin}${escuela.imagen}' style="height: 20rem;" class="img-fluid" alt="Imagen escuela">`)
 
   validar_campo_escuela(escuela.clave, "clave_centro_edit");
   validar_campo_escuela(escuela.nombre, "nombre_centro_edit");
@@ -165,6 +171,56 @@ const editar_escuela = (escuela) => {
   $("#menu_escuelas").addClass("d-none");
   $("#editar_escuela").removeClass("d-none");
 };
+
+const editar_escuela = (json) => {
+  request_post("/api/v1/escuelas/editar_escuela", json).then((response) => {
+    const {success, message} = response;
+
+    if (success) {
+      Swal.fire({
+        icon: "success",
+        title: "Exito",
+        text: "Escuela actualizada",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Aceptar",
+      });
+
+      $("#form_edit_escuela")[0].reset();
+      img_escuela_edit.removeFile();
+
+      $("#menu_escuelas").removeClass("d-none");
+      escuela_actual = null;
+      $("#editar_escuela").addClass("d-none");
+    } else {
+      Swal.fire("Error", message, "error");
+    }
+  });
+}
+
+const agregar_escuela = (json) => {
+  request_post("/api/v1/escuelas/agregar_escuela", json).then((response) => {
+    const {success, message} = response;
+
+    if (success) {
+      Swal.fire({
+        icon: "success",
+        title: "Exito",
+        text: "Escuela registrada",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Aceptar",
+      });
+
+      $("#form_nueva_escuela")[0].reset();
+      img_escuela.removeFile();
+
+      $("#menu_escuelas").removeClass("d-none");
+      escuela_actual = null;
+      $("#nueva_escuela").addClass("d-none");
+    } else {
+      Swal.fire("Error", message, "error");
+    }
+  });
+}
 
 notificacion_carga();
 request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
@@ -507,7 +563,8 @@ $("#form_nueva_escuela").on("submit", (event) => event.preventDefault());
 $("#btn_guardar_escuela").click(() => {
   if (validar_form_escuela()) {
     notificacion_carga();
-    request_post("/api/v1/escuelas/agregar_escuela", {
+
+    let json = {
       clave: $("#clave_centro").val(),
       nombre: $("#nombre_centro").val(),
       pag_web: $("#pagina").val(),
@@ -532,28 +589,25 @@ $("#btn_guardar_escuela").click(() => {
       codigo_postal: $("#postal_maps").val(),
       num_int: $("#num_int_maps").val(),
       num_ext: $("#num_ext_maps").val(),
-    }).then((response) => {
-      const {success, message} = response;
+    }
 
-      if (success) {
-        Swal.fire({
-          icon: "success",
-          title: "Exito",
-          text: "Escuela registrada",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Aceptar",
-        });
+    if (img_escuela.getFile()) {
+      const data = new FormData();
+      data.append('archivo', img_escuela.getFile().file);
 
-        $("#form_nueva_escuela")[0].reset();
-        img_escuela.removeFile();
+      request_post_file("/api/v1/escuelas/subir_archivo", data).then((response) => {
+        const {failure, success, message, response: {path}} = response
 
-        $("#menu_escuelas").removeClass("d-none");
-        escuela_actual = null;
-        $("#nueva_escuela").addClass("d-none");
-      } else {
-        Swal.fire("Error", message, "error");
-      }
-    });
+        if (success) {
+          json.imagen = path
+          agregar_escuela(json)
+        }
+
+        if (failure) Swal.fire("Error", message, "error");
+      })
+    } else {
+      agregar_escuela(json)
+    }
   }
 });
 
@@ -607,7 +661,7 @@ $("#main").on("click", ".control_escuela", (event) => {
 
         if (success) {
           notificacion("Escuela consultada");
-          visualizar_escuela(escuela);
+          vista_visualizar_escuela(escuela);
         } else {
           Swal.fire("Error", message, "error");
         }
@@ -622,7 +676,7 @@ $("#main").on("click", ".control_escuela", (event) => {
 
         if (success) {
           notificacion("Escuela consultada");
-          editar_escuela(escuela);
+          vista_editar_escuela(escuela);
         } else {
           Swal.fire("Error", message, "error");
         }
@@ -684,7 +738,7 @@ $("#form_edit_escuela").on("submit", (event) => event.preventDefault());
 $("#btn_guardar_edit_escuela").click(() => {
   if (validar_form_edit_escuela()) {
     notificacion_carga();
-    request_post("/api/v1/escuelas/editar_escuela", {
+    let json = {
       id_escuela: escuela_actual,
       nombre: $("#nombre_centro_edit").val(),
       pag_web: $("#pagina_edit").val(),
@@ -709,28 +763,25 @@ $("#btn_guardar_edit_escuela").click(() => {
       codigo_postal: $("#postal_maps_edit").val(),
       num_int: $("#num_int_maps_edit").val(),
       num_ext: $("#num_ext_maps_edit").val(),
-    }).then((response) => {
-      const {success, message} = response;
+    }
 
-      if (success) {
-        Swal.fire({
-          icon: "success",
-          title: "Exito",
-          text: "Escuela actualizada",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "Aceptar",
-        });
+    if (img_escuela_edit.getFile()) {
+      const data = new FormData();
+      data.append('archivo', img_escuela_edit.getFile().file);
 
-        $("#form_edit_escuela")[0].reset();
-        img_escuela_edit.removeFile();
+      request_post_file("/api/v1/escuelas/subir_archivo", data).then((response) => {
+        const {failure, success, message, response: {path}} = response
 
-        $("#menu_escuelas").removeClass("d-none");
-        escuela_actual = null;
-        $("#editar_escuela").addClass("d-none");
-      } else {
-        Swal.fire("Error", message, "error");
-      }
-    });
+        if (success) {
+          json.imagen = path
+          editar_escuela(json)
+        }
+
+        if (failure) Swal.fire("Error", message, "error");
+      })
+    } else {
+      editar_escuela(json)
+    }
   }
 });
 
@@ -780,9 +831,9 @@ socket.on("editar_escuela", mensaje_socket => {
 
       if (success && $("#menu_escuelas").attr("class").match("d-none")) {
         if ($("#editar_escuela").attr("class").match("d-none")) {
-          visualizar_escuela(escuela);
+          vista_visualizar_escuela(escuela);
         } else if ($("#visualizar_escuela").attr("class").match("d-none")) {
-          editar_escuela(escuela);
+          vista_editar_escuela(escuela);
         }
       }
     })

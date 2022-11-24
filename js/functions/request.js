@@ -56,3 +56,25 @@ const request_post = async (url, json) => {
   }
   return responseJSON;
 };
+
+const request_post_file = async (url, file) => {
+  const url_peticion = `${window.location.origin}${entorno ? `/${entorno}` : ""}${url}`;
+  console.log(`request_post(${url_peticion})`);
+  const response = await fetch(url_peticion, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: file,
+  });
+  let responseJSON;
+  try {
+    responseJSON = JSON.parse(await response.text());
+  } catch (e) {
+    console.error(e);
+    responseJSON = {success: false, failure: true, message: "UNRESOLVE"};
+  }
+  return responseJSON;
+};

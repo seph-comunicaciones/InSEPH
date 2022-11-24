@@ -1,25 +1,32 @@
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+const fileUpload = require("express-fileupload")
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const {Server} = require("socket.io");
 const socket = new Server(server);
-let my_session;
+
+const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_insert, pool_query_update, filtrar_llaves, message_success, message_redirect, message_reload, name_file, create_directory} = require("./js/functions/servicios");
+
 const token_web = process.env.TOKEN_WEB ? process.env.TOKEN_WEB : "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
 const token_movil = process.env.TOKEN_MOVIL
-
-const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_insert, pool_query_update, filtrar_llaves, message_success, message_redirect, message_reload} = require("./js/functions/servicios");
+let my_session;
+const path_files_escuela = "uploads/escuela"
 
 app.use("/js", express.static(__dirname + "/js"));
 app.use("/extensions", express.static(__dirname + "/extensions"));
 app.use("/fonts", express.static(__dirname + "/fonts"));
 app.use("/images", express.static(__dirname + "/images"));
 app.use("/css", express.static(__dirname + "/css"));
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
-app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(fileUpload())
+
+create_directory(path_files_escuela)
 
 server.listen(process.env.PORT || 8080);
 
@@ -185,7 +192,7 @@ app.post("/api/v1/escuelas/agregar_escuela", async (request, response) => {
       }
     }
 
-    const llaves_filtrar = ["clave", "nombre", "pag_web", "telefono", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "tipo_id", "servicio_educativo_id", "sostenimiento_id", "municipio_id", "nivel_id", "usuario_id_modificacion"]
+    const llaves_filtrar = ["imagen", "clave", "nombre", "pag_web", "telefono", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "tipo_id", "servicio_educativo_id", "sostenimiento_id", "municipio_id", "nivel_id", "usuario_id_modificacion"]
     const query = await pool_query(pool_query_insert(await filtrar_llaves(request.body, llaves_filtrar), true, "escuela"), "Escuela registrada exitosamente", "Error, no se pudo registrar la escuela");
 
     if (query.success) {
@@ -232,7 +239,7 @@ app.post("/api/v1/escuelas/editar_escuela", async (request, response) => {
   //Consulta query
   if ((request.session.rol_id === 1) || (token_acceso === token_web)) {
     const where = {id_escuela: id_escuela};
-    const llaves_filtrar = ["id_escuela", "nombre", "pag_web", "telefono", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "tipo_id", "servicio_educativo_id", "sostenimiento_id", "municipio_id", "nivel_id", "usuario_id_modificacion"]
+    const llaves_filtrar = ["imagen", "id_escuela", "nombre", "pag_web", "telefono", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "tipo_id", "servicio_educativo_id", "sostenimiento_id", "municipio_id", "nivel_id", "usuario_id_modificacion"]
     const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, llaves_filtrar), where, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
 
     const query_id_escuela = await pool_query_unique(`SELECT escuela.id_escuela, direccion.id_direccion
@@ -296,6 +303,25 @@ app.post("/api/v1/escuelas/eliminar_escuela", async (request, response) => {
     }
   } else {
     return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
+  }
+});
+app.post("/api/v1/escuelas/subir_archivo", async (request, response) => {
+  if (!request.files) return response.status(400).json(message_failure("Error, no hay archivo que subir"));
+
+  const archivo = request.files.archivo;
+  const file = await name_file(archivo.name);
+
+  try {
+    await archivo.mv(`${__dirname}/${path_files_escuela}/${file}`, (error) => {
+      if (error) {
+        console.log(error);
+        return response.status(400).json(message_failure("Error, no se pudo subir el archivo"));
+      }
+      return response.status(200).json(message_success("Imagen agregada exitosamente", {"path": `/${path_files_escuela}/${file}`}));
+    });
+  } catch (e) {
+    console.log(e);
+    return response.status(400).json(message_failure("Error, no se pudo subir el archivo"));
   }
 });
 

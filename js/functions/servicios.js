@@ -1,5 +1,6 @@
 const {pool} = require("../database/pg");
 const web_crypto = require("crypto").webcrypto;
+const {mkdir} = require("fs/promises");
 
 const validar_llaves = (llaves_obligatorias, body) => {
   return new Promise((resolve, reject) => {
@@ -177,6 +178,34 @@ const get_hora = () => {
   return new Date().toLocaleTimeString()
 }
 
+const name_file = (name) => {
+  return new Promise((resolve, reject) => {
+    const name_split = name.split(".")
+    const type = name_split[name_split.length - 1]
+    let new_name
+
+    name_split[name_split.length - 1] = get_uuid()
+
+    new_name = name_split.join("-")
+    new_name += `.${type}`
+
+    resolve(new_name)
+  });
+}
+
+const create_directory = async path => {
+  try {
+    await mkdir(path);
+    console.log("Directorio creado");
+  } catch (e) {
+    if (e.code === "EEXIST") {
+      console.log("Directorio existente")
+    } else {
+      console.log(e);
+    }
+  }
+};
+
 module.exports = {
   validar_llaves,
   filtrar_llaves,
@@ -189,4 +218,6 @@ module.exports = {
   pool_query_unique,
   pool_query_insert,
   pool_query_update,
+  name_file,
+  create_directory
 };
