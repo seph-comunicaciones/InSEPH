@@ -91,11 +91,27 @@ const validar_campo_escuela = (campo, id) => {
   }
 };
 
+const validar_img_escuela = (img, id) => {
+  $(`#${id}`).empty()
+  $(`#${id}`).addClass("d-none")
+
+  if (img && img !== "") {
+    $("<img>")
+      .attr('src', `${window.location.origin}${img}`)
+      .on('load', () => {
+        $(`#${id}`).append(`<img src='${window.location.origin}${img}' style="height: 20rem;" class="img-fluid" alt="Imagen escuela">`)
+        $(`#${id}`).removeClass("d-none")
+      })
+      .on('error', () => {
+        // console.log("Imagen no encontrada")
+      });
+  }
+}
+
 const vista_visualizar_escuela = (escuela) => {
   $("#form_vis_escuela")[0].reset();
 
-  $("#container_vis_img").empty()
-  if (escuela.imagen && escuela.imagen !== "") $("#container_vis_img").append(`<img src='${window.location.origin}${escuela.imagen}' style="height: 20rem;" class="img-fluid" alt="Imagen escuela">`)
+  validar_img_escuela(escuela.imagen, "container_vis_img")
 
   validar_campo_escuela(escuela.clave, "clave_centro_vis");
   validar_campo_escuela(escuela.nombre, "nombre_centro_vis");
@@ -135,8 +151,7 @@ const vista_editar_escuela = (escuela) => {
   $("#form_edit_escuela")[0].reset();
   img_escuela_edit.removeFile();
 
-  $("#container_edit_img").empty()
-  if (escuela.imagen && escuela.imagen !== "") $("#container_edit_img").append(`<img src='${window.location.origin}${escuela.imagen}' style="height: 20rem;" class="img-fluid" alt="Imagen escuela">`)
+  validar_img_escuela(escuela.imagen, "container_edit_img")
 
   validar_campo_escuela(escuela.clave, "clave_centro_edit");
   validar_campo_escuela(escuela.nombre, "nombre_centro_edit");
