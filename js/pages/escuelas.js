@@ -187,6 +187,30 @@ const vista_editar_escuela = (escuela) => {
   $("#editar_escuela").removeClass("d-none");
 };
 
+const comprimir_imagen = (img, calidad) => {
+  return new Promise((resolve, reject) => {
+    const canvas = document.createElement("canvas");
+    const imagen = new Image();
+    imagen.onload = () => {
+      canvas.width = imagen.width;
+      canvas.height = imagen.height;
+      canvas.getContext("2d").drawImage(imagen, 0, 0);
+      canvas.toBlob(
+        (blob) => {
+          if (blob === null) {
+            return reject(blob);
+          } else {
+            resolve(blob);
+          }
+        },
+        "image/jpeg",
+        calidad / 100
+      );
+    };
+    imagen.src = URL.createObjectURL(img);
+  });
+};
+
 const editar_escuela = (json) => {
   request_post("/api/v1/escuelas/editar_escuela", json).then((response) => {
     const {success, message} = response;
@@ -575,7 +599,7 @@ $("#docentes_hombres").on("input", (event) => {
 //Guardar nueva escuela
 $("#form_nueva_escuela").on("submit", (event) => event.preventDefault());
 
-$("#btn_guardar_escuela").click(() => {
+$("#btn_guardar_escuela").click(async () => {
   if (validar_form_escuela()) {
     notificacion_carga();
 
@@ -608,7 +632,8 @@ $("#btn_guardar_escuela").click(() => {
 
     if (img_escuela.getFile()) {
       const data = new FormData();
-      data.append('archivo', img_escuela.getFile().file);
+      const blob = await comprimir_imagen(img_escuela_edit.getFile().file, 50);
+      data.append('archivo', new File([blob], img_escuela_edit.getFile().file.name));
 
       subir_archivo(data).then((response) => {
         const {failure, success, message, response: {path}} = response
@@ -750,7 +775,7 @@ $("#btn_cancelar_edit_escuela").click(() => {
 //Guardar editar escuela
 $("#form_edit_escuela").on("submit", (event) => event.preventDefault());
 
-$("#btn_guardar_edit_escuela").click(() => {
+$("#btn_guardar_edit_escuela").click(async () => {
   if (validar_form_edit_escuela()) {
     notificacion_carga();
     let json = {
@@ -782,7 +807,8 @@ $("#btn_guardar_edit_escuela").click(() => {
 
     if (img_escuela_edit.getFile()) {
       const data = new FormData();
-      data.append('archivo', img_escuela_edit.getFile().file);
+      const blob = await comprimir_imagen(img_escuela_edit.getFile().file, 50);
+      data.append('archivo', new File([blob], img_escuela_edit.getFile().file.name));
 
       subir_archivo(data).then((response) => {
         const {failure, success, message, response: {path}} = response
