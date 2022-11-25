@@ -7,12 +7,12 @@ const http = require('http');
 const server = http.createServer(app);
 const {Server} = require("socket.io");
 const socket = new Server(server);
-const {mkdir} = require("fs/promises");
 
 const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_insert, pool_query_update, filtrar_llaves, message_success, message_redirect, message_reload, name_file, create_directory} = require("./js/functions/servicios");
 
 const token_web = process.env.TOKEN_WEB ? process.env.TOKEN_WEB : "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
 const token_movil = process.env.TOKEN_MOVIL
+const domain = "http://localhost:8080";
 let my_session;
 const path_files = "uploads"
 const path_files_escuela = "uploads/escuela"
@@ -713,7 +713,7 @@ app.post("/api/v1/escuelas/subir_archivo", async (request, response) => {
         console.log(error);
         return response.status(400).json(message_failure("Error, no se pudo subir el archivo"));
       }
-      return response.status(200).json(message_success("Imagen agregada exitosamente", {"path": `/${path_files_escuela}/${file}`}));
+      return response.status(200).json(message_success("Imagen agregada exitosamente", {"path": `${domain}/${path_files_escuela}/${file}`}));
     });
   } catch (e) {
     console.log(e);
@@ -802,7 +802,6 @@ app.get("/escuelas.html", routes_session("/escuelas.html", "escuelas.html", "log
 app.get("/usuarios.html", routes_session("/usuarios.html", "usuarios.html", "login.html", false));
 
 app.use((request, response) => {
-  response.status(404);
-  console.log("Not found")
+  console.log("No encontrado")
   response.sendFile(__dirname + `/public/error-404.html`);
 });

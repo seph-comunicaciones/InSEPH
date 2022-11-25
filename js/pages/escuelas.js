@@ -97,9 +97,9 @@ const validar_img_escuela = (img, id) => {
 
   if (img && img !== "") {
     $("<img>")
-      .attr('src', `${window.location.origin}${img}`)
+      .attr('src', `${img}`)
       .on('load', () => {
-        $(`#${id}`).append(`<img src='${window.location.origin}${img}' style="height: 20rem;" class="img-fluid" alt="Imagen escuela">`)
+        $(`#${id}`).append(`<img src='${img}' style="height: 20rem;" class="img-fluid" alt="Imagen escuela">`)
         $(`#${id}`).removeClass("d-none")
       })
       .on('error', () => {
