@@ -1,3 +1,45 @@
+$.extend(window.Parsley.options, {
+  focus: "first",
+  excluded: "input[type=button], input[type=submit], input[type=reset], .search, .ignore",
+  triggerAfterFailure: "change blur",
+  errorsContainer: function (element) {
+  },
+  trigger: "change",
+  successClass: "is-valid",
+  errorClass: "is-invalid",
+  classHandler: function (el) {
+    return el.$element.closest(".form-group");
+  },
+  errorsContainer: function (el) {
+    return el.$element.closest(".form-group");
+  },
+  errorsWrapper: '<div class="parsley-error"></div>',
+  errorTemplate: "<span></span>",
+});
+
+Parsley.on("field:validated", function (el) {
+  let elNode = $(el)[0];
+  if (elNode && !elNode.isValid()) {
+    let rqeuiredValResult = elNode.validationResult.filter(function (vr) {
+      return vr.assert.name === "required";
+    });
+    if (rqeuiredValResult.length > 0) {
+      let fieldNode = $(elNode.element);
+      let formGroupNode = fieldNode.closest(".form-group");
+      let lblNode = formGroupNode.find(".form-label:first");
+      if (lblNode.length > 0) {
+        let errorNode = formGroupNode.find("div.parsley-error span[class*=parsley-]");
+        if (errorNode.length > 0) {
+          let lblText = lblNode.text();
+          if (lblText) {
+            errorNode.html(lblText + " es necesario.");
+          }
+        }
+      }
+    }
+  }
+});
+
 $("#main").on("input", ".validacion_input", (event) => {
   const input = event.currentTarget
   const value = input.value
@@ -48,3 +90,27 @@ $("#main").on("input", ".validacion_input", (event) => {
     if (mensajes_error_validacion_clave !== "") $(`#container_${name}`).addClass("is-invalid input_invalido")
   }
 })
+
+const validar_form = () => {
+  for (let i = 0; i < $(".validacion").length; i++) {
+    if ($(`#${$(".validacion")[i].id}`).val() === "" || $(`#${$(".validacion")[i].id}`).val() === 0) {
+      return false;
+    }
+  }
+  return $(".error_input").length <= 0;
+};
+
+const validar_form_edit = () => {
+  for (let i = 0; i < $(".validacion_edit").length; i++) {
+    if ($(`#${$(".validacion_edit")[i].id}`).val() === "" || $(`#${$(".validacion_edit")[i].id}`).val() === 0) {
+      return false;
+    }
+  }
+  return $(".error_input").length <= 0;
+};
+
+const validar_campo = (campo, id) => {
+  if (campo && $(`#${id}`).length > 0) {
+    $(`#${id}`).val(campo);
+  }
+};

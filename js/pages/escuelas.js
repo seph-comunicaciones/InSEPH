@@ -6,27 +6,6 @@ let escuela_actual = null;
 let rol = false
 let usuario = 0
 
-//Notficaciones
-const notificacion = (mensaje) => {
-  Toastify({
-    text: mensaje,
-    duration: 3000,
-    close: true,
-    gravity: "top",
-    position: "right",
-  }).showToast();
-};
-
-const notificacion_carga = () => {
-  Toastify({
-    text: "Cargando...",
-    duration: 3000,
-    close: true,
-    gravity: "top",
-    position: "right",
-  }).showToast();
-};
-
 //Funciones
 const pintar_select_menu_municipios = (municipios) => {
   $("#escuelas_select_municipio").empty();
@@ -85,61 +64,38 @@ const pintar_tabla_escuelas = (escuelas) => {
   });
 };
 
-const validar_campo_escuela = (campo, id) => {
-  if (campo && $(`#${id}`).length > 0) {
-    $(`#${id}`).val(campo);
-  }
-};
-
-const validar_img_escuela = (img, id) => {
-  $(`#${id}`).empty()
-  $(`#${id}`).addClass("d-none")
-
-  if (img && img !== "") {
-    $("<img>")
-      .attr('src', `${img}`)
-      .on('load', () => {
-        $(`#${id}`).append(`<img src='${img}' style="height: 20rem;" class="img-fluid" alt="Imagen escuela">`)
-        $(`#${id}`).removeClass("d-none")
-      })
-      .on('error', () => {
-        // console.log("Imagen no encontrada")
-      });
-  }
-}
-
 const vista_visualizar_escuela = (escuela) => {
   $("#form_vis_escuela")[0].reset();
 
-  validar_img_escuela(escuela.imagen, "container_vis_img")
+  validar_img(escuela.imagen, "container_vis_img")
 
-  validar_campo_escuela(escuela.clave, "clave_centro_vis");
-  validar_campo_escuela(escuela.nombre, "nombre_centro_vis");
-  validar_campo_escuela(escuela.pag_web, "pagina_vis");
-  validar_campo_escuela(escuela.telefono, "telefono_vis");
-  validar_campo_escuela(escuela.alum_muj, "alumnos_mujeres_vis");
-  validar_campo_escuela(escuela.alum_hom, "alumnos_hombres_vis");
-  validar_campo_escuela(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_vis");
-  validar_campo_escuela(escuela.doc_muj, "docentes_mujeres_vis");
-  validar_campo_escuela(escuela.doc_hom, "docentes_hombres_vis");
-  validar_campo_escuela(escuela.doc_hom + escuela.doc_muj, "docentes_totales_vis");
-  validar_campo_escuela(escuela.aulas_exist, "aulas_existentes_vis");
-  validar_campo_escuela(escuela.aulas_uso, "aulas_uso_vis");
-  validar_campo_escuela(escuela.turno_id, "turno_vis");
-  validar_campo_escuela(escuela.control_id, "control_vis");
-  validar_campo_escuela(escuela.modelo_id, "modelo_vis");
-  validar_campo_escuela(escuela.tipo_id, "tipo_vis");
-  validar_campo_escuela(escuela.servicio_educativo_id, "servicio_vis");
-  validar_campo_escuela(escuela.sostenimiento_id, "sostenimiento_vis");
-  validar_campo_escuela(escuela.municipio_id, "municipio_vis");
-  validar_campo_escuela(escuela.nivel_id, "nivel_vis");
+  validar_campo(escuela.clave, "clave_centro_vis");
+  validar_campo(escuela.nombre, "nombre_centro_vis");
+  validar_campo(escuela.pag_web, "pagina_vis");
+  validar_campo(escuela.telefono, "telefono_vis");
+  validar_campo(escuela.alum_muj, "alumnos_mujeres_vis");
+  validar_campo(escuela.alum_hom, "alumnos_hombres_vis");
+  validar_campo(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_vis");
+  validar_campo(escuela.doc_muj, "docentes_mujeres_vis");
+  validar_campo(escuela.doc_hom, "docentes_hombres_vis");
+  validar_campo(escuela.doc_hom + escuela.doc_muj, "docentes_totales_vis");
+  validar_campo(escuela.aulas_exist, "aulas_existentes_vis");
+  validar_campo(escuela.aulas_uso, "aulas_uso_vis");
+  validar_campo(escuela.turno_id, "turno_vis");
+  validar_campo(escuela.control_id, "control_vis");
+  validar_campo(escuela.modelo_id, "modelo_vis");
+  validar_campo(escuela.tipo_id, "tipo_vis");
+  validar_campo(escuela.servicio_educativo_id, "servicio_vis");
+  validar_campo(escuela.sostenimiento_id, "sostenimiento_vis");
+  validar_campo(escuela.municipio_id, "municipio_vis");
+  validar_campo(escuela.nivel_id, "nivel_vis");
 
-  validar_campo_escuela(escuela.direccion, "direccion_vis");
-  validar_campo_escuela(escuela.codigo_postal, "postal_maps_vis");
-  validar_campo_escuela(escuela.colonia, "colonia_maps_vis");
-  validar_campo_escuela(escuela.num_int, "num_int_maps_vis");
-  validar_campo_escuela(escuela.num_ext, "num_ext_maps_vis");
-  validar_campo_escuela(escuela.localidad, "localidad_maps_vis");
+  validar_campo(escuela.direccion, "direccion_vis");
+  validar_campo(escuela.codigo_postal, "postal_maps_vis");
+  validar_campo(escuela.colonia, "colonia_maps_vis");
+  validar_campo(escuela.num_int, "num_int_maps_vis");
+  validar_campo(escuela.num_ext, "num_ext_maps_vis");
+  validar_campo(escuela.localidad, "localidad_maps_vis");
 
   $("#escuela_modificacion_vis").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
 
@@ -151,64 +107,40 @@ const vista_editar_escuela = (escuela) => {
   $("#form_edit_escuela")[0].reset();
   img_escuela_edit.removeFile();
 
-  validar_img_escuela(escuela.imagen, "container_edit_img")
+  validar_img(escuela.imagen, "container_edit_img")
 
-  validar_campo_escuela(escuela.clave, "clave_centro_edit");
-  validar_campo_escuela(escuela.nombre, "nombre_centro_edit");
-  validar_campo_escuela(escuela.pag_web, "pagina_edit");
-  validar_campo_escuela(escuela.telefono, "telefono_edit");
-  validar_campo_escuela(escuela.alum_muj, "alumnos_mujeres_edit");
-  validar_campo_escuela(escuela.alum_hom, "alumnos_hombres_edit");
-  validar_campo_escuela(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_edit");
-  validar_campo_escuela(escuela.doc_muj, "docentes_mujeres_edit");
-  validar_campo_escuela(escuela.doc_hom, "docentes_hombres_edit");
-  validar_campo_escuela(escuela.doc_hom + escuela.doc_muj, "docentes_totales_edit");
-  validar_campo_escuela(escuela.aulas_exist, "aulas_existentes_edit");
-  validar_campo_escuela(escuela.aulas_uso, "aulas_uso_edit");
-  validar_campo_escuela(escuela.turno_id, "turno_edit");
-  validar_campo_escuela(escuela.control_id, "control_edit");
-  validar_campo_escuela(escuela.modelo_id, "modelo_edit");
-  validar_campo_escuela(escuela.tipo_id, "tipo_edit");
-  validar_campo_escuela(escuela.servicio_educativo_id, "servicio_edit");
-  validar_campo_escuela(escuela.sostenimiento_id, "sostenimiento_edit");
-  validar_campo_escuela(escuela.municipio_id, "municipio_edit");
-  validar_campo_escuela(escuela.nivel_id, "nivel_edit");
+  validar_campo(escuela.clave, "clave_centro_edit");
+  validar_campo(escuela.nombre, "nombre_centro_edit");
+  validar_campo(escuela.pag_web, "pagina_edit");
+  validar_campo(escuela.telefono, "telefono_edit");
+  validar_campo(escuela.alum_muj, "alumnos_mujeres_edit");
+  validar_campo(escuela.alum_hom, "alumnos_hombres_edit");
+  validar_campo(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_edit");
+  validar_campo(escuela.doc_muj, "docentes_mujeres_edit");
+  validar_campo(escuela.doc_hom, "docentes_hombres_edit");
+  validar_campo(escuela.doc_hom + escuela.doc_muj, "docentes_totales_edit");
+  validar_campo(escuela.aulas_exist, "aulas_existentes_edit");
+  validar_campo(escuela.aulas_uso, "aulas_uso_edit");
+  validar_campo(escuela.turno_id, "turno_edit");
+  validar_campo(escuela.control_id, "control_edit");
+  validar_campo(escuela.modelo_id, "modelo_edit");
+  validar_campo(escuela.tipo_id, "tipo_edit");
+  validar_campo(escuela.servicio_educativo_id, "servicio_edit");
+  validar_campo(escuela.sostenimiento_id, "sostenimiento_edit");
+  validar_campo(escuela.municipio_id, "municipio_edit");
+  validar_campo(escuela.nivel_id, "nivel_edit");
 
-  validar_campo_escuela(escuela.direccion, "direccion_edit");
-  validar_campo_escuela(escuela.codigo_postal, "postal_maps_edit");
-  validar_campo_escuela(escuela.colonia, "colonia_maps_edit");
-  validar_campo_escuela(escuela.num_int, "num_int_maps_edit");
-  validar_campo_escuela(escuela.num_ext, "num_ext_maps_edit");
-  validar_campo_escuela(escuela.localidad, "localidad_maps_edit");
+  validar_campo(escuela.direccion, "direccion_edit");
+  validar_campo(escuela.codigo_postal, "postal_maps_edit");
+  validar_campo(escuela.colonia, "colonia_maps_edit");
+  validar_campo(escuela.num_int, "num_int_maps_edit");
+  validar_campo(escuela.num_ext, "num_ext_maps_edit");
+  validar_campo(escuela.localidad, "localidad_maps_edit");
 
   $("#escuela_modificacion_edit").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
 
   $("#menu_escuelas").addClass("d-none");
   $("#editar_escuela").removeClass("d-none");
-};
-
-const comprimir_imagen = (img, calidad) => {
-  return new Promise((resolve, reject) => {
-    const canvas = document.createElement("canvas");
-    const imagen = new Image();
-    imagen.onload = () => {
-      canvas.width = imagen.width;
-      canvas.height = imagen.height;
-      canvas.getContext("2d").drawImage(imagen, 0, 0);
-      canvas.toBlob(
-        (blob) => {
-          if (blob === null) {
-            return reject(blob);
-          } else {
-            resolve(blob);
-          }
-        },
-        "image/jpeg",
-        calidad / 100
-      );
-    };
-    imagen.src = URL.createObjectURL(img);
-  });
 };
 
 const editar_escuela = (json) => {
@@ -499,68 +431,6 @@ $("#escuelas_select_municipio").on("change", () => {
   });
 });
 
-//Validar que el formulario este lleno para enviar
-const validar_form_escuela = () => {
-  for (let i = 0; i < $(".validacion").length; i++) {
-    if ($(`#${$(".validacion")[i].id}`).val() === "" || $(`#${$(".validacion")[i].id}`).val() === 0) {
-      return false;
-    }
-  }
-  return $(".error_input").length <= 0;
-};
-
-const validar_form_edit_escuela = () => {
-  for (let i = 0; i < $(".validacion_edit").length; i++) {
-    if ($(`#${$(".validacion_edit")[i].id}`).val() === "" || $(`#${$(".validacion_edit")[i].id}`).val() === 0) {
-      return false;
-    }
-  }
-  return $(".error_input").length <= 0;
-};
-
-//Validacion formulario
-$.extend(window.Parsley.options, {
-  focus: "first",
-  excluded: "input[type=button], input[type=submit], input[type=reset], .search, .ignore",
-  triggerAfterFailure: "change blur",
-  errorsContainer: function (element) {
-  },
-  trigger: "change",
-  successClass: "is-valid",
-  errorClass: "is-invalid",
-  classHandler: function (el) {
-    return el.$element.closest(".form-group");
-  },
-  errorsContainer: function (el) {
-    return el.$element.closest(".form-group");
-  },
-  errorsWrapper: '<div class="parsley-error"></div>',
-  errorTemplate: "<span></span>",
-});
-
-Parsley.on("field:validated", function (el) {
-  let elNode = $(el)[0];
-  if (elNode && !elNode.isValid()) {
-    let rqeuiredValResult = elNode.validationResult.filter(function (vr) {
-      return vr.assert.name === "required";
-    });
-    if (rqeuiredValResult.length > 0) {
-      let fieldNode = $(elNode.element);
-      let formGroupNode = fieldNode.closest(".form-group");
-      let lblNode = formGroupNode.find(".form-label:first");
-      if (lblNode.length > 0) {
-        let errorNode = formGroupNode.find("div.parsley-error span[class*=parsley-]");
-        if (errorNode.length > 0) {
-          let lblText = lblNode.text();
-          if (lblText) {
-            errorNode.html(lblText + " es necesario.");
-          }
-        }
-      }
-    }
-  }
-});
-
 // Filepond: Image Preview
 FilePond.registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType);
 
@@ -600,7 +470,7 @@ $("#docentes_hombres").on("input", (event) => {
 $("#form_nueva_escuela").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_escuela").click(async () => {
-  if (validar_form_escuela()) {
+  if (validar_form()) {
     notificacion_carga();
 
     let json = {
@@ -776,7 +646,7 @@ $("#btn_cancelar_edit_escuela").click(() => {
 $("#form_edit_escuela").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_edit_escuela").click(async () => {
-  if (validar_form_edit_escuela()) {
+  if (validar_form_edit()) {
     notificacion_carga();
     let json = {
       id_escuela: escuela_actual,

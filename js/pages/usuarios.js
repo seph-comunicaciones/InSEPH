@@ -5,27 +5,6 @@ let usuario_actual = null
 let rol = false
 let usuario = 0
 
-//Notficaciones
-const notificacion = (mensaje) => {
-  Toastify({
-    text: mensaje,
-    duration: 3000,
-    close: true,
-    gravity: "top",
-    position: "right",
-  }).showToast();
-};
-
-const notificacion_carga = () => {
-  Toastify({
-    text: "Cargando...",
-    duration: 3000,
-    close: true,
-    gravity: "top",
-    position: "right",
-  }).showToast();
-};
-
 //Funciones
 const pintar_tabla_usuarios = (usuarios) => {
   $("#container_table_usuarios").empty();
@@ -69,40 +48,16 @@ const pintar_tabla_usuarios = (usuarios) => {
   });
 }
 
-const validar_form_usuario = () => {
-  for (let i = 0; i < $(".validacion").length; i++) {
-    if ($(`#${$(".validacion")[i].id}`).val() === "" || $(`#${$(".validacion")[i].id}`).val() === 0) {
-      return false;
-    }
-  }
-  return $(".error_input").length <= 0;
-};
-
-const validar_form_edit_usuario = () => {
-  for (let i = 0; i < $(".validacion_edit").length; i++) {
-    if ($(`#${$(".validacion_edit")[i].id}`).val() === "" || $(`#${$(".validacion_edit")[i].id}`).val() === 0) {
-      return false;
-    }
-  }
-  return $(".error_input").length <= 0;
-};
-
-const validar_campo_usuario = (campo, id) => {
-  if (campo && $(`#${id}`).length > 0) {
-    $(`#${id}`).val(campo);
-  }
-};
-
-const visualizar_usuario = (usuario) => {
+const vista_visualizar_usuario = (usuario) => {
   $("#form_vis_usuario")[0].reset();
 
-  validar_campo_usuario(usuario.usuario, "usuario_vis");
-  validar_campo_usuario(usuario.correo, "correo_vis");
-  validar_campo_usuario(usuario.telefono, "telefono_vis");
-  validar_campo_usuario(usuario.nombre, "nombre_vis");
-  validar_campo_usuario(usuario.apellido_paterno, "apellido_paterno_vis");
-  validar_campo_usuario(usuario.apellido_materno, "apellido_materno_vis");
-  validar_campo_usuario(usuario.rol_id, "rol_vis");
+  validar_campo(usuario.usuario, "usuario_vis");
+  validar_campo(usuario.correo, "correo_vis");
+  validar_campo(usuario.telefono, "telefono_vis");
+  validar_campo(usuario.nombre, "nombre_vis");
+  validar_campo(usuario.apellido_paterno, "apellido_paterno_vis");
+  validar_campo(usuario.apellido_materno, "apellido_materno_vis");
+  validar_campo(usuario.rol_id, "rol_vis");
 
   $("#usuario_modificacion_vis").text(`Ultima modificación el ${usuario.fecha_modificacion} a las ${usuario.hora_modificacion} por ${usuario.usuario_nombre_modificacion} ${usuario.usuario_apellido_paterno_modificacion} ${usuario.usuario_apellido_materno_modificacion}`)
 
@@ -110,16 +65,16 @@ const visualizar_usuario = (usuario) => {
   $("#visualizar_usuario").removeClass("d-none");
 };
 
-const editar_usuario = (usuario) => {
+const vista_editar_usuario = (usuario) => {
   $("#form_edit_usuario")[0].reset();
 
-  validar_campo_usuario(usuario.usuario, "usuario_edit");
-  validar_campo_usuario(usuario.correo, "correo_edit");
-  validar_campo_usuario(usuario.telefono, "telefono_edit");
-  validar_campo_usuario(usuario.nombre, "nombre_edit");
-  validar_campo_usuario(usuario.apellido_paterno, "apellido_paterno_edit");
-  validar_campo_usuario(usuario.apellido_materno, "apellido_materno_edit");
-  validar_campo_usuario(usuario.rol_id, "rol_edit");
+  validar_campo(usuario.usuario, "usuario_edit");
+  validar_campo(usuario.correo, "correo_edit");
+  validar_campo(usuario.telefono, "telefono_edit");
+  validar_campo(usuario.nombre, "nombre_edit");
+  validar_campo(usuario.apellido_paterno, "apellido_paterno_edit");
+  validar_campo(usuario.apellido_materno, "apellido_materno_edit");
+  validar_campo(usuario.rol_id, "rol_edit");
 
   $("#usuario_modificacion_edit").text(`Ultima modificación el ${usuario.fecha_modificacion} a las ${usuario.hora_modificacion} por ${usuario.usuario_nombre_modificacion} ${usuario.usuario_apellido_paterno_modificacion} ${usuario.usuario_apellido_materno_modificacion}`)
 
@@ -169,51 +124,6 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
   }
 })
 
-//Validacion formulario
-$.extend(window.Parsley.options, {
-  focus: "first",
-  excluded: "input[type=button], input[type=submit], input[type=reset], .search, .ignore",
-  triggerAfterFailure: "change blur",
-  errorsContainer: function (element) {
-  },
-  trigger: "change",
-  successClass: "is-valid",
-  errorClass: "is-invalid",
-  classHandler: function (el) {
-    return el.$element.closest(".form-group");
-  },
-  errorsContainer: function (el) {
-    return el.$element.closest(".form-group");
-  },
-  errorsWrapper: '<div class="parsley-error"></div>',
-  errorTemplate: "<span></span>",
-});
-
-Parsley.on("field:validated", function (el) {
-  let elNode = $(el)[0];
-  if (elNode && !elNode.isValid()) {
-    let rqeuiredValResult = elNode.validationResult.filter(function (vr) {
-      return vr.assert.name === "required";
-    });
-    if (rqeuiredValResult.length > 0) {
-      let fieldNode = $(elNode.element);
-      let formGroupNode = fieldNode.closest(".form-group");
-      let lblNode = formGroupNode.find(".form-label:first");
-      if (lblNode.length > 0) {
-        let errorNode = formGroupNode.find(
-          "div.parsley-error span[class*=parsley-]"
-        );
-        if (errorNode.length > 0) {
-          let lblText = lblNode.text();
-          if (lblText) {
-            errorNode.html(lblText + " es necesario.");
-          }
-        }
-      }
-    }
-  }
-});
-
 //Agregar nuevo usuario
 $("#btn_nuevo_usuario").click(() => {
   $("#form_nuevo_usuario")[0].reset();
@@ -227,7 +137,7 @@ $("#btn_nuevo_usuario").click(() => {
 $("#form_nuevo_usuario").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_usuario").click(() => {
-  if (validar_form_usuario()) {
+  if (validar_form()) {
     notificacion_carga();
     request_post("/api/v1/usuarios/agregar_usuario", {
       "usuario": $("#usuario").val(),
@@ -283,7 +193,7 @@ $("#main").on("click", ".control_usuario", (event) => {
 
         if (success) {
           notificacion("Usuario consultado");
-          visualizar_usuario(usuario);
+          vista_visualizar_usuario(usuario);
         } else {
           Swal.fire("Error", message, "error");
         }
@@ -298,7 +208,7 @@ $("#main").on("click", ".control_usuario", (event) => {
 
         if (success) {
           notificacion("Usuario consultado");
-          editar_usuario(usuario);
+          vista_editar_usuario(usuario);
         } else {
           Swal.fire("Error", message, "error");
         }
@@ -357,7 +267,7 @@ $("#btn_cancelar_edit_usuario").click(() => {
 $("#form_edit_usuario").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_edit_usuario").click(() => {
-  if (validar_form_edit_usuario()) {
+  if (validar_form_edit()) {
     notificacion_carga();
     request_post("/api/v1/usuarios/editar_usuario", {
       "id_usuario": usuario_actual,
@@ -435,9 +345,9 @@ socket.on("editar_usuario", mensaje_socket => {
 
       if (success && $("#menu_usuarios").attr("class").match("d-none")) {
         if ($("#editar_usuario").attr("class").match("d-none")) {
-          visualizar_usuario(usuario);
+          vista_visualizar_usuario(usuario);
         } else if ($("#visualizar_usuario").attr("class").match("d-none")) {
-          editar_usuario(usuario);
+          vista_editar_usuario(usuario);
         }
       }
     })
