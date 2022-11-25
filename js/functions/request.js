@@ -57,9 +57,10 @@ const request_post = async (url, json) => {
   return responseJSON;
 };
 
-const request_post_file = async (url, file) => {
+const subir_archivo = async (file) => {
+  const url = "/api/v1/escuelas/subir_archivo"
   const url_peticion = `${window.location.origin}${entorno ? `/${entorno}` : ""}${url}`;
-  console.log(`request_post(${url_peticion})`);
+  console.log("Subiendo archivo")
   const response = await fetch(url_peticion, {
     method: "POST",
     mode: "cors",

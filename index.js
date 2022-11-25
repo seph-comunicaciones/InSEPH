@@ -306,28 +306,6 @@ app.post("/api/v1/escuelas/eliminar_escuela", async (request, response) => {
     return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
   }
 });
-app.post("/api/v1/escuelas/subir_archivo", async (request, response) => {
-  if (!request.files) return response.status(400).json(message_failure("Error, no hay archivo que subir"));
-
-  await create_directory(path_files)
-  await create_directory(path_files_escuela)
-
-  const archivo = request.files.archivo;
-  const file = await name_file(archivo.name);
-
-  try {
-    await archivo.mv(`${__dirname}/${path_files_escuela}/${file}`, (error) => {
-      if (error) {
-        console.log(error);
-        return response.status(400).json(message_failure("Error, no se pudo subir el archivo"));
-      }
-      return response.status(200).json(message_success("Imagen agregada exitosamente", {"path": `/${path_files_escuela}/${file}`}));
-    });
-  } catch (e) {
-    console.log(e);
-    return response.status(400).json(message_failure("Error, no se pudo subir el archivo"));
-  }
-});
 
 //Dashboard
 app.post("/api/v1/dashboard/consultar_datos_dashboard", async (request, response) => {
@@ -716,6 +694,30 @@ app.get("/api/v1/usuarios/validar_session", async (request, response) => {
     request.session.rol_id = rol_id;
     request.session.id_usuario = id_usuario;
     return response.status(200).json(message_reload());
+  }
+});
+
+//Servicios
+app.post("/api/v1/escuelas/subir_archivo", async (request, response) => {
+  if (!request.files) return response.status(400).json(message_failure("Error, no hay archivo que subir"));
+
+  await create_directory(path_files)
+  await create_directory(path_files_escuela)
+
+  const archivo = request.files.archivo;
+  const file = await name_file(archivo.name);
+
+  try {
+    await archivo.mv(`${__dirname}/${path_files_escuela}/${file}`, (error) => {
+      if (error) {
+        console.log(error);
+        return response.status(400).json(message_failure("Error, no se pudo subir el archivo"));
+      }
+      return response.status(200).json(message_success("Imagen agregada exitosamente", {"path": `/${path_files_escuela}/${file}`}));
+    });
+  } catch (e) {
+    console.log(e);
+    return response.status(400).json(message_failure("Error, no se pudo subir el archivo"));
   }
 });
 

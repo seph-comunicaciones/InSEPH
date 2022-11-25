@@ -96,7 +96,7 @@ const vista_visualizar_escuela = (escuela) => {
 
   $("#container_vis_img").empty()
   if (escuela.imagen && escuela.imagen !== "") $("#container_vis_img").append(`<img src='${window.location.origin}${escuela.imagen}' style="height: 20rem;" class="img-fluid" alt="Imagen escuela">`)
-  
+
   validar_campo_escuela(escuela.clave, "clave_centro_vis");
   validar_campo_escuela(escuela.nombre, "nombre_centro_vis");
   validar_campo_escuela(escuela.pag_web, "pagina_vis");
@@ -595,7 +595,7 @@ $("#btn_guardar_escuela").click(() => {
       const data = new FormData();
       data.append('archivo', img_escuela.getFile().file);
 
-      request_post_file("/api/v1/escuelas/subir_archivo", data).then((response) => {
+      subir_archivo(data).then((response) => {
         const {failure, success, message, response: {path}} = response
 
         if (success) {
@@ -769,7 +769,7 @@ $("#btn_guardar_edit_escuela").click(() => {
       const data = new FormData();
       data.append('archivo', img_escuela_edit.getFile().file);
 
-      request_post_file("/api/v1/escuelas/subir_archivo", data).then((response) => {
+      subir_archivo(data).then((response) => {
         const {failure, success, message, response: {path}} = response
 
         if (success) {
