@@ -14,7 +14,6 @@ const token_web = process.env.TOKEN_WEB ? process.env.TOKEN_WEB : "0012b5cc-0f3e
 const token_movil = process.env.TOKEN_MOVIL
 const domain = "https://sig.up.railway.app";
 let my_session;
-const path_files = "uploads"
 const path_files_escuela = "uploads/escuela"
 
 app.use("/js", express.static(__dirname + "/js"));

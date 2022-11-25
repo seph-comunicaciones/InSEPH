@@ -1,4 +1,4 @@
-const {pool} = require("../database/pg");
+const {pool} = require("../../database/postgres");
 const web_crypto = require("crypto").webcrypto;
 const {mkdir} = require("fs/promises");
 
@@ -123,7 +123,8 @@ const pool_query_update = (body, where, table) => {
   values_body.push(get_fecha())
   values_body.push(get_hora())
 
-  let query = `UPDATE ${table} SET `;
+  let query = `UPDATE ${table}
+               SET `;
   let query_where = " Where ";
 
   for (let i = 0; i < llaves_body.length; i++) query += values_body[i] !== "" ? ` ${llaves_body[i]} = '${values_body[i]}'${i !== llaves_body.length - 1 ? "," : ""} ` : ``;
