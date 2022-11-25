@@ -12,7 +12,7 @@ const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_quer
 
 const token_web = process.env.TOKEN_WEB ? process.env.TOKEN_WEB : "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
 const token_movil = process.env.TOKEN_MOVIL
-const domain = "http://localhost:8080";
+const domain = "https://sig.up.railway.app";
 let my_session;
 const path_files = "uploads"
 const path_files_escuela = "uploads/escuela"
