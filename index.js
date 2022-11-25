@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const {Server} = require("socket.io");
 const socket = new Server(server);
 
-const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_insert, pool_query_update, filtrar_llaves, message_success, message_redirect, message_reload, name_file, create_directory} = require("./js/functions/servicios");
+const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_insert, pool_query_update, filtrar_llaves, message_success, message_redirect, message_reload, name_file} = require("./js/functions/servicios");
 
 const token_web = process.env.TOKEN_WEB ? process.env.TOKEN_WEB : "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
 const token_movil = process.env.TOKEN_MOVIL
@@ -26,8 +26,7 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(fileUpload())
-
+app.use(fileUpload({createParentPath: true,}))
 
 server.listen(process.env.PORT || 8080);
 
@@ -86,9 +85,9 @@ app.post("/api/v1/escuelas/consultar_escuelas", async (request, response) => {
   if (request.session.login || (token_acceso === token_web)) {
     const query = await pool_query(
       `Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
-    From escuela
-    Join turno On escuela.turno_id = turno.id_turno
-    Join municipio On escuela.municipio_id = municipio.id_municipio ${id_municipio !== "" ? ` Where municipio.id_municipio = ${id_municipio} And escuela.activo = true ` : " Where escuela.activo = true "};`,
+       From escuela
+                Join turno On escuela.turno_id = turno.id_turno
+                Join municipio On escuela.municipio_id = municipio.id_municipio ${id_municipio !== "" ? ` Where municipio.id_municipio = ${id_municipio} And escuela.activo = true ` : " Where escuela.activo = true "};`,
       "Escuelas consultadas exitosamente",
       "Error, no se pudieron consultar las escuelas"
     );
@@ -118,38 +117,21 @@ app.post("/api/v1/escuelas/consultar_escuela", async (request, response) => {
   //Consulta query
   if (request.session.login || (token_acceso === token_web)) {
     const query = await pool_query_unique(
-      `Select escuela.*,
-               LEFT(cast(escuela.fecha_modificacion AS varchar), 10) AS fecha_modificacion,
-               turno.nom_turno,
-               sost_control.nom_sost_control,
-               modelo.nom_modelo,
-               sostenimiento.nom_sostenimiento,
-               municipio.nom_municipio,
-               nivel.nom_nivel,
-               tipo.nom_tipo,
-               servicio_educativo.nom_servicio_educativo,
-               usuario.nombre                                        AS usuario_nombre_modificacion,
-               usuario.apellido_paterno                              AS usuario_apellido_paterno_modificacion,
-               usuario.apellido_materno                              AS usuario_apellido_materno_modificacion,
-               direccion.direccion,
-               direccion.codigo_postal,
-               direccion.colonia,
-               direccion.num_int,
-               direccion.num_ext,
-               direccion.localidad
-        From escuela
-                 Join turno On escuela.turno_id = turno.id_turno
-                 Join sost_control On escuela.control_id = sost_control.id_sost_control
-                 Join modelo On escuela.modelo_id = modelo.id_modelo
-                 Join sostenimiento On escuela.sostenimiento_id = sostenimiento.id_sostenimiento
-                 Join municipio On escuela.municipio_id = municipio.id_municipio
-                 Join nivel On escuela.nivel_id = nivel.id_nivel
-                 Join tipo On escuela.tipo_id = tipo.id_tipo
-                 Join servicio_educativo On escuela.servicio_educativo_id = servicio_educativo.id_servicio_educativo
-                 JOIN usuario on escuela.usuario_id_modificacion = usuario.id_usuario
-                 Left JOIN direccion on escuela.id_escuela = direccion.escuela_id
-        Where escuela.id_escuela = '${id_escuela}'
-          AND escuela.activo = true;`,
+      `Select escuela.*, LEFT (cast (escuela.fecha_modificacion AS varchar), 10) AS fecha_modificacion, turno.nom_turno, sost_control.nom_sost_control, modelo.nom_modelo, sostenimiento.nom_sostenimiento, municipio.nom_municipio, nivel.nom_nivel, tipo.nom_tipo, servicio_educativo.nom_servicio_educativo, usuario.nombre AS usuario_nombre_modificacion, usuario.apellido_paterno AS usuario_apellido_paterno_modificacion, usuario.apellido_materno AS usuario_apellido_materno_modificacion, direccion.direccion, direccion.codigo_postal, direccion.colonia, direccion.num_int, direccion.num_ext, direccion.localidad
+       From escuela
+           Join turno
+       On escuela.turno_id = turno.id_turno
+           Join sost_control On escuela.control_id = sost_control.id_sost_control
+           Join modelo On escuela.modelo_id = modelo.id_modelo
+           Join sostenimiento On escuela.sostenimiento_id = sostenimiento.id_sostenimiento
+           Join municipio On escuela.municipio_id = municipio.id_municipio
+           Join nivel On escuela.nivel_id = nivel.id_nivel
+           Join tipo On escuela.tipo_id = tipo.id_tipo
+           Join servicio_educativo On escuela.servicio_educativo_id = servicio_educativo.id_servicio_educativo
+           JOIN usuario on escuela.usuario_id_modificacion = usuario.id_usuario
+           Left JOIN direccion on escuela.id_escuela = direccion.escuela_id
+       Where escuela.id_escuela = '${id_escuela}'
+         AND escuela.activo = true;`,
       "Escuela consultada exitosamente",
       "Error, no se pudo consultar la escuela"
     );
@@ -185,7 +167,9 @@ app.post("/api/v1/escuelas/agregar_escuela", async (request, response) => {
   //Consulta query
   if ((request.session.rol_id === 1 || request.session.rol_id === 2) || (token_acceso === token_web)) {
     //Validar que no exista esta clave
-    const validacion = await pool_query_unique(`SELECT clave FROM escuela where clave = '${clave}';`, "", "Error, no se pudo agregar la escuela")
+    const validacion = await pool_query_unique(`SELECT clave
+                                                FROM escuela
+                                                where clave = '${clave}';`, "", "Error, no se pudo agregar la escuela")
 
     if (validacion.response && validacion.success) {
       if (validacion.response.clave === clave.toString()) {
@@ -197,7 +181,9 @@ app.post("/api/v1/escuelas/agregar_escuela", async (request, response) => {
     const query = await pool_query(pool_query_insert(await filtrar_llaves(request.body, llaves_filtrar), true, "escuela"), "Escuela registrada exitosamente", "Error, no se pudo registrar la escuela");
 
     if (query.success) {
-      const query_id_escuela = await pool_query_unique(`SELECT id_escuela FROM escuela WHERE clave = '${clave}';`, "", "")
+      const query_id_escuela = await pool_query_unique(`SELECT id_escuela
+                                                        FROM escuela
+                                                        WHERE clave = '${clave}';`, "", "")
 
       const llaves_filtrar = ["direccion", "localidad", "colonia", "num_int", "num_ext", "codigo_postal", "municipio_id", "escuela_id"]
       request.body["escuela_id"] = query_id_escuela.response.id_escuela
@@ -205,9 +191,11 @@ app.post("/api/v1/escuelas/agregar_escuela", async (request, response) => {
 
 
       const query_socket = await pool_query_unique(`Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
-            From escuela
-            Join turno On escuela.turno_id = turno.id_turno
-            Join municipio On escuela.municipio_id = municipio.id_municipio  Where escuela.clave = '${clave}' And escuela.activo = true;`, "Escuela consultada exitosamente", "Error, no se pudo consultar la escuela");
+                                                    From escuela
+                                                             Join turno On escuela.turno_id = turno.id_turno
+                                                             Join municipio On escuela.municipio_id = municipio.id_municipio
+                                                    Where escuela.clave = '${clave}'
+                                                      And escuela.activo = true;`, "Escuela consultada exitosamente", "Error, no se pudo consultar la escuela");
       socket.emit("agregar_escuela", query_socket.response)
 
       return response.status(200).json(query);
@@ -244,8 +232,9 @@ app.post("/api/v1/escuelas/editar_escuela", async (request, response) => {
     const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, llaves_filtrar), where, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
 
     const query_id_escuela = await pool_query_unique(`SELECT escuela.id_escuela, direccion.id_direccion
-        FROM escuela LEFT JOIN direccion on escuela.id_escuela = direccion.escuela_id
-        WHERE escuela.id_escuela = '${id_escuela}';`, "", "")
+                                                      FROM escuela
+                                                               LEFT JOIN direccion on escuela.id_escuela = direccion.escuela_id
+                                                      WHERE escuela.id_escuela = '${id_escuela}';`, "", "")
 
     if (!query_id_escuela.response.id_direccion) {
       const llaves_filtrar = ["direccion", "localidad", "colonia", "num_int", "num_ext", "codigo_postal", "municipio_id", "escuela_id"]
@@ -259,9 +248,11 @@ app.post("/api/v1/escuelas/editar_escuela", async (request, response) => {
 
     if (query.success) {
       const query_socket = await pool_query_unique(`Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
-        From escuela
-        Join turno On escuela.turno_id = turno.id_turno
-        Join municipio On escuela.municipio_id = municipio.id_municipio  Where escuela.id_escuela = ${id_escuela} And escuela.activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+                                                    From escuela
+                                                             Join turno On escuela.turno_id = turno.id_turno
+                                                             Join municipio On escuela.municipio_id = municipio.id_municipio
+                                                    Where escuela.id_escuela = ${id_escuela}
+                                                      And escuela.activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
       socket.emit("editar_escuela", query_socket.response)
       return response.status(200).json(query);
     } else {
@@ -296,7 +287,9 @@ app.post("/api/v1/escuelas/eliminar_escuela", async (request, response) => {
     const query = await pool_query(pool_query_update(request.body, {id_escuela: id_escuela}, "escuela"), "Escuela eliminada exitosamente", "Error, no se pudo eliminar la escuela");
 
     if (query.success) {
-      const query_socket = await pool_query_unique(`Select clave, id_escuela From escuela Where id_escuela = ${id_escuela};`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+      const query_socket = await pool_query_unique(`Select clave, id_escuela
+                                                    From escuela
+                                                    Where id_escuela = ${id_escuela};`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
       socket.emit("eliminar_escuela", query_socket.response)
       return response.status(200).json(query);
     } else {
@@ -320,17 +313,19 @@ app.post("/api/v1/dashboard/consultar_datos_dashboard", async (request, response
     const datos_niveles = {}
 
     const query_datos_alumnos_docentes_aulas = await pool_query_unique(`SELECT SUM(alum_hom)            as alum_hom,
-                                                       SUM(alum_muj)            as alum_muj,
-                                                       SUM(alum_hom + alum_muj) as alum_tot,
-                                                       SUM(doc_hom)             as doc_hom,
-                                                       SUM(doc_muj)             as doc_muj,
-                                                       SUM(doc_hom + doc_muj)   as doc_tot,
-                                                       SUM(aulas_exist)         as aulas_exist,
-                                                       SUM(aulas_uso)           as aulas_uso
-                                                FROM escuela
-                                                WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} activo = true;`, "", "");
+                                                                               SUM(alum_muj)            as alum_muj,
+                                                                               SUM(alum_hom + alum_muj) as alum_tot,
+                                                                               SUM(doc_hom)             as doc_hom,
+                                                                               SUM(doc_muj)             as doc_muj,
+                                                                               SUM(doc_hom + doc_muj)   as doc_tot,
+                                                                               SUM(aulas_exist)         as aulas_exist,
+                                                                               SUM(aulas_uso)           as aulas_uso
+                                                                        FROM escuela
+                                                                        WHERE ${municipio_id !== "" ? ` municipio_id = ${municipio_id} AND ` : ``} activo = true;`, "", "");
 
-    const query_niveles = await pool_query(`SELECT tipo_id FROM escuela WHERE ${municipio_id!==""?` municipio_id = ${municipio_id} AND `:``} activo = true;`, ``, ``)
+    const query_niveles = await pool_query(`SELECT tipo_id
+                                            FROM escuela
+                                            WHERE ${municipio_id !== "" ? ` municipio_id = ${municipio_id} AND ` : ``} activo = true;`, ``, ``)
 
     const niveles = [{"name": "preescolar", "id": 1}, {"name": "primaria", "id": 2}, {"name": "secundaria", "id": 3}, {"name": "bachiller", "id": 4}, {"name": "licenciatura", "id": 5}, {"name": "posgrado", "id": 6}]
     niveles.forEach((nivel) => datos_niveles[nivel.name] = (query_niveles.response.filter(({tipo_id}) => tipo_id === nivel.id).length))
@@ -453,7 +448,11 @@ app.post("/api/v1/usuarios/validar_usuario", async (request, response) => {
   //Consulta query
   const {usuario, contrasena} = request.body;
 
-  const query = await pool_query_unique(`Select * From usuario Where usuario = '${usuario}' AND PGP_SYM_DECRYPT(contrasena::bytea, 'AES_KEY') = '${contrasena}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo validar el usuario");
+  const query = await pool_query_unique(`Select *
+                                         From usuario
+                                         Where usuario = '${usuario}'
+                                           AND PGP_SYM_DECRYPT(contrasena::bytea, 'AES_KEY') = '${contrasena}'
+                                           And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo validar el usuario");
 
   if (!query.response) {
     return response.status(200).json(message_failure("Usuario o contraseña no encontrados"));
@@ -474,7 +473,9 @@ app.post("/api/v1/usuarios/consultar_usuarios", async (request, response) => {
 
   //Consulta query
   if (request.session.rol_id === 1 || token_acceso === token_web) {
-    const query = await pool_query(`SELECT usuario,  nombre, apellido_materno, apellido_paterno, id_usuario FROM usuario WHERE activo = true;`, "Usuarios consultados exitosamente", "Error, no se pudieron consultar los usuarios");
+    const query = await pool_query(`SELECT usuario, nombre, apellido_materno, apellido_paterno, id_usuario
+                                    FROM usuario
+                                    WHERE activo = true;`, "Usuarios consultados exitosamente", "Error, no se pudieron consultar los usuarios");
 
     if (query.success) {
       return response.status(200).json(query);
@@ -500,10 +501,24 @@ app.post("/api/v1/usuarios/consultar_usuario", async (request, response) => {
 
   //Consulta query
   if (request.session.rol_id === 1 || token_acceso === token_web) {
-    const query = await pool_query_unique(`SELECT usuario, correo, nombre, apellido_materno, apellido_paterno, telefono, rol_id, id_usuario, usuario_id_modificacion, hora_modificacion, LEFT(cast(fecha_modificacion AS varchar),10) AS fecha_modificacion FROM usuario WHERE id_usuario = '${id_usuario}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+    const query = await pool_query_unique(`SELECT usuario,
+                                                  correo,
+                                                  nombre,
+                                                  apellido_materno,
+                                                  apellido_paterno,
+                                                  telefono,
+                                                  rol_id,
+                                                  id_usuario,
+                                                  usuario_id_modificacion,
+                                                  hora_modificacion, LEFT (cast (fecha_modificacion AS varchar), 10) AS fecha_modificacion
+                                           FROM usuario
+                                           WHERE id_usuario = '${id_usuario}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
 
     if (query.success) {
-      const query_us_mod = await pool_query_unique(`SELECT nombre, apellido_materno, apellido_paterno FROM usuario WHERE id_usuario = '${query.response.usuario_id_modificacion}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+      const query_us_mod = await pool_query_unique(`SELECT nombre, apellido_materno, apellido_paterno
+                                                    FROM usuario
+                                                    WHERE id_usuario = '${query.response.usuario_id_modificacion}'
+                                                      And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
 
       if (query_us_mod.success) {
         query.response["usuario_nombre_modificacion"] = query_us_mod.response.nombre
@@ -528,7 +543,10 @@ app.post("/api/v1/usuarios/consultar_rol_usuario", async (request, response) => 
 
   //Consulta query
   if (request.session.login || id_usuario || token_acceso === token_web) {
-    const query = await pool_query_unique(`SELECT rol_id, id_usuario FROM usuario WHERE id_usuario = '${request.session.login? request.session.id_usuario: id_usuario}' And activo = true;`, "Rol consultado exitosamente", "Error, no se pudo consultar el rol");
+    const query = await pool_query_unique(`SELECT rol_id, id_usuario
+                                           FROM usuario
+                                           WHERE id_usuario = '${request.session.login ? request.session.id_usuario : id_usuario}'
+                                             And activo = true;`, "Rol consultado exitosamente", "Error, no se pudo consultar el rol");
 
     if (query.success) {
       return response.status(200).json(query);
@@ -547,7 +565,8 @@ app.post("/api/v1/usuarios/consultar_roles", async (request, response) => {
 
   //Consulta query
   if (request.session.rol_id === 1 || token_acceso === token_web) {
-    const query = await pool_query(`SELECT * FROM rol;`, "Roles consultados exitosamente", "Error, no se pudieron consultar los roles");
+    const query = await pool_query(`SELECT *
+                                    FROM rol;`, "Roles consultados exitosamente", "Error, no se pudieron consultar los roles");
 
     if (query.success) {
       return response.status(200).json(query);
@@ -580,7 +599,10 @@ app.post("/api/v1/usuarios/agregar_usuario", async (request, response) => {
   //Consulta query
   if (request.session.rol_id === 1 || token_acceso === token_web) {
     //Comparar el usuario y correo del nuevo usuario
-    const validacion = await pool_query_unique(`SELECT usuario, correo FROM usuario WHERE usuario = '${usuario}' OR correo = '${correo}';`, "", "Error, no se pudo agregar el usuario")
+    const validacion = await pool_query_unique(`SELECT usuario, correo
+                                                FROM usuario
+                                                WHERE usuario = '${usuario}'
+                                                   OR correo = '${correo}';`, "", "Error, no se pudo agregar el usuario")
 
     if (validacion.response && validacion.success) {
       if (validacion.response.usuario === usuario) return response.status(200).json(message_failure("Usuario no disponible"))
@@ -590,7 +612,10 @@ app.post("/api/v1/usuarios/agregar_usuario", async (request, response) => {
     const query = await pool_query(pool_query_insert(request.body, true, "usuario"), "Usuario agregado exitosamente", "Error, no se pudo agregar el usuario");
 
     if (query.success) {
-      const query_socket = await pool_query_unique(`SELECT usuario, nombre, apellido_materno, apellido_paterno, id_usuario FROM usuario WHERE usuario = '${usuario}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+      const query_socket = await pool_query_unique(`SELECT usuario, nombre, apellido_materno, apellido_paterno, id_usuario
+                                                    FROM usuario
+                                                    WHERE usuario = '${usuario}'
+                                                      And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
       socket.emit("agregar_usuario", query_socket.response)
       return response.status(200).json(query);
     } else {
@@ -625,7 +650,9 @@ app.post("/api/v1/usuarios/eliminar_usuario", async (request, response) => {
     const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, ["activo", "usuario_id_modificacion"]), {id_usuario: id_usuario}, "usuario"), "Usuario eliminado exitosamente", "Error, no se pudo eliminar el usuario");
 
     if (query.success) {
-      const query_socket = await pool_query_unique(`SELECT usuario, id_usuario FROM usuario WHERE id_usuario = '${id_usuario}';`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+      const query_socket = await pool_query_unique(`SELECT usuario, id_usuario
+                                                    FROM usuario
+                                                    WHERE id_usuario = '${id_usuario}';`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
       socket.emit("eliminar_usuario", query_socket.response)
       return response.status(200).json(query);
     } else {
@@ -657,7 +684,11 @@ app.post("/api/v1/usuarios/editar_usuario", async (request, response) => {
   //Consulta query
   if (request.session.rol_id === 1 || token_acceso === token_web) {
     //Comparar el usuario y correo del nuevo usuario
-    const validacion = await pool_query_unique(`SELECT correo FROM usuario WHERE  correo = '${correo}' AND id_usuario != ${id_usuario} AND activo = true;`, "", "Error, no se pudo agregar el usuario")
+    const validacion = await pool_query_unique(`SELECT correo
+                                                FROM usuario
+                                                WHERE correo = '${correo}'
+                                                  AND id_usuario != ${id_usuario}
+                                                  AND activo = true;`, "", "Error, no se pudo agregar el usuario")
 
     if (validacion.response && validacion.success) {
       if (validacion.response.correo === correo) return response.status(200).json(message_failure("Correo no valido"));
@@ -666,7 +697,10 @@ app.post("/api/v1/usuarios/editar_usuario", async (request, response) => {
     const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, ["correo", "telefono", "rol_id", "usuario_id_modificacion"]), {id_usuario: id_usuario}, "usuario"), "Usuario actualizado exitosamente", "Error, no se pudo editar el usuario");
 
     if (query.success) {
-      const query_socket = await pool_query_unique(`SELECT usuario, nombre, apellido_materno, apellido_paterno, id_usuario FROM usuario WHERE id_usuario = '${id_usuario}' And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
+      const query_socket = await pool_query_unique(`SELECT usuario, nombre, apellido_materno, apellido_paterno, id_usuario
+                                                    FROM usuario
+                                                    WHERE id_usuario = '${id_usuario}'
+                                                      And activo = true;`, "Usuario consultado exitosamente", "Error, no se pudo consultar el usuario");
       socket.emit("editar_usuario", query_socket.response)
       return response.status(200).json(query);
     } else {
@@ -678,7 +712,9 @@ app.post("/api/v1/usuarios/editar_usuario", async (request, response) => {
 });
 app.get("/api/v1/usuarios/validar_session", async (request, response) => {
   //Consulta query
-  const query = await pool_query_unique(`SELECT id_usuario, activo, rol_id FROM usuario WHERE id_usuario = ${request.session.id_usuario?request.session.id_usuario:0};`, "", "");
+  const query = await pool_query_unique(`SELECT id_usuario, activo, rol_id
+                                         FROM usuario
+                                         WHERE id_usuario = ${request.session.id_usuario ? request.session.id_usuario : 0};`, "", "");
 
   const {id_usuario, activo, rol_id} = query.response
 
@@ -701,9 +737,6 @@ app.get("/api/v1/usuarios/validar_session", async (request, response) => {
 app.post("/api/v1/escuelas/subir_archivo", async (request, response) => {
   if (!request.files) return response.status(400).json(message_failure("Error, no hay archivo que subir"));
 
-  await create_directory(path_files)
-  await create_directory(path_files_escuela)
-
   const archivo = request.files.archivo;
   const file = await name_file(archivo.name);
 
@@ -724,7 +757,9 @@ app.post("/api/v1/escuelas/subir_archivo", async (request, response) => {
 const validar_session = async (request, response, token_acceso) => {
   if (token_acceso !== "") {
     //Consulta query
-    const query_permisos = await pool_query_unique(`SELECT id_usuario, activo, rol_id FROM usuario WHERE id_usuario = ${request.session.id_usuario?request.session.id_usuario:0};`, "", "");
+    const query_permisos = await pool_query_unique(`SELECT id_usuario, activo, rol_id
+                                                    FROM usuario
+                                                    WHERE id_usuario = ${request.session.id_usuario ? request.session.id_usuario : 0};`, "", "");
 
     let id_usuario = -1, activo = false, rol_id = -1
 
