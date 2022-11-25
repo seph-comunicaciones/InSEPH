@@ -100,7 +100,7 @@ const pool_query_insert = (body, uuid, tabla) => {
   }
 
   for (let i = 0; i < llaves_body.length; i++) {
-    if (llaves_body[i] !== "token_acceso") {
+    if (llaves_body[i] !== "token_acceso" && values_body[i] !== "") {
       query += ` ${llaves_body[i]}${i !== llaves_body.length - 1 ? "," : " )"} `;
       values += llaves_body[i] === "contrasena" ? ` PGP_SYM_ENCRYPT('${values_body[i]}', 'AES_KEY')${i !== llaves_body.length - 1 ? "," : " );"} ` : ` '${values_body[i]}'${i !== llaves_body.length - 1 ? "," : " );"} `;
     }
@@ -126,7 +126,7 @@ const pool_query_update = (body, where, table) => {
   let query = `UPDATE ${table} SET `;
   let query_where = " Where ";
 
-  for (let i = 0; i < llaves_body.length; i++) query += ` ${llaves_body[i]} = '${values_body[i]}'${i !== llaves_body.length - 1 ? "," : ""} `;
+  for (let i = 0; i < llaves_body.length; i++) query += ` ${llaves_body[i]} = '${values_body[i]}'${i !== (llaves_body.length - 1) && values_body[i] !== "" ? "," : ""} `;
 
   for (let i = 0; i < llaves_where.length; i++) query_where += ` ${llaves_where[i]} = '${values_where[i]}'${i !== llaves_where.length - 1 ? "," : " ;"} `;
 
