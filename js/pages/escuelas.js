@@ -502,8 +502,8 @@ $("#btn_guardar_escuela").click(async () => {
 
     if (img_escuela.getFile()) {
       const data = new FormData();
-      const blob = await comprimir_imagen(img_escuela_edit.getFile().file, 50);
-      data.append('archivo', new File([blob], img_escuela_edit.getFile().file.name));
+      const blob = await comprimir_imagen(img_escuela.getFile().file, 50);
+      data.append('archivo', new File([blob], img_escuela.getFile().file.name));
 
       subir_archivo(data).then((response) => {
         const {failure, success, message, response: {path}} = response
