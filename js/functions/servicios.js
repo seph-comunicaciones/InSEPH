@@ -207,6 +207,81 @@ const create_directory = async (path) => {
   }
 };
 
+const validate_session = async (request, response, token_acceso) => {
+  if (token_acceso !== "") {
+    //Consulta query
+    const query_permisos = await pool_query_unique(`SELECT id_usuario, activo, rol_id
+                                                    FROM usuario
+                                                    WHERE id_usuario = ${request.session.id_usuario ? request.session.id_usuario : 0};`, "", "");
+
+    let id_usuario = -1, activo = false, rol_id = -1
+
+    if (query_permisos.response) {
+      id_usuario = query_permisos.response.id_usuario
+      activo = query_permisos.response.activo
+      rol_id = query_permisos.response.rol_id
+    }
+
+    if (query_permisos.response && !activo) {
+      console.log("Sin permisos")
+      request.session.login = false;
+      request.session.rol_id = 0;
+      request.session.id_usuario = 0;
+      return message_redirect("/login.html")
+    } else if (query_permisos.response && activo && id_usuario.toString() === request.session.id_usuario.toString() && rol_id.toString() !== request.session.rol_id.toString()) {
+      console.log("Actualización de session")
+      request.session.login = true;
+      request.session.rol_id = rol_id;
+      request.session.id_usuario = id_usuario;
+      return message_reload()
+    }
+  }
+
+  return {}
+}
+
+const routes_session = (request, response, route, session_true, session_false, log_out, dir_name) => {
+  console.log("Accediendo a la ruta", route)
+
+  if (log_out) {
+    request.session.login = false;
+    request.session.rol_id = 0;
+    request.session.id_usuario = 0;
+  }
+
+  console.log(request.session);
+
+  if (!request.session.login) {
+    response.sendFile(dir_name + `/public/${session_false}`);
+  }
+
+  if (request.session.rol_id && request.session.rol_id !== 1) {
+    if (request.session.login) {
+      switch (route) {
+        case "/dashboard.html":
+          
+          response.sendFile(dir_name + `/public/dashboard_us.html`);
+          break
+        case "/escuelas.html":
+          response.sendFile(dir_name + `/public/escuelas_us.html`);
+          break
+        case "/usuarios.html":
+          response.sendFile(dir_name + `/public/dashboard_us.html`);
+          break
+        case "/logout.html":
+          response.sendFile(dir_name + `/public/login.html`);
+          break
+        default:
+          response.sendFile(dir_name + `/public/dashboard_us.html`);
+      }
+    }
+  } else {
+    if (request.session.login) {
+      response.sendFile(dir_name + `/public/${session_true}`);
+    }
+  }
+};
+
 module.exports = {
   validar_llaves,
   filtrar_llaves,
@@ -220,5 +295,7 @@ module.exports = {
   pool_query_insert,
   pool_query_update,
   name_file,
-  create_directory
+  create_directory,
+  validate_session,
+  routes_session
 };
