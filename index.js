@@ -7,6 +7,7 @@ const http = require('http');
 const server = http.createServer(app);
 const {Server} = require("socket.io");
 const socket = new Server(server);
+require("dotenv").config()
 
 const {validate_session, routes_session} = require("./js/functions/servicios");
 const {consultar_datos_dashboard} = require("./js/services/dashboard");
@@ -15,6 +16,7 @@ const {subir_archivo} = require("./js/services/archivo")
 const {editar_usuario, validar_usuario, consultar_usuarios, consultar_usuario, consultar_rol_usuario, consultar_roles, agregar_usuario, eliminar_usuario} = require("./js/services/usuario");
 const {consultar_niveles, consultar_servicios, consultar_tipos, consultar_municipios, consultar_turnos, consultar_modelos, consultar_sostenimientos, consultar_controles} = require("./js/services/catalogo");
 
+const {PORT} = process.env
 let my_session;
 
 app.use("/js", express.static(__dirname + "/js"));
@@ -28,7 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(fileUpload({createParentPath: true,}))
 
-server.listen(process.env.PORT || 8080);
+server.listen(PORT);
 
 //Socket
 socket.on('connection', (socket) => {
@@ -100,7 +102,7 @@ app.post("/api/v1/usuarios/editar_usuario", async (request, response) => await e
 app.get("/api/v1/usuarios/validar_session", async (request, response) => await validate_session(request, response, socket));
 
 //Carga de vistas
-app.get("/", (request, response) => routes_session(request, response, "/", "dashboard.html", "login.html", false, __dirname, __dirname));
+app.get("/", (request, response) => routes_session(request, response, "/", "dashboard.html", "login.html", false, __dirname));
 app.get("/login.html", (request, response) => routes_session(request, response, "/login.html", "dashboard.html", "login.html", false, __dirname));
 app.get("/logout.html", (request, response) => routes_session(request, response, "/logout.html", "login.html", "login.html", true, __dirname));
 app.get("/dashboard.html", (request, response) => routes_session(request, response, "/dashboard.html", "dashboard.html", "login.html", false, __dirname));

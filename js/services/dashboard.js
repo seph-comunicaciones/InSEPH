@@ -1,7 +1,6 @@
 const {validate_session, pool_query_unique, pool_query, message_success, message_failure} = require("../functions/servicios");
 
-const token_web = process.env.TOKEN_WEB ? process.env.TOKEN_WEB : "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
-const token_movil = process.env.TOKEN_MOVIL
+const {TOKEN_WEB, TOKEN_MOVIL} = process.env
 
 const consultar_datos_dashboard = async (request, response) => {
   const {token_acceso} = request.body;
@@ -10,7 +9,7 @@ const consultar_datos_dashboard = async (request, response) => {
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Consulta query
-  if (token_acceso === token_web || request.session.login) {
+  if (token_acceso === TOKEN_WEB || request.session.login) {
     const {municipio_id} = request.body
     const datos_niveles = {}
 

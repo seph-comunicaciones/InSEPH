@@ -1,7 +1,6 @@
 const {validate_session, pool_query_unique, pool_query, message_failure, validar_llaves, pool_query_insert, filtrar_llaves, pool_query_update} = require("../functions/servicios");
 
-const token_web = process.env.TOKEN_WEB ? process.env.TOKEN_WEB : "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
-const token_movil = process.env.TOKEN_MOVIL
+const {TOKEN_WEB, TOKEN_MOVIL} = process.env
 
 const consultar_escuelas = async (request, response) => {
   const {id_municipio, token_acceso} = request.body;
@@ -19,7 +18,7 @@ const consultar_escuelas = async (request, response) => {
   }
 
   //Consulta query
-  if (request.session.login || (token_acceso === token_web)) {
+  if (request.session.login || (token_acceso === TOKEN_WEB)) {
     const query = await pool_query(
       `Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
        From escuela
@@ -53,7 +52,7 @@ const consultar_escuela = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if (request.session.login || (token_acceso === token_web)) {
+  if (request.session.login || (token_acceso === TOKEN_WEB)) {
     const query = await pool_query_unique(
       `Select escuela.*, LEFT (cast (escuela.fecha_modificacion AS varchar), 10) AS fecha_modificacion, turno.nom_turno, sost_control.nom_sost_control, modelo.nom_modelo, sostenimiento.nom_sostenimiento, municipio.nom_municipio, nivel.nom_nivel, tipo.nom_tipo, servicio_educativo.nom_servicio_educativo, usuario.nombre AS usuario_nombre_modificacion, usuario.apellido_paterno AS usuario_apellido_paterno_modificacion, usuario.apellido_materno AS usuario_apellido_materno_modificacion, direccion.direccion, direccion.codigo_postal, direccion.colonia, direccion.num_int, direccion.num_ext, direccion.localidad
        From escuela
@@ -104,7 +103,7 @@ const agregar_escuela = async (request, response, socket) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if ((request.session.rol_id === 1 || request.session.rol_id === 2) || (token_acceso === token_web)) {
+  if ((request.session.rol_id === 1 || request.session.rol_id === 2) || (token_acceso === TOKEN_WEB)) {
     //Validar que no exista esta clave
     const validacion = await pool_query_unique(`SELECT clave
                                                 FROM escuela
@@ -166,7 +165,7 @@ const editar_escuela = async (request, response, socket) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if ((request.session.rol_id === 1) || (token_acceso === token_web)) {
+  if ((request.session.rol_id === 1) || (token_acceso === TOKEN_WEB)) {
     const where = {id_escuela: id_escuela};
     const llaves_filtrar = ["imagen", "id_escuela", "nombre", "pag_web", "telefono", "alum_muj", "alum_hom", "doc_muj", "doc_hom", "aulas_exist", "aulas_uso", "turno_id", "control_id", "modelo_id", "tipo_id", "servicio_educativo_id", "sostenimiento_id", "municipio_id", "nivel_id", "usuario_id_modificacion"]
     const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, llaves_filtrar), where, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
@@ -223,7 +222,7 @@ const eliminar_escuela = async (request, response, socket) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if ((request.session.rol_id === 1) || (token_acceso === token_web)) {
+  if ((request.session.rol_id === 1) || (token_acceso === TOKEN_WEB)) {
     request.body["activo"] = false
     const query = await pool_query(pool_query_update(request.body, {id_escuela: id_escuela}, "escuela"), "Escuela eliminada exitosamente", "Error, no se pudo eliminar la escuela");
 

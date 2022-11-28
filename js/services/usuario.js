@@ -1,7 +1,6 @@
 const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_update, filtrar_llaves, validate_session, pool_query_insert} = require("../functions/servicios");
 
-const token_web = process.env.TOKEN_WEB ? process.env.TOKEN_WEB : "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
-const token_movil = process.env.TOKEN_MOVIL
+const {TOKEN_WEB, TOKEN_MOVIL} = process.env
 
 const validar_usuario = async (request, response) => {
   //Validar llaves obligatorias
@@ -39,7 +38,7 @@ const consultar_usuarios = async (request, response) => {
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Consulta query
-  if (request.session.rol_id === 1 || token_acceso === token_web) {
+  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
     const query = await pool_query(`SELECT usuario, nombre, apellido_materno, apellido_paterno, id_usuario
                                     FROM usuario
                                     WHERE activo = true;`, "Usuarios consultados exitosamente", "Error, no se pudieron consultar los usuarios");
@@ -68,7 +67,7 @@ const consultar_usuario = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if (request.session.rol_id === 1 || token_acceso === token_web) {
+  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
     const query = await pool_query_unique(`SELECT usuario,
                                                   correo,
                                                   nombre,
@@ -111,7 +110,7 @@ const consultar_rol_usuario = async (request, response) => {
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Consulta query
-  if (request.session.login || id_usuario || token_acceso === token_web) {
+  if (request.session.login || id_usuario || token_acceso === TOKEN_WEB) {
     const query = await pool_query_unique(`SELECT rol_id, id_usuario
                                            FROM usuario
                                            WHERE id_usuario = '${request.session.login ? request.session.id_usuario : id_usuario}'
@@ -134,7 +133,7 @@ const consultar_roles = async (request, response) => {
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Consulta query
-  if (request.session.rol_id === 1 || token_acceso === token_web) {
+  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
     const query = await pool_query(`SELECT *
                                     FROM rol;`, "Roles consultados exitosamente", "Error, no se pudieron consultar los roles");
 
@@ -168,7 +167,7 @@ const agregar_usuario = async (request, response, socket) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if (request.session.rol_id === 1 || token_acceso === token_web) {
+  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
     //Comparar el usuario y correo del nuevo usuario
     const validacion = await pool_query_unique(`SELECT usuario, correo
                                                 FROM usuario
@@ -217,7 +216,7 @@ const eliminar_usuario = async (request, response, socket) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if (request.session.rol_id === 1 || token_acceso === token_web) {
+  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
     request.body["activo"] = false
     const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, ["activo", "usuario_id_modificacion"]), {id_usuario: id_usuario}, "usuario"), "Usuario eliminado exitosamente", "Error, no se pudo eliminar el usuario");
 
@@ -255,7 +254,7 @@ const editar_usuario = async (request, response, socket) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if (request.session.rol_id === 1 || token_acceso === token_web) {
+  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
     //Comparar el usuario y correo del nuevo usuario
     const validacion = await pool_query_unique(`SELECT correo
                                                 FROM usuario
