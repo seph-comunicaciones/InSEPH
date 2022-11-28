@@ -9,7 +9,7 @@ const {Server} = require("socket.io");
 const socket = new Server(server);
 require("dotenv").config()
 
-const {validate_session, routes_session} = require("./js/functions/servicios");
+const {validate_session, routes_session} = require("./js/services/servicios");
 const {consultar_datos_dashboard} = require("./js/services/dashboard");
 const {consultar_escuelas, consultar_escuela, eliminar_escuela, editar_escuela, agregar_escuela} = require("./js/services/escuela");
 const {subir_archivo} = require("./js/services/archivo")

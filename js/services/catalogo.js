@@ -1,4 +1,4 @@
-const {pool_query} = require("../functions/servicios");
+const {pool_query} = require("./servicios");
 
 const consultar_niveles = async (request, response) => {
   //Consulta query

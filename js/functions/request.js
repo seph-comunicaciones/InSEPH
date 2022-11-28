@@ -1,7 +1,5 @@
-const entorno = null;
-
 const request_get = async url => {
-  const url_peticion = `${window.location.origin}${entorno ? `/${entorno}` : ""}${url}`;
+  const url_peticion = `${window.location.origin}${url}`;
   console.log(`request_get(${url_peticion})`);
   const response = await fetch(url_peticion, {
     method: "GET",
@@ -20,7 +18,7 @@ const request_get = async url => {
     responseJSON = {success: false, failure: true, message: "UNRESOLVE"};
   }
   if (responseJSON.redirect) {
-    location.href = `${window.location.origin}${entorno ? `/${entorno}` : ""}${responseJSON.url}`;
+    location.href = `${window.location.origin}${responseJSON.url}`;
   }
   if (responseJSON.reload) {
     location.reload();
@@ -29,7 +27,7 @@ const request_get = async url => {
 };
 
 const request_post = async (url, json) => {
-  const url_peticion = `${window.location.origin}${entorno ? `/${entorno}` : ""}${url}`;
+  const url_peticion = `${window.location.origin}${url}`;
   console.log(`request_post(${url_peticion})`, json);
   const response = await fetch(url_peticion, {
     method: "POST",
@@ -49,7 +47,7 @@ const request_post = async (url, json) => {
     responseJSON = {success: false, failure: true, message: "UNRESOLVE"};
   }
   if (responseJSON.redirect) {
-    location.href = `${window.location.origin}${entorno ? `/${entorno}` : ""}${responseJSON.url}`;
+    location.href = `${window.location.origin}${responseJSON.url}`;
   }
   if (responseJSON.reload) {
     location.reload();
@@ -59,7 +57,7 @@ const request_post = async (url, json) => {
 
 const subir_archivo = async (file) => {
   const url = "/api/v1/escuelas/subir_archivo"
-  const url_peticion = `${window.location.origin}${entorno ? `/${entorno}` : ""}${url}`;
+  const url_peticion = `${window.location.origin}${url}`;
   console.log("Subiendo archivo")
   const response = await fetch(url_peticion, {
     method: "POST",

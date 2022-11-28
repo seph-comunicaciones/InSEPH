@@ -1,4 +1,4 @@
-const {message_failure, name_file, message_success} = require("../functions/servicios");
+const {message_failure, name_file, message_success} = require("./servicios");
 
 const {DOMAIN, PATH_FILES_ESCUELA} = process.env
 

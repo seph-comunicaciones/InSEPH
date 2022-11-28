@@ -1,4 +1,4 @@
-const {validate_session, pool_query_unique, pool_query, message_failure, validar_llaves, pool_query_insert, filtrar_llaves, pool_query_update} = require("../functions/servicios");
+const {validate_session, pool_query_unique, pool_query, message_failure, validar_llaves, pool_query_insert, filtrar_llaves, pool_query_update} = require("./servicios");
 
 const {TOKEN_WEB, TOKEN_MOVIL} = process.env
 
