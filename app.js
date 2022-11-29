@@ -15,6 +15,7 @@ const {consultar_escuelas, consultar_escuela, eliminar_escuela, editar_escuela, 
 const {subir_archivo} = require("./js/services/archivo")
 const {editar_usuario, validar_usuario, consultar_usuarios, consultar_usuario, consultar_rol_usuario, consultar_roles, agregar_usuario, eliminar_usuario} = require("./js/services/usuario");
 const {consultar_niveles, consultar_servicios, consultar_tipos, consultar_municipios, consultar_turnos, consultar_modelos, consultar_sostenimientos, consultar_controles} = require("./js/services/catalogo");
+const {consultar_indicadores_internacionales} = require("./js/services/indicadores");
 
 const {PORT} = process.env
 let my_session;
@@ -89,6 +90,9 @@ app.get("/api/v1/turnos/consultar_turnos", async (request, response) => await co
 app.get("/api/v1/modelos/consultar_modelos", async (request, response) => await consultar_modelos(request, response, socket));
 app.get("/api/v1/sostenimientos/consultar_sostenimientos", async (request, response) => await consultar_sostenimientos(request, response, socket));
 app.get("/api/v1/controles/consultar_controles", async (request, response) => await consultar_controles(request, response, socket));
+
+//Indicadores
+app.post("/api/v1/indicadores/consultar_indicadores_internacionales", async (request, response) => await consultar_indicadores_internacionales(request, response, socket));
 
 //Usuario
 app.post("/api/v1/usuarios/validar_usuario", async (request, response) => await validar_usuario(request, response, socket));
