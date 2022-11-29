@@ -3,14 +3,18 @@
   <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Dashboard</title>
+    <title>Indicadores</title>
 
     <link rel="stylesheet" href="/css/main/app.css"/>
     <link rel="stylesheet" href="/css/main/app-dark.css"/>
-    <link rel="stylesheet" href="/extensions/choices.js/public/assets/styles/choices.css"/>
+    <link rel="stylesheet" href="/extensions/toastify-js/src/toastify.css"/>
+    <link rel="stylesheet" href="/extensions/filepond/filepond.css"/>
+    <link rel="stylesheet" href="/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css"/>
+    <link rel="stylesheet" href="/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css"/>
+    <link rel="stylesheet" href="/css/pages/datatables.css"/>
+    <link rel="stylesheet" href="/extensions/sweetalert2/sweetalert2.min.css"/>
     <link rel="shortcut icon" href="/images/logo/favicon.svg" type="image/x-icon"/>
     <link rel="shortcut icon" href="/images/logo/favicon.png" type="image/png"/>
-    <link rel="stylesheet" href="/extensions/toastify-js/src/toastify.css"/>
     <link rel="stylesheet" href="/css/shared/iconly.css"/>
   </head>
 
@@ -21,9 +25,9 @@
           <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
               <div class="logo">
-                <a href="dashboard.html">
-                  <img src="/images/logo/logo.svg" alt="Logo" srcset=""/>
-                </a>
+                <a href="dashboard.html"
+                ><img src="/images/logo/logo.svg" alt="Logo" srcset=""
+                /></a>
               </div>
               <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20" height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
@@ -55,7 +59,7 @@
                 Sistema de Información Gerencial - SEPH
               </li>
 
-              <li class="sidebar-item active">
+              <li class="sidebar-item">
                 <a href="dashboard.html" class="sidebar-link">
                   <i class="bi bi-bar-chart-fill"></i>
                   <span>Dashboard</span>
@@ -69,14 +73,7 @@
                 </a>
               </li>
 
-              <li class="sidebar-item">
-                <a href="usuarios.html" class="sidebar-link">
-                  <i class="bi bi-people-fill"></i>
-                  <span>Usuarios</span>
-                </a>
-              </li>
-
-              <li class="sidebar-item">
+              <li class="sidebar-item active">
                 <a href="indicadores.html" class="sidebar-link">
                   <i class="bi bi-bar-chart"></i>
                   <span>Indicadores</span>
@@ -101,116 +98,39 @@
         </header>
 
         <div class="page-heading">
-          <h3>Dashboard</h3>
+          <h3>Indicadores educativos</h3>
         </div>
-        <section class="basic-choices">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-content">
-                <div class="card-header">
-                  <h6>Seleccione un Municipio:</h6>
-                </div>
-                <div class="card-body">
-                  <div class="form-group">
-                    <select id="bashboard_select_municipio" class="choices form-select"></select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         <section class="section">
-          <div class="row">
-            <div class="col-12">
-              <div class="card">
-                <div class="card-body">
-                  <div class="table-responsive" id="container_tabla_alumnos_docentes_aulas"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div class="buttons" id="indicadores"></div>
+          <div class="buttons" id="subsecretaria"></div>
+          <div class="buttons" id="direccion_general"></div>
+          <div class="buttons" id="nivel_educativo"></div>
         </section>
 
-        <section>
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h4>Alumnos</h4>
-              </div>
-              <div class="card-body">
-                <div id="dashboard_chart_alumnos"></div>
-              </div>
-            </div>
+        <br>
+
+        <section id="menu_indicadores" class="section d-none">
+          <div class="card">
+            <div class="card-header" id="container_tittle_indicadores"></div>
+            <div class="table-responsive card-body" id="container_table_indicadores"></div>
           </div>
         </section>
-
-        <section>
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h4>Docentes</h4>
-              </div>
-              <div class="card-body">
-                <div id="dashboard_chart_docentes"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h4>Aulas</h4>
-              </div>
-              <div class="card-body">
-                <div id="dashboard_chart_aulas"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="row">
-            <div class="col-12">
-              <div class="card">
-                <div class="card-header">
-                  <h4>POBLACIÓN QUE ASISTE A LA ESCUELA</h4>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive" id="container_tabla_niveles"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h4>Niveles educativos</h4>
-              </div>
-              <div class="card-body">
-                <div id="dashboard_chart_niveles"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
       </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/extensions/jquery/jquery.min.js"></script>
     <script src="/js/functions/request.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
     <script src="/js/bootstrap.js"></script>
     <script src="/js/app.js"></script>
     <script src="/extensions/choices.js/public/assets/scripts/choices.js"></script>
-    <script src="/extensions/apexcharts/apexcharts.min.js"></script>
+    <script src="/extensions/sweetalert2/sweetalert2.min.js"></script>
+    <script src="/extensions/parsleyjs/parsley.min.js"></script>
     <script src="/extensions/toastify-js/src/toastify.js"></script>
+    <script src="/js/functions/validaciones.js"></script>
     <script src="/js/functions/notificaciones.js"></script>
-    <script src="/js/pages/dashboard.js"></script>
+    <script src="/js/pages/indicadores.js"></script>
   </body>
 </html>

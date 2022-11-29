@@ -107,6 +107,7 @@ app.get("/login.html", (request, response) => routes_session(request, response, 
 app.get("/logout.html", (request, response) => routes_session(request, response, "/logout.html", "login.html", "login.html", true, __dirname));
 app.get("/dashboard.html", (request, response) => routes_session(request, response, "/dashboard.html", "dashboard.html", "login.html", false, __dirname));
 app.get("/escuelas.html", (request, response) => routes_session(request, response, "/escuelas.html", "escuelas.html", "login.html", false, __dirname));
+app.get("/indicadores.html", (request, response) => routes_session(request, response, "/indicadores.html", "indicadores.html", "login.html", false, __dirname));
 app.get("/usuarios.html", (request, response) => routes_session(request, response, "/usuarios.html", "usuarios.html", "login.html", false, __dirname));
 
 app.use((request, response) => {

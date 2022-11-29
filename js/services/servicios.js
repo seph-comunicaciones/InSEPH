@@ -259,7 +259,6 @@ const routes_session = (request, response, route, session_true, session_false, l
     if (request.session.login) {
       switch (route) {
         case "/dashboard.html":
-          
           response.sendFile(dir_name + `/public/dashboard_us.html`);
           break
         case "/escuelas.html":
@@ -267,6 +266,9 @@ const routes_session = (request, response, route, session_true, session_false, l
           break
         case "/usuarios.html":
           response.sendFile(dir_name + `/public/dashboard_us.html`);
+          break
+        case "/indicadores.html":
+          response.sendFile(dir_name + `/public/indicadores_us.html`);
           break
         case "/logout.html":
           response.sendFile(dir_name + `/public/login.html`);
