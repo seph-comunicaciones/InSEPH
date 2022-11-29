@@ -99,8 +99,34 @@ const vista_visualizar_escuela = (escuela) => {
 
   $("#escuela_modificacion_vis").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
 
-  $("#menu_escuelas").addClass("d-none");
+  $("#visualizar_escuela_sim").addClass("d-none");
   $("#visualizar_escuela").removeClass("d-none");
+};
+
+const vista_visualizar_escuela_sim = (escuela) => {
+  $("#form_vis_sim_escuela")[0].reset();
+
+  validar_img(escuela.imagen, "container_vis_sim_img")
+
+  validar_campo(escuela.clave, "clave_centro_vis_sim");
+  validar_campo(escuela.nombre, "nombre_centro_vis_sim");
+  validar_campo(escuela.telefono, "telefono_vis_sim");
+  validar_campo(escuela.pag_web, "pagina_vis_sim");
+  validar_campo(escuela.alum_muj, "alumnos_mujeres_vis_sim");
+  validar_campo(escuela.alum_hom, "alumnos_hombres_vis_sim");
+  validar_campo(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_vis_sim");
+  validar_campo(escuela.doc_muj, "docentes_mujeres_vis_sim");
+  validar_campo(escuela.doc_hom, "docentes_hombres_vis_sim");
+  validar_campo(escuela.doc_hom + escuela.doc_muj, "docentes_totales_vis_sim");
+  validar_campo(escuela.aulas_exist, "aulas_existentes_vis_sim");
+  validar_campo(escuela.aulas_uso, "aulas_uso_vis_sim");
+
+  validar_campo(escuela.direccion, "direccion_vis_sim");
+
+  $("#escuela_modificacion_vis_sim").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
+
+  $("#menu_escuelas").addClass("d-none");
+  $("#visualizar_escuela_sim").removeClass("d-none");
 };
 
 const vista_editar_escuela = (escuela) => {
@@ -571,7 +597,7 @@ $("#main").on("click", ".control_escuela", (event) => {
 
         if (success) {
           notificacion("Escuela consultada");
-          vista_visualizar_escuela(escuela);
+          vista_visualizar_escuela_sim(escuela);
         } else {
           Swal.fire("Error", message, "error");
         }
@@ -623,13 +649,38 @@ $("#main").on("click", ".control_escuela", (event) => {
   }
 });
 
+//Visualizar información completa escuela
+$("#btn_mas_vis_sim_escuela").click(() => {
+  notificacion_carga();
+  request_post("/api/v1/escuelas/consultar_escuela", {
+    id_escuela: escuela_actual,
+  }).then((response) => {
+    const {success, message, response: escuela} = response;
+
+    if (success) {
+      notificacion("Escuela consultada");
+      vista_visualizar_escuela(escuela);
+    } else {
+      Swal.fire("Error", message, "error");
+    }
+  });
+});
+
 //Regresar visualizar escuela
 $("#btn_regresar_vis_escuela").click(() => {
-  $("#form_edit_escuela")[0].reset();
+  $("#form_vis_escuela")[0].reset();
 
   $("#menu_escuelas").removeClass("d-none");
   escuela_actual = null;
   $("#visualizar_escuela").addClass("d-none");
+});
+
+$("#btn_regresar_vis_sim_escuela").click(() => {
+  $("#form_vis_sim_escuela")[0].reset();
+
+  $("#menu_escuelas").removeClass("d-none");
+  escuela_actual = null;
+  $("#visualizar_escuela_sim").addClass("d-none");
 });
 
 //Cancelar editar escuela
@@ -742,7 +793,7 @@ socket.on("editar_escuela", mensaje_socket => {
 
       if (success && $("#menu_escuelas").attr("class").match("d-none")) {
         if ($("#editar_escuela").attr("class").match("d-none")) {
-          vista_visualizar_escuela(escuela);
+          vista_visualizar_escuela_sim(escuela);
         } else if ($("#visualizar_escuela").attr("class").match("d-none")) {
           vista_editar_escuela(escuela);
         }
