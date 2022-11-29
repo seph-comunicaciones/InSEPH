@@ -217,8 +217,6 @@ const pintar_tabla_indicadores = (tittle, type) => {
 
 
 //Opciones indicadores
-$("#indicadores").append(`<div class="divider divider-left"><div class="divider-text">Indicadores</div></div>`)
-
 indicadores.forEach((indicador) => {
   const {name, id, end} = indicador
 
@@ -248,7 +246,11 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
     $("#direccion_general").empty()
     $("#nivel_educativo").empty()
 
-    if (indicadores[id_indicador - 1].subsecretarias.length > 0) btn_subsecretarias += `<div class="divider divider-left"><div class="divider-text">Subsecretarias</div></div>`
+    $("#divider_subsecretarias").addClass("d-none")
+    $("#divider_direcciones_generales").addClass("d-none")
+    $("#divider_niveles_educativos").addClass("d-none")
+
+    if (indicadores[id_indicador - 1].subsecretarias.length > 0) $("#divider_subsecretarias").removeClass("d-none")
 
     indicadores[id_indicador - 1].subsecretarias.forEach((subsecretaria) => {
       const {name, id, end} = subsecretaria
@@ -269,7 +271,10 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
     $("#direccion_general").empty()
     $("#nivel_educativo").empty()
 
-    if (indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales.length > 0) btn_direcciones_generales += `<div class="divider divider-left"><div class="divider-text">Direcciones Generales</div></div>`
+    $("#divider_direcciones_generales").addClass("d-none")
+    $("#divider_niveles_educativos").addClass("d-none")
+
+    if (indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales.length > 0) $("#divider_direcciones_generales").removeClass("d-none")
 
     indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales.forEach((direccion_general) => {
       const {name, id, end} = direccion_general
@@ -289,7 +294,9 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
     $("#nivel_educativo").empty()
 
-    if (indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - 1].niveles_educativos.length > 0) btn_niveles_educativos += `<div class="divider divider-left"><div class="divider-text">Niveles Educativos</div></div>`
+    $("#divider_niveles_educativos").addClass("d-none")
+
+    if (indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - 1].niveles_educativos.length > 0) $("#divider_niveles_educativos").removeClass("d-none")
 
     indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - 1].niveles_educativos.forEach((nivel_educativo) => {
       const {name, id, end} = nivel_educativo
