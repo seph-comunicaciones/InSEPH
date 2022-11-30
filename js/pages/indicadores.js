@@ -184,6 +184,68 @@ const indicadores = [
     ]
   }
 ]
+const glosario = [
+  {
+    "word": "Absorción",
+    "definition": "Porcentaje de alumnos egresados de un ciclo escolar, en un determinado nivel educativo, que se matriculan al siguiente nivel sin interrumpir sus estudios."
+  },
+  {
+    "word": "Abandono-Escolar",
+    "definition": "Porcentaje de alumnos que dejan la escuela de un ciclo escolar a otro."
+  },
+  {
+    "word": "Analfabetismo",
+    "definition": "Porcentaje de personas de 15 años y más que no son capaces de leer ni escribir."
+  },
+  {
+    "word": "Atención-a-3-a-5-años",
+    "definition": "Matrícula de entre 3 y 5 años respecto de la población de la misma edad."
+  },
+  {
+    "word": "Eficiencia-del-Sistema-Educativo",
+    "definition": "Porcentaje de alumnos que lograron terminar estudios superiores en un año determinado, de cada 100 estudiantes que iniciaron su educación primaria, 16 años antes."
+  },
+  {
+    "word": "Cobertura",
+    "definition": "Número total de alumnos en un nivel educativo al inicio del ciclo escolar, por cada cien del grupo de población con la edad reglamentaria para cursar ese nivel. También conocida como Tasa bruta de escolarización."
+  },
+  {
+    "word": "Población-que-asiste-a-la-escuela",
+    "definition": "Número de niños en el grupo poblacional analizado que asisten a la escuela, por cada cien en el mismo grupo."
+  },
+  {
+    "word": "Grado promedio-de-escolaridad",
+    "definition": "Número promedio de grados escolares aprobados por la población de 15 años y más. Es el nivel promedio de instrucción de un estado o país."
+  },
+  {
+    "word": "Eficiencia-Terminal",
+    "definition": "Número de alumnos que egresan de un determinado nivel educativo en un ciclo escolar, por cada cien alumnos de la cohorte inicial del mismo nivel."
+  },
+  {
+    "word": "Reprobación",
+    "definition": "Número de alumnos que no ha obtenido los conocimientos establecidos en los planes y programas de estudio de cualquier grado o curso al final del ciclo escolar, por cada 100 alumnos matriculados."
+  },
+  {
+    "word": "Rezago-educativo",
+    "definition": "Porcentaje de la población de 15 años y más que no ha logrado concluir la educación básica."
+  },
+  {
+    "word": "Rezago-educativo",
+    "definition": "Población de: (1) 3 a 21 años que no cuenta con educación obligatoria y no asiste a la escuela; (2) 21 años o más que no ha terminado el EMS; (3) 16 años o más que no completó la primaria o secundaria."
+  },
+  {
+    "word": "Grado-promedio-de-escolaridad",
+    "definition": "Número promedio de grados escolares aprobados por la población de 25 años y más."
+  },
+  {
+    "word": "Cobertura-Educativa-de-educación-secundaria",
+    "definition": "Número total de alumnos en secundaria al inicio del ciclo escolar, por cada cien del grupo de población con la edad reglamentaria para cursar ese nivel. También conocida como Tasa bruta de escolarización."
+  },
+  {
+    "word": "Rendimiento-académico",
+    "definition": "Porcentaje de alumnos en nivel de desempeño 3 y 4 en matemáticas, en la prueba Planea."
+  },
+]
 let indicadores_datatable = null
 
 //Funciones
@@ -219,6 +281,20 @@ const pintar_tabla_indicadores = (tittle, type) => {
 
 const notificacion_palabra = (tittle, text, message) => {
   return `<a href="#" onclick="notificacion_sweetalert('${tittle}','${message}')">${text}</a>`
+}
+
+const agregar_glosario = (oracion, glosario) => {
+  let oracion_glosario = oracion.replaceAll(" ", "-")
+
+  glosario.forEach((palabra_definicion) => {
+    const {word, definition} = palabra_definicion
+
+    if (oracion_glosario.includes(word)) {
+      oracion_glosario = oracion_glosario.replaceAll(word, `${notificacion_palabra("Glosario", word.replaceAll("-", " "), definition)}`)
+    }
+  })
+
+  return oracion_glosario.replaceAll("-", " ");
 }
 
 const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valor_nacional) => {
@@ -334,7 +410,7 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores) => {
 
     table += `<tr>
                 <td>${filtro_indicador_nacional}</td>
-                <td style="text-align: left">${indicador_nacional}</td>
+                <td style="text-align: left">${agregar_glosario(indicador_nacional, glosario)}</td>
                 <td>${categoria_indicador_nacional}</td>
                 <td>${nacional_porcentaje}</td>
                 <td>${hidalgo_porcentaje}</td>
