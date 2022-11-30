@@ -395,16 +395,14 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
 
     let table = `<hr><h3>Categoria: ${nombre_indicador}</h3>`
 
-    table += `<table class="table" style="text-align: center" id="table_indicadores_${nombre_indicador.replaceAll(" ", "_")}">
-                <thead>
-                  <tr>
-                    <th style="text-align: center">Indicador</th>`
+    table += `<table class="table" style="text-align: center" id="table_indicadores_${nombre_indicador.replaceAll(" ", "_")}"><thead><tr>`
 
     if (nombre_indicador === "SEP") {
       table += `<th style="text-align: center">Nivel Educativo</th>`
     }
 
-    table +=`<th style="text-align: center">% Nacional</th>
+    table +=`<th style="text-align: center">Indicador</th>
+                     <th style="text-align: center">% Nacional</th>
                     <th style="text-align: center">% Hidalgo</th>
                     <th style="text-align: center">% Posición</th>
                     <th style="text-align: center">Semáforo</th>
@@ -417,7 +415,7 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
 
       switch (nombre_indicador) {
         case "SEP":
-          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_SEP)}</td><td>${categoria_indicador_nacional}</td>`
+          table += `<tr><td>${categoria_indicador_nacional}</td><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_SEP)}</td>`
           break
         case "INEGI 2022":
           table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_INEGI)}</td>`;
