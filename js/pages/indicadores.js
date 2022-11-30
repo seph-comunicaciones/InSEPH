@@ -184,7 +184,7 @@ const indicadores = [
     ]
   }
 ]
-const glosario = [
+const glosario_SEP = [
   {
     "word": "Absorción",
     "definition": "Porcentaje de alumnos egresados de un ciclo escolar, en un determinado nivel educativo, que se matriculan al siguiente nivel sin interrumpir sus estudios."
@@ -192,10 +192,6 @@ const glosario = [
   {
     "word": "Abandono-Escolar",
     "definition": "Porcentaje de alumnos que dejan la escuela de un ciclo escolar a otro."
-  },
-  {
-    "word": "Analfabetismo",
-    "definition": "Porcentaje de personas de 15 años y más que no son capaces de leer ni escribir."
   },
   {
     "word": "Atención-a-3-a-5-años",
@@ -210,6 +206,20 @@ const glosario = [
     "definition": "Número total de alumnos en un nivel educativo al inicio del ciclo escolar, por cada cien del grupo de población con la edad reglamentaria para cursar ese nivel. También conocida como Tasa bruta de escolarización."
   },
   {
+    "word": "Eficiencia-Terminal",
+    "definition": "Número de alumnos que egresan de un determinado nivel educativo en un ciclo escolar, por cada cien alumnos de la cohorte inicial del mismo nivel."
+  },
+  {
+    "word": "Reprobación",
+    "definition": "Número de alumnos que no ha obtenido los conocimientos establecidos en los planes y programas de estudio de cualquier grado o curso al final del ciclo escolar, por cada 100 alumnos matriculados."
+  },
+]
+const glosario_INEGI = [
+  {
+    "word": "Analfabetismo",
+    "definition": "Porcentaje de personas de 15 años y más que no son capaces de leer ni escribir."
+  },
+  {
     "word": "Población-que-asiste-a-la-escuela",
     "definition": "Número de niños en el grupo poblacional analizado que asisten a la escuela, por cada cien en el mismo grupo."
   },
@@ -218,21 +228,17 @@ const glosario = [
     "definition": "Número promedio de grados escolares aprobados por la población de 15 años y más. Es el nivel promedio de instrucción de un estado o país."
   },
   {
-    "word": "Eficiencia-Terminal",
-    "definition": "Número de alumnos que egresan de un determinado nivel educativo en un ciclo escolar, por cada cien alumnos de la cohorte inicial del mismo nivel."
+    "word": "Rezago-educativo",
+    "definition": "Población de: (1) 3 a 21 años que no cuenta con educación obligatoria y no asiste a la escuela; (2) 21 años o más que no ha terminado el EMS; (3) 16 años o más que no completó la primaria o secundaria."
   },
-  {
-    "word": "Reprobación",
-    "definition": "Número de alumnos que no ha obtenido los conocimientos establecidos en los planes y programas de estudio de cualquier grado o curso al final del ciclo escolar, por cada 100 alumnos matriculados."
-  },
+]
+const glosario_CONEVAL = [
   {
     "word": "Rezago-educativo",
     "definition": "Porcentaje de la población de 15 años y más que no ha logrado concluir la educación básica."
   },
-  {
-    "word": "Rezago-educativo",
-    "definition": "Población de: (1) 3 a 21 años que no cuenta con educación obligatoria y no asiste a la escuela; (2) 21 años o más que no ha terminado el EMS; (3) 16 años o más que no completó la primaria o secundaria."
-  },
+]
+const glosario_IMCO = [
   {
     "word": "Grado-promedio-de-escolaridad",
     "definition": "Número promedio de grados escolares aprobados por la población de 25 años y más."
@@ -246,7 +252,6 @@ const glosario = [
     "definition": "Porcentaje de alumnos en nivel de desempeño 3 y 4 en matemáticas, en la prueba Planea."
   },
 ]
-let indicadores_datatable = null
 
 //Funciones
 const pintar_tabla_indicadores = (tittle, type) => {
@@ -254,8 +259,6 @@ const pintar_tabla_indicadores = (tittle, type) => {
   $("#container_table_indicadores").empty();
 
   $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
-
-  indicadores_datatable = null;
 
   let table = `<table class="table" style="text-align: center" id="table_indicadores">
                 <thead>
@@ -272,7 +275,7 @@ const pintar_tabla_indicadores = (tittle, type) => {
   $("#container_table_indicadores").append(table);
 
   //Datatable
-  indicadores_datatable = $("#table_indicadores").DataTable({
+  $("#table_indicadores").DataTable({
     language: {
       url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
     },
@@ -329,15 +332,13 @@ const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valo
   return `<i class="bi bi-circle-fill" style="color: ${(semaforo_nacional + semaforo_hidalgo) >= 5 ? "green" : (semaforo_nacional + semaforo_hidalgo) >= 2 ? "yellow" : "red"}"></i>`
 }
 
-const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores) => {
+const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_internacionales) => {
   notificacion_toastify("Tabla de indicadores internacionales consultada")
 
   $("#container_tittle_indicadores").empty();
   $("#container_table_indicadores").empty();
 
   $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
-
-  indicadores_datatable = null;
 
   let table = `<table class="table" style="text-align: center" id="table_indicadores">
                 <thead>
@@ -352,7 +353,7 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores) => 
                 </thead>
                 <tbody> `;
 
-  indicadores.forEach((meta_indicadores) => {
+  indicadores_internacionales.forEach((meta_indicadores) => {
     const {meta_internacional} = meta_indicadores
     meta_indicadores.indicadores.forEach((indicador) => {
       const {indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, hidalgo_calculo, nacional_calculo} = indicador
@@ -374,14 +375,14 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores) => 
   $("#container_table_indicadores").append(table);
 
   //Datatable
-  indicadores_datatable = $("#table_indicadores").DataTable({
+  $("#table_indicadores").DataTable({
     language: {
       url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
     },
   });
 }
 
-const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores) => {
+const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionales) => {
   notificacion_toastify("Tabla de indicadores nacionales consultada")
 
   $("#container_tittle_indicadores").empty();
@@ -389,14 +390,19 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores) => {
 
   $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
 
-  indicadores_datatable = null;
+  indicadores_nacionales.forEach((indicador_nacional) => {
+    const {nombre_indicador, indicadores} = indicador_nacional
 
-  let table = `<table class="table" style="text-align: center" id="table_indicadores">
+    let table = `<hr><h3>Indicador: ${nombre_indicador}</h3>`
+
+    table += `<table class="table" style="text-align: center" id="table_indicadores_${nombre_indicador.replaceAll(" ", "_")}">
                 <thead>
                   <tr>
-                    <th style="text-align: center">Tipo</th>
-                    <th style="text-align: center">Indicador</th>
-                    <th style="text-align: center">Categoría</th>
+                    <th style="text-align: center">Indicador</th>`
+
+    switch (nombre_indicador) {
+      case "SEP":
+        table += `<th style="text-align: center">Nivel Educativo</th>
                     <th style="text-align: center">% Nacional</th>
                     <th style="text-align: center">% Hidalgo</th>
                     <th style="text-align: center">% Posición</th>
@@ -404,32 +410,76 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores) => {
                   </tr>
                 </thead>
                 <tbody> `;
+        break
+      case "INEGI 2022":
+      case "CONEVAL 2022":
+      case "IMCO 2021-2022":
+        table += ` <th style="text-align: center">% Nacional</th>
+                    <th style="text-align: center">% Hidalgo</th>
+                    <th style="text-align: center">% Posición</th>
+                    <th style="text-align: center">Semáforo</th>
+                  </tr>
+                </thead>
+                <tbody> `;
+        break
+    }
 
-  indicadores.forEach((indicador) => {
-    const {indicador_nacional, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, filtro_indicador_nacional, categoria_indicador_nacional} = indicador
+    indicadores.forEach((indicador) => {
+      const {indicador_nacional, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, categoria_indicador_nacional} = indicador
 
-    table += `<tr>
-                <td>${filtro_indicador_nacional}</td>
-                <td style="text-align: left">${agregar_glosario(indicador_nacional, glosario)}</td>
+      switch (nombre_indicador) {
+        case "SEP":
+          table += `<tr>
+                <td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_SEP)}</td>
                 <td>${categoria_indicador_nacional}</td>
                 <td>${nacional_porcentaje}</td>
                 <td>${hidalgo_porcentaje}</td>
                 <td>${posicion}</td>
                 <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
               </tr>`;
-  })
+          break
+        case "INEGI 2022":
+          table += `<tr>
+                <td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_INEGI)}</td>
+                <td>${nacional_porcentaje}</td>
+                <td>${hidalgo_porcentaje}</td>
+                <td>${posicion}</td>
+                <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
+              </tr>`;
+          break
+        case "CONEVAL 2022":
+          table += `<tr>
+                <td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_CONEVAL)}</td>
+                <td>${nacional_porcentaje}</td>
+                <td>${hidalgo_porcentaje}</td>
+                <td>${posicion}</td>
+                <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
+              </tr>`;
+          break
+        case "IMCO 2021-2022":
+          table += `<tr>
+                <td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_IMCO)}</td>
+                <td>${nacional_porcentaje}</td>
+                <td>${hidalgo_porcentaje}</td>
+                <td>${posicion}</td>
+                <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
+              </tr>`;
+          break
+      }
+    })
 
-  table += ` </tbody> 
+    table += ` </tbody> 
             </table>`;
 
-  $("#container_table_indicadores").append(table);
+    $("#container_table_indicadores").append(table);
 
-  //Datatable
-  indicadores_datatable = $("#table_indicadores").DataTable({
-    language: {
-      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-    },
-  });
+    //Datatable
+    $(`#table_indicadores_${nombre_indicador.replaceAll(" ", "_")}`).DataTable({
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+      },
+    });
+  })
 }
 
 //Opciones indicadores
