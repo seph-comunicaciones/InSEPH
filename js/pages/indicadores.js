@@ -10,6 +10,7 @@ const indicadores = [
     "name": "Nacionales",
     "id": 2,
     "end": true,
+    "service": "consultar_indicadores_nacionales",
     "subsecretarias": []
   },
   {
@@ -252,7 +253,7 @@ const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valo
   return `<i class="bi bi-circle-fill" style="color: ${(semaforo_nacional + semaforo_hidalgo) >= 5 ? "green" : (semaforo_nacional + semaforo_hidalgo) >= 2 ? "yellow" : "red"}"></i>`
 }
 
-const pintar_tabla_indicadores_internacionales = (tittle, type, metas_indicadores) => {
+const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores) => {
   notificacion_toastify("Tabla de indicadores internacionales consultada")
 
   $("#container_tittle_indicadores").empty();
@@ -275,7 +276,7 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, metas_indicadore
                 </thead>
                 <tbody> `;
 
-  metas_indicadores.forEach((meta_indicadores) => {
+  indicadores.forEach((meta_indicadores) => {
     const {meta_internacional} = meta_indicadores
     meta_indicadores.indicadores.forEach((indicador) => {
       const {indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, hidalgo_calculo, nacional_calculo} = indicador
@@ -289,6 +290,57 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, metas_indicadore
                 <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_calculo, nacional_calculo)}</td>
               </tr>`;
     })
+  })
+
+  table += ` </tbody> 
+            </table>`;
+
+  $("#container_table_indicadores").append(table);
+
+  //Datatable
+  indicadores_datatable = $("#table_indicadores").DataTable({
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+    },
+  });
+}
+
+const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores) => {
+  notificacion_toastify("Tabla de indicadores nacionales consultada")
+
+  $("#container_tittle_indicadores").empty();
+  $("#container_table_indicadores").empty();
+
+  $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
+
+  indicadores_datatable = null;
+
+  let table = `<table class="table" style="text-align: center" id="table_indicadores">
+                <thead>
+                  <tr>
+                    <th style="text-align: center">Tipo</th>
+                    <th style="text-align: center">Indicador</th>
+                    <th style="text-align: center">Categoría</th>
+                    <th style="text-align: center">% Nacional</th>
+                    <th style="text-align: center">% Hidalgo</th>
+                    <th style="text-align: center">% Posición</th>
+                    <th style="text-align: center">Semáforo</th>
+                  </tr>
+                </thead>
+                <tbody> `;
+
+  indicadores.forEach((indicador) => {
+    const {indicador_nacional, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, filtro_indicador_nacional, categoria_indicador_nacional} = indicador
+
+    table += `<tr>
+                <td>${filtro_indicador_nacional}</td>
+                <td style="text-align: left">${indicador_nacional}</td>
+                <td>${categoria_indicador_nacional}</td>
+                <td>${nacional_porcentaje}</td>
+                <td>${hidalgo_porcentaje}</td>
+                <td>${posicion}</td>
+                <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
+              </tr>`;
   })
 
   table += ` </tbody> 
@@ -350,15 +402,21 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
       $("#menu_indicadores").removeClass("d-none")
 
       if (service && service !== "") {
-        switch (service) {
-          case "consultar_indicadores_internacionales":
-            notificacion_toastify_carga()
-            request_post(`/api/v1/indicadores/${service}`, {}).then((response) => {
-              const {success, response: metas_indicadores} = response;
-              if (success) pintar_tabla_indicadores_internacionales(indicadores[id_indicador - 1].name, "Indicador", metas_indicadores);
-            })
-            break
-        }
+        notificacion_toastify_carga()
+        request_post(`/api/v1/indicadores/${service}`, {}).then((response) => {
+          const {success, response: indicador} = response;
+
+          if (success) {
+            switch (service) {
+              case "consultar_indicadores_internacionales":
+                pintar_tabla_indicadores_internacionales(indicadores[id_indicador - 1].name, "Indicador", indicador);
+                break
+              case "consultar_indicadores_nacionales":
+                pintar_tabla_indicadores_nacionales(indicadores[id_indicador - 1].name, "Indicador", indicador);
+                break
+            }
+          }
+        })
       } else {
         pintar_tabla_indicadores(indicadores[id_indicador - 1].name, "Indicador")
       }
