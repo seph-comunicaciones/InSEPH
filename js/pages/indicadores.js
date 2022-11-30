@@ -3,6 +3,7 @@ const indicadores = [
     "name": "Internacionales",
     "id": 1,
     "end": true,
+    "service": "consultar_indicadores_internacionales",
     "subsecretarias": [],
   },
   {
@@ -215,12 +216,99 @@ const pintar_tabla_indicadores = (tittle, type) => {
   });
 }
 
+const notificacion_palabra = (tittle, text, message) => {
+  return `<a href="#" onclick="notificacion_sweetalert('${tittle}','${message}')">${text}</a>`
+}
+
+const calcular_semaforo_indicadores_internacinales = (posicion, ascendente, valor_hidalgo, valor_nacional) => {
+  let semaforo_nacional = 0, semaforo_hidalgo = 0
+
+  if (posicion <= 5 || valor_nacional === 100) {
+    semaforo_nacional = 3
+  } else if (posicion <= 10) {
+    semaforo_nacional = 2
+  } else if (posicion <= 15) {
+    semaforo_nacional = 1
+  }
+
+  if (ascendente) {
+    if (valor_hidalgo === 100) {
+      semaforo_hidalgo = 3
+    } else if (valor_hidalgo >= 85) {
+      semaforo_hidalgo = 2
+    } else if (valor_hidalgo >= 70) {
+      semaforo_hidalgo = 1
+    }
+  } else {
+    if (valor_hidalgo === 0) {
+      semaforo_hidalgo = 3
+    } else if (valor_hidalgo <= 5) {
+      semaforo_hidalgo = 2
+    } else if (valor_hidalgo <= 10) {
+      semaforo_hidalgo = 1
+    }
+  }
+
+  return `<i class="bi bi-circle-fill" style="color: ${(semaforo_nacional + semaforo_hidalgo) >= 5 ? "green" : (semaforo_nacional + semaforo_hidalgo) >= 2 ? "yellow" : "red"}"></i>`
+}
+
+const pintar_tabla_indicadores_internacionales = (tittle, type, metas_indicadores) => {
+  notificacion_toastify("Tabla de indicadores internacionales consultada")
+
+  $("#container_tittle_indicadores").empty();
+  $("#container_table_indicadores").empty();
+
+  $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
+
+  indicadores_datatable = null;
+
+  let table = `<table class="table" style="text-align: center" id="table_indicadores">
+                <thead>
+                  <tr>
+                    <th style="text-align: center">Meta</th>
+                    <th style="text-align: center">Indicador México</th>
+                    <th style="text-align: center">% Nacional</th>
+                    <th style="text-align: center">% Hidalgo</th>
+                    <th style="text-align: center">% Posición</th>
+                    <th style="text-align: center">Semáforo</th>
+                  </tr>
+                </thead>
+                <tbody> `;
+
+  metas_indicadores.forEach((meta_indicadores) => {
+    const {meta} = meta_indicadores
+    meta_indicadores.indicadores.forEach((indicador) => {
+      const {indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, hidalgo_calculo, nacional_calculo} = indicador
+
+      table += `<tr>
+                <td style="text-align: left">${notificacion_palabra("Meta", `Meta ${meta.split(" ")[0]}`, meta)}</td>
+                <td style="text-align: left">${indicador_mexico}</td>
+                <td>${nacional_porcentaje}</td>
+                <td>${hidalgo_porcentaje}</td>
+                <td>${posicion}</td>
+                <td>${calcular_semaforo_indicadores_internacinales(posicion, ascendente, hidalgo_calculo, nacional_calculo)}</td>
+              </tr>`;
+    })
+  })
+
+  table += ` </tbody> 
+            </table>`;
+
+  $("#container_table_indicadores").append(table);
+
+  //Datatable
+  indicadores_datatable = $("#table_indicadores").DataTable({
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+    },
+  });
+}
 
 //Opciones indicadores
 indicadores.forEach((indicador) => {
-  const {name, id, end} = indicador
+  const {name, id, end, service} = indicador
 
-  $("#indicadores").append(`<button type="button" id="indicador_${id}" data-type="indicador" data-id-indicador="${id}" data-end="${end}" class="btn btn-primary control_indicadores">${name}</button>`)
+  $("#indicadores").append(`<button type="button" id="indicador_${id}" data-type="indicador" data-id-indicador="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn btn-primary control_indicadores">${name}</button>`)
 })
 
 $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_direccion_general, .control_nivel_educativo", (event) => {
@@ -228,6 +316,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
   const id = button.id
   const type = button.dataset.type
   const end = button.dataset.end ? button.dataset.end : "false"
+  const service = button.dataset.service ? button.dataset.service : ""
   const id_indicador = button.dataset.idIndicador
   const id_subsecretaria = button.dataset.idSubsecretaria
   const id_direccion_general = button.dataset.idDireccionGeneral
@@ -259,7 +348,20 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
     if (end === "true") {
       $("#menu_indicadores").removeClass("d-none")
-      pintar_tabla_indicadores(indicadores[id_indicador - 1].name, "Indicador")
+
+      if (service && service !== "") {
+        switch (service) {
+          case "consultar_indicadores_internacionales":
+            notificacion_toastify_carga()
+            request_post(`/api/v1/indicadores/${service}`, {}).then((response) => {
+              const {success, response: metas_indicadores} = response;
+              if (success) pintar_tabla_indicadores_internacionales(indicadores[id_indicador - 1].name, "Indicador", metas_indicadores);
+            })
+            break
+        }
+      } else {
+        pintar_tabla_indicadores(indicadores[id_indicador - 1].name, "Indicador")
+      }
     }
 
     $("#subsecretaria").append(btn_subsecretarias)

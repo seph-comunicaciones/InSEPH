@@ -83,7 +83,7 @@ const vista_editar_usuario = (usuario) => {
 };
 
 //Cargas usuarios
-notificacion_carga()
+notificacion_toastify_carga()
 request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
   const {success, message, response: {rol_id, id_usuario}} = response;
 
@@ -115,7 +115,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
           }
         })
 
-        notificacion("Usuarios consultados")
+        notificacion_toastify("Usuarios consultados")
         pintar_tabla_usuarios(usuarios)
       }
     })
@@ -138,7 +138,7 @@ $("#form_nuevo_usuario").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_usuario").click(() => {
   if (validar_form()) {
-    notificacion_carga();
+    notificacion_toastify_carga();
     request_post("/api/v1/usuarios/agregar_usuario", {
       "usuario": $("#usuario").val(),
       "correo": $("#correo").val(),
@@ -185,14 +185,14 @@ $("#main").on("click", ".control_usuario", (event) => {
 
   switch (type) {
     case "visualizar_usuario":
-      notificacion_carga();
+      notificacion_toastify_carga();
       request_post("/api/v1/usuarios/consultar_usuario", {
         id_usuario: id,
       }).then((response) => {
         const {success, message, response: usuario} = response;
 
         if (success) {
-          notificacion("Usuario consultado");
+          notificacion_toastify("Usuario consultado");
           vista_visualizar_usuario(usuario);
         } else {
           Swal.fire("Error", message, "error");
@@ -200,14 +200,14 @@ $("#main").on("click", ".control_usuario", (event) => {
       });
       break
     case "editar_usuario":
-      notificacion_carga();
+      notificacion_toastify_carga();
       request_post("/api/v1/usuarios/consultar_usuario", {
         id_usuario: id,
       }).then((response) => {
         const {success, message, response: usuario} = response;
 
         if (success) {
-          notificacion("Usuario consultado");
+          notificacion_toastify("Usuario consultado");
           vista_editar_usuario(usuario);
         } else {
           Swal.fire("Error", message, "error");
@@ -226,7 +226,7 @@ $("#main").on("click", ".control_usuario", (event) => {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          notificacion_carga();
+          notificacion_toastify_carga();
 
           request_post("/api/v1/usuarios/eliminar_usuario", {
             id_usuario: id,
@@ -268,7 +268,7 @@ $("#form_edit_usuario").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_edit_usuario").click(() => {
   if (validar_form_edit()) {
-    notificacion_carga();
+    notificacion_toastify_carga();
     request_post("/api/v1/usuarios/editar_usuario", {
       "id_usuario": usuario_actual,
       "correo": $("#correo_edit").val(),
@@ -321,7 +321,7 @@ socket.on("agregar_usuario", mensaje_socket => {
       `<td><button data-id="${mensaje_socket.id_usuario}" data-type="editar_usuario" class="btn btn-primary control_usuario"><i class="bi bi-pencil-square"></i></button></td>`,
       `<td><button id="row_${mensaje_socket.id_usuario}" data-id="${mensaje_socket.id_usuario}" data-type="eliminar_usuario" class="btn btn-danger control_usuario"><i class="bi bi-trash3-fill"></i></button></td>`,
     ]).draw(false);
-    notificacion("Nuevo usuario registrado")
+    notificacion_toastify("Nuevo usuario registrado")
   }
 });
 
@@ -332,7 +332,7 @@ socket.on("editar_usuario", mensaje_socket => {
       usuarios_datatable.cell({row: i, column: 0}).data(mensaje_socket.usuario);
       usuarios_datatable.cell({row: i, column: 1}).data(mensaje_socket.nombre);
       usuarios_datatable.cell({row: i, column: 2}).data(`${mensaje_socket.apellido_materno} ${mensaje_socket.apellido_paterno}`);
-      notificacion("Usuario editado")
+      notificacion_toastify("Usuario editado")
       break
     }
   }
@@ -365,7 +365,7 @@ socket.on("eliminar_usuario", mensaje_socket => {
   for (let i = 0; i < usuarios_datatable.rows().data().length; i++) {
     if (usuarios_datatable.data()[i][0] === mensaje_socket.usuario) {
       usuarios_datatable.row($(`#row_${mensaje_socket.id_usuario}`).parents("tr")).remove().draw(false)
-      notificacion("Usuario eliminado")
+      notificacion_toastify("Usuario eliminado")
       break
     }
   }

@@ -255,7 +255,7 @@ const pintar_dashboard = () => {
     const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_niveles: {preescolar, primaria, secundaria, bachiller, licenciatura, posgrado}}} = response;
 
     if (success) {
-      notificacion("Datos consultados")
+      notificacion_toastify("Datos consultados")
 
       pintar_alumnos(alum_hom, alum_muj, alum_tot)
       pintar_docentes(doc_hom, doc_muj, doc_tot)
@@ -268,7 +268,7 @@ const pintar_dashboard = () => {
 }
 
 //Consultar municipios
-notificacion_carga()
+notificacion_toastify_carga()
 request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
   const {success, message, response: {rol_id, id_usuario}} = response;
 
@@ -311,7 +311,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
 
 //On change select municipios
 $("#bashboard_select_municipio").on("change", () => {
-  notificacion_carga();
+  notificacion_toastify_carga();
   pintar_dashboard()
 });
 
@@ -321,19 +321,19 @@ const socket = io.connect();
 socket.on("agregar_escuela", () => {
   console.log("agregar_escuela")
   pintar_dashboard()
-  notificacion("Nueva escuela registrada")
+  notificacion_toastify("Nueva escuela registrada")
 });
 
 socket.on("editar_escuela", () => {
   console.log("editar_escuela")
   pintar_dashboard()
-  notificacion("Escuela editada")
+  notificacion_toastify("Escuela editada")
 });
 
 socket.on("eliminar_escuela", () => {
   console.log("eliminar_escuela")
   pintar_dashboard()
-  notificacion("Escuela eliminada")
+  notificacion_toastify("Escuela eliminada")
 });
 
 socket.on("editar_usuario", mensaje_socket => {

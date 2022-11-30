@@ -1,4 +1,4 @@
-const notificacion = (mensaje) => {
+const notificacion_toastify = (mensaje) => {
   Toastify({
     text: mensaje,
     duration: 3000,
@@ -8,7 +8,7 @@ const notificacion = (mensaje) => {
   }).showToast();
 };
 
-const notificacion_carga = () => {
+const notificacion_toastify_carga = () => {
   Toastify({
     text: "Cargando...",
     duration: 3000,
@@ -17,3 +17,11 @@ const notificacion_carga = () => {
     position: "right",
   }).showToast();
 };
+
+const notificacion_sweetalert = (tittle, message) => {
+  Swal.fire({
+    title: tittle,
+    text: message,
+    confirmButtonText: "Cerrar"
+  })
+}

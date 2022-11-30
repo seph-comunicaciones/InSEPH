@@ -219,7 +219,7 @@ const agregar_escuela = (json) => {
   });
 }
 
-notificacion_carga();
+notificacion_toastify_carga();
 request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
   const {success, message, response: {rol_id, id_usuario}} = response;
 
@@ -283,7 +283,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
           const {success, response: escuelas} = response;
 
           if (success) {
-            notificacion("Escuelas consultadas");
+            notificacion_toastify("Escuelas consultadas");
             pintar_tabla_escuelas(escuelas);
           } else {
             Swal.fire("Error", message, "error");
@@ -444,14 +444,14 @@ request_get("/api/v1/modelos/consultar_modelos").then((response) => {
 
 //On change select municipios
 $("#escuelas_select_municipio").on("change", () => {
-  notificacion_carga();
+  notificacion_toastify_carga();
   request_post("/api/v1/escuelas/consultar_escuelas", {
     id_municipio: $("#escuelas_select_municipio").val(),
   }).then((response) => {
     const {success, response: escuelas} = response;
 
     if (success) {
-      notificacion("Escuelas consultadas");
+      notificacion_toastify("Escuelas consultadas");
       pintar_tabla_escuelas(escuelas);
     }
   });
@@ -497,7 +497,7 @@ $("#form_nueva_escuela").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_escuela").click(async () => {
   if (validar_form()) {
-    notificacion_carga();
+    notificacion_toastify_carga();
 
     let json = {
       clave: $("#clave_centro").val(),
@@ -589,14 +589,14 @@ $("#main").on("click", ".control_escuela", (event) => {
 
   switch (type) {
     case "visualizar_escuela":
-      notificacion_carga();
+      notificacion_toastify_carga();
       request_post("/api/v1/escuelas/consultar_escuela", {
         id_escuela: id,
       }).then((response) => {
         const {success, message, response: escuela} = response;
 
         if (success) {
-          notificacion("Escuela consultada");
+          notificacion_toastify("Escuela consultada");
           vista_visualizar_escuela_sim(escuela);
         } else {
           Swal.fire("Error", message, "error");
@@ -604,14 +604,14 @@ $("#main").on("click", ".control_escuela", (event) => {
       });
       break;
     case "editar_escuela":
-      notificacion_carga();
+      notificacion_toastify_carga();
       request_post("/api/v1/escuelas/consultar_escuela", {
         id_escuela: id,
       }).then((response) => {
         const {success, message, response: escuela} = response;
 
         if (success) {
-          notificacion("Escuela consultada");
+          notificacion_toastify("Escuela consultada");
           vista_editar_escuela(escuela);
         } else {
           Swal.fire("Error", message, "error");
@@ -630,7 +630,7 @@ $("#main").on("click", ".control_escuela", (event) => {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          notificacion_carga();
+          notificacion_toastify_carga();
 
           request_post("/api/v1/escuelas/eliminar_escuela", {
             id_escuela: id,
@@ -651,14 +651,14 @@ $("#main").on("click", ".control_escuela", (event) => {
 
 //Visualizar información completa escuela
 $("#btn_mas_vis_sim_escuela").click(() => {
-  notificacion_carga();
+  notificacion_toastify_carga();
   request_post("/api/v1/escuelas/consultar_escuela", {
     id_escuela: escuela_actual,
   }).then((response) => {
     const {success, message, response: escuela} = response;
 
     if (success) {
-      notificacion("Escuela consultada");
+      notificacion_toastify("Escuela consultada");
       vista_visualizar_escuela(escuela);
     } else {
       Swal.fire("Error", message, "error");
@@ -698,7 +698,7 @@ $("#form_edit_escuela").on("submit", (event) => event.preventDefault());
 
 $("#btn_guardar_edit_escuela").click(async () => {
   if (validar_form_edit()) {
-    notificacion_carga();
+    notificacion_toastify_carga();
     let json = {
       id_escuela: escuela_actual,
       nombre: $("#nombre_centro_edit").val(),
@@ -768,7 +768,7 @@ socket.on("agregar_escuela", mensaje_socket => {
     }
 
     escuelas_datatable.row.add(new_row).draw(false);
-    notificacion("Nueva escuela registrada")
+    notificacion_toastify("Nueva escuela registrada")
   }
 });
 
@@ -780,7 +780,7 @@ socket.on("editar_escuela", mensaje_socket => {
       escuelas_datatable.cell({row: i, column: 1}).data(mensaje_socket.nombre);
       escuelas_datatable.cell({row: i, column: 2}).data(mensaje_socket.nom_municipio);
       escuelas_datatable.cell({row: i, column: 3}).data(mensaje_socket.nom_turno);
-      notificacion("Escuela editada")
+      notificacion_toastify("Escuela editada")
       break
     }
   }
@@ -807,7 +807,7 @@ socket.on("eliminar_escuela", mensaje_socket => {
   for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
     if (escuelas_datatable.data()[i][0] === mensaje_socket.clave) {
       escuelas_datatable.row($(`#row_${mensaje_socket.clave}`).parents("tr")).remove().draw(false)
-      notificacion("Escuela eliminada")
+      notificacion_toastify("Escuela eliminada")
       break
     }
   }
