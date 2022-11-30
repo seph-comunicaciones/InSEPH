@@ -42,6 +42,34 @@ const consultar_indicadores_internacionales = async (request, response) => {
   }
 }
 
+const consultar_indicadores_nacionales = async (request, response) => {
+  const {token_acceso} = request.body;
+
+  const validacion_session = await validate_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
+  //Consulta query
+  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
+    const query = await pool_query(`SELECT indicador_nacional.*,
+                                                 categoria_indicador_nacional.categoria_indicador_nacional,
+                                                 filtro_indicador_nacional.filtro_indicador_nacional
+                                          FROM indicador_nacional
+                                                   JOIN categoria_indicador_nacional on categoria_indicador_nacional.id_categoria_indicador_nacional =
+                                                                                        indicador_nacional.categoria_indicador_nacional_id
+                                                   JOIN filtro_indicador_nacional on filtro_indicador_nacional.id_filtro_indicador_nacional =
+                                                                                     indicador_nacional.filtro_indicador_nacional_id;`, "Indicadores nacionales consultados exitosamente", "Error, no se pudieron consultar indicadores nacionales");
+
+    if (query.success) {
+      return response.status(200).json(query);
+    } else {
+      if (query.failure) return response.status(400).json(query);
+    }
+  } else {
+    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
+  }
+}
+
 module.exports = {
-  consultar_indicadores_internacionales
+  consultar_indicadores_internacionales,
+  consultar_indicadores_nacionales
 }
