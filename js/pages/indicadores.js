@@ -400,72 +400,41 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
                   <tr>
                     <th style="text-align: center">Indicador</th>`
 
-    switch (nombre_indicador) {
-      case "SEP":
-        table += `<th style="text-align: center">Nivel Educativo</th>
-                    <th style="text-align: center">% Nacional</th>
-                    <th style="text-align: center">% Hidalgo</th>
-                    <th style="text-align: center">% Posición</th>
-                    <th style="text-align: center">Semáforo</th>
-                  </tr>
-                </thead>
-                <tbody> `;
-        break
-      case "INEGI 2022":
-      case "CONEVAL 2022":
-      case "IMCO 2021-2022":
-        table += ` <th style="text-align: center">% Nacional</th>
-                    <th style="text-align: center">% Hidalgo</th>
-                    <th style="text-align: center">% Posición</th>
-                    <th style="text-align: center">Semáforo</th>
-                  </tr>
-                </thead>
-                <tbody> `;
-        break
+    if (nombre_indicador === "SEP") {
+      table += `<th style="text-align: center">Nivel Educativo</th>`
     }
+
+    table +=`<th style="text-align: center">% Nacional</th>
+                    <th style="text-align: center">% Hidalgo</th>
+                    <th style="text-align: center">% Posición</th>
+                    <th style="text-align: center">Semáforo</th>
+                  </tr>
+                </thead>
+                <tbody>`;
 
     indicadores.forEach((indicador) => {
       const {indicador_nacional, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, categoria_indicador_nacional} = indicador
 
       switch (nombre_indicador) {
         case "SEP":
-          table += `<tr>
-                <td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_SEP)}</td>
-                <td>${categoria_indicador_nacional}</td>
-                <td>${nacional_porcentaje}</td>
-                <td>${hidalgo_porcentaje}</td>
-                <td>${posicion}</td>
-                <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
-              </tr>`;
+          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_SEP)}</td><td>${categoria_indicador_nacional}</td>`
           break
         case "INEGI 2022":
-          table += `<tr>
-                <td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_INEGI)}</td>
-                <td>${nacional_porcentaje}</td>
-                <td>${hidalgo_porcentaje}</td>
-                <td>${posicion}</td>
-                <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
-              </tr>`;
+          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_INEGI)}</td>`;
           break
         case "CONEVAL 2022":
-          table += `<tr>
-                <td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_CONEVAL)}</td>
-                <td>${nacional_porcentaje}</td>
-                <td>${hidalgo_porcentaje}</td>
-                <td>${posicion}</td>
-                <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
-              </tr>`;
+          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_CONEVAL)}</td>`;
           break
         case "IMCO 2021-2022":
-          table += `<tr>
-                <td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_IMCO)}</td>
-                <td>${nacional_porcentaje}</td>
+          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_IMCO)}</td>`;
+          break
+      }
+
+      table +=` <td>${nacional_porcentaje}</td>
                 <td>${hidalgo_porcentaje}</td>
                 <td>${posicion}</td>
                 <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
-              </tr>`;
-          break
-      }
+              </tr>`
     })
 
     table += ` </tbody> 
