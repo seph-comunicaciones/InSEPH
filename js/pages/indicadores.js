@@ -1,26 +1,26 @@
 const indicadores = [
   {
-    "name": "Internacionales",
+    "name": "Internacional",
     "id": 1,
     "end": true,
     "service": "consultar_indicadores_internacionales",
     "subsecretarias": [],
   },
   {
-    "name": "Nacionales",
+    "name": "Nacional",
     "id": 2,
     "end": true,
     "service": "consultar_indicadores_nacionales",
     "subsecretarias": []
   },
   {
-    "name": "Estatales",
+    "name": "Estatal",
     "id": 3,
     "end": true,
     "subsecretarias": []
   },
   {
-    "name": "Institucionales",
+    "name": "Institucional",
     "id": 4,
     "end": false,
     "subsecretarias": [
@@ -393,7 +393,7 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
   indicadores_nacionales.forEach((indicador_nacional) => {
     const {nombre_indicador, indicadores} = indicador_nacional
 
-    let table = `<hr><h3>Indicador: ${nombre_indicador}</h3>`
+    let table = `<hr><h3>Categoria: ${nombre_indicador}</h3>`
 
     table += `<table class="table" style="text-align: center" id="table_indicadores_${nombre_indicador.replaceAll(" ", "_")}">
                 <thead>
