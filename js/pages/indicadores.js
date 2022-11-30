@@ -220,7 +220,7 @@ const notificacion_palabra = (tittle, text, message) => {
   return `<a href="#" onclick="notificacion_sweetalert('${tittle}','${message}')">${text}</a>`
 }
 
-const calcular_semaforo_indicadores_internacinales = (posicion, ascendente, valor_hidalgo, valor_nacional) => {
+const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valor_nacional) => {
   let semaforo_nacional = 0, semaforo_hidalgo = 0
 
   if (posicion <= 5 || valor_nacional === 100) {
@@ -276,17 +276,17 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, metas_indicadore
                 <tbody> `;
 
   metas_indicadores.forEach((meta_indicadores) => {
-    const {meta} = meta_indicadores
+    const {meta_internacional} = meta_indicadores
     meta_indicadores.indicadores.forEach((indicador) => {
       const {indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, hidalgo_calculo, nacional_calculo} = indicador
 
       table += `<tr>
-                <td style="text-align: left">${notificacion_palabra("Meta", `Meta ${meta.split(" ")[0]}`, meta)}</td>
+                <td style="text-align: left">${notificacion_palabra("Meta", `Meta ${meta_internacional.split(" ")[0]}`, meta_internacional)}</td>
                 <td style="text-align: left">${indicador_mexico}</td>
                 <td>${nacional_porcentaje}</td>
                 <td>${hidalgo_porcentaje}</td>
                 <td>${posicion}</td>
-                <td>${calcular_semaforo_indicadores_internacinales(posicion, ascendente, hidalgo_calculo, nacional_calculo)}</td>
+                <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_calculo, nacional_calculo)}</td>
               </tr>`;
     })
   })

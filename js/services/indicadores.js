@@ -10,8 +10,8 @@ const consultar_indicadores_internacionales = async (request, response) => {
 
   //Consulta query
   if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
-    const query_meta = await pool_query(`SELECT id_meta, meta FROM meta_internacional;`, "Indicadores internacionales consultados exitosamente", "Error, no se pudieron consultar indicadores internacionales");
-    const query_indicador = await pool_query(`SELECT indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, meta_id, nacional_calculo, hidalgo_calculo, ascendente FROM indicador_internacional;`, "", "Error, no se pudieron consultar indicadores internacionales");
+    const query_meta = await pool_query(`SELECT id_meta_internacional, meta_internacional FROM meta_internacional;`, "Indicadores internacionales consultados exitosamente", "Error, no se pudieron consultar indicadores internacionales");
+    const query_indicador = await pool_query(`SELECT indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, meta_internacional_id, nacional_calculo, hidalgo_calculo, ascendente FROM indicador_internacional;`, "", "Error, no se pudieron consultar indicadores internacionales");
 
     if (query_meta.success && query_indicador.success) {
       const {response: metas} = query_meta
