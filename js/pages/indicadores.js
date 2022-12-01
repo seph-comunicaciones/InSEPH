@@ -479,6 +479,7 @@ const calcular_semaforo_indicadores_institucionales = (avance) => {
 
 const mostrar_actividades = (id_indicador_institucional) => {
   $(".actividad_indicador_institucional").addClass("d-none")
+  $(`.column_actividad`).removeClass("d-none")
   $(`.actividad_indicador_institucional_${id_indicador_institucional}`).removeClass("d-none")
 }
 
@@ -607,7 +608,8 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
   let table = `<table class="table" style="text-align: center" id="table_indicadores">
                 <thead>
                   <tr>
-                    <th style="text-align: center">Nivel</th>
+                    <th style="text-align: center">Componente</th>
+                    <th class="d-none column_actividad" style="text-align: center">Actividad</th>
                     <th style="text-align: center">Resumen</th>
                     <th style="text-align: center">Indicador</th>
                     <th style="text-align: center">Frecuencia</th>
@@ -627,7 +629,8 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
     id_indicador_componente = nivel.includes(".") ? id_indicador_componente : id_indicador_institucional;
 
     table += `<tr class="${nivel.includes(".") ? `d-none actividad_indicador_institucional actividad_indicador_institucional_${id_indicador_componente}` : "componente_indicador_institucional"}">
-                <td style="text-align: left">${nivel.includes(".") ? `${nivel}` : `${mostrar_componentes(id_indicador_componente, nivel)}`}</td>
+                <td style="text-align: left">${nivel.includes(".") ? `<p style="color: transparent">${nivel}</p>` : `${mostrar_componentes(id_indicador_componente, nivel)}`}</td>
+                <td  class="d-none column_actividad" style="text-align: left">${nivel.includes(".") ? `${nivel}` : `<p>${nivel}</p>`}</td>
                 <td style="text-align: left">${resumen}</td>
                 <td style="text-align: left">${indicador}</td>
                 <td>${frecuencia}</td>
