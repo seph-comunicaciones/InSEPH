@@ -403,11 +403,11 @@ const pintar_tabla_indicadores = (tittle, type) => {
   $("#container_table_indicadores").append(table);
 
   //Datatable
-  // $("#table_indicadores").DataTable({
-  //   language: {
-  //     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-  //   },
-  // });
+  $("#table_indicadores").DataTable({
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+    },
+  });
 }
 
 const notificacion_palabra = (tittle, text, message) => {
@@ -522,11 +522,11 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_inte
   $("#container_table_indicadores").append(table);
 
   //Datatable
-  // $("#table_indicadores").DataTable({
-  //   language: {
-  //     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-  //   },
-  // });
+  $("#table_indicadores").DataTable({
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+    },
+  });
 }
 
 const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionales) => {
@@ -588,11 +588,11 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
     $("#container_table_indicadores").append(table);
 
     //Datatable
-    // $(`#table_indicadores_${nombre_indicador.replaceAll(" ", "_")}`).DataTable({
-    //   language: {
-    //     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-    //   },
-    // });
+    $(`#table_indicadores_${nombre_indicador.replaceAll(" ", "_")}`).DataTable({
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+      },
+    });
   })
 }
 
@@ -644,11 +644,12 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
   $("#container_table_indicadores").append(table);
 
   //Datatable
-  // $("#table_indicadores").DataTable({
-  //   language: {
-  //     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-  //   },
-  // });
+  $("#table_indicadores").DataTable({
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+    },
+    paging: false,
+  });
 }
 
 //Opciones indicadores
