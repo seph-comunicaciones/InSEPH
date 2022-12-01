@@ -473,8 +473,8 @@ const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valo
   return `<i class="bi bi-circle-fill" style="color: ${(semaforo_nacional + semaforo_hidalgo) >= 5 ? "green" : (semaforo_nacional + semaforo_hidalgo) >= 2 ? "yellow" : "red"}"></i><i style="color: transparent">${semaforo_nacional + semaforo_hidalgo}</i>`
 }
 
-const calcular_semaforo_indicadores_institucionales = (avance) => {
-  return `<i class="bi bi-circle-fill" style="color: ${(avance) > 100 ? "purple" : (avance) >= 85 ? "green" : (avance) >= 65 ? "yellow" : "red"}"></i><i style="color: transparent">${(avance) > 100 ? 1 : (avance) >= 85 ? 2 : (avance) >= 65 ? 3 : 4}</i>`
+const calcular_semaforo_indicadores_institucionales = (avance, meta_programada) => {
+  return `<i class="bi bi-circle-fill" style="color: ${(avance) > 100 ? "purple" : (avance) >= 85 || meta_programada === 0 ? "green" : (avance) >= 65 ? "yellow" : "red"}"></i><i style="color: transparent">${(avance) > 100 ? 1 : (avance) >= 85 || meta_programada === 0 ? 2 : (avance) >= 65 ? 3 : 4}</i>`
 }
 
 const mostrar_actividades = (id_indicador_institucional) => {
@@ -637,7 +637,7 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
                 <td>${meta_programada}</td>
                 <td>${meta_alcanzada}</td>
                 <td>${avance}</td>
-                <td>${calcular_semaforo_indicadores_institucionales(avance)}</td>
+                <td>${calcular_semaforo_indicadores_institucionales(avance, meta_programada)}</td>
               </tr>`;
   })
 
