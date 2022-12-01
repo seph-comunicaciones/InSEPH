@@ -701,7 +701,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
           }
         }
       })
-    } else {
+    } else if (end === "true") {
       $("#menu_indicadores").removeClass("d-none")
       pintar_tabla_indicadores(indicadores[id_indicador - 1].name, "Indicador")
     }
