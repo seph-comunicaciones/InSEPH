@@ -629,8 +629,8 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
     id_indicador_componente = !componente ? id_indicador_componente : id_indicador_institucional;
 
     table += `<tr class="${!componente ? `d-none actividad_indicador_institucional actividad_indicador_institucional_${id_indicador_componente}` : "componente_indicador_institucional"}">
-                <td>${!componente ? `<p style="color: transparent">${nivel}</p>` : `${mostrar_componentes(id_indicador_componente, nivel)}`}</td>
-                <td class="d-none column_actividad">${!componente ? `${nivel}` : `<p>${nivel}</p>`}</td>
+                <td>${!componente ? `<p style="color: transparent; margin: auto">${nivel}</p>` : `${mostrar_componentes(id_indicador_componente, nivel)}`}</td>
+                <td class="d-none column_actividad">${!componente ? `${nivel}` : `<p style="margin: auto">${nivel}</p>`}</td>
                 <td style="text-align: left">${resumen}</td>
                 <td style="text-align: left">${indicador}</td>
                 <td>${frecuencia}</td>
