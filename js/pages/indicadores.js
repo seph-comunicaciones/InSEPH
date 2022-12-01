@@ -25,7 +25,7 @@ const indicadores = [
     "end": false,
     "subsecretarias": [
       {
-        "name": "Despacho",
+        "name": "Despacho De La SEPH",
         "id": 1,
         "end": false,
         "direcciones_generales": [
@@ -33,150 +33,278 @@ const indicadores = [
             "name": "Coordinación Ejecutiva",
             "id": 1,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
             "name": "Asuntos Jurídicos",
             "id": 2,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
             "name": "Comunicación Social",
             "id": 3,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
+            "name": "Técnica",
+            "id": 4,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
+            "name": "Centro Estatal de Lenguas y Culturas Indígenas",
+            "id": 5,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
             "name": "Órgano Interno de Control",
-            "id": 4,
+            "id": 6,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
         ]
       },
       {
-        "name": "Educación Básica",
+        "name": "Subsecretaría De Educación Básica",
         "id": 2,
         "end": false,
         "direcciones_generales": [
           {
-            "name": "Básica",
-            "id": 1,
+            "name": "Subsecretaría de Educación Básica (Coordinación general)",
+            "id": 7,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
+            "name": "Educación Básica",
+            "id": 8,
             "end": false,
             "niveles_educativos": [
               {
-                "name": "Inicial",
+                "name": "Especial",
+                "id": 1,
                 "end": true,
-                "id": 1
+                "service": "consultar_indicadores_institucionales",
+              },
+              {
+                "name": "Inicial",
+                "id": 2,
+                "end": true,
+                "service": "consultar_indicadores_institucionales",
               },
               {
                 "name": "Preescolar",
+                "id": 3,
                 "end": true,
-                "id": 2
+                "service": "consultar_indicadores_institucionales",
               },
               {
                 "name": "Primaria",
+                "id": 4,
                 "end": true,
-                "id": 3
+                "service": "consultar_indicadores_institucionales",
               },
               {
-                "name": "Secundaria",
+                "name": "Indígena",
+                "id": 5,
                 "end": true,
-                "id": 4
+                "service": "consultar_indicadores_institucionales",
+              },
+              {
+                "name": "Secundaria General",
+                "id": 6,
+                "end": true,
+                "service": "consultar_indicadores_institucionales",
+              },
+              {
+                "name": "Secundaria Técnica",
+                "id": 7,
+                "end": true,
+                "service": "consultar_indicadores_institucionales",
+              },
+              {
+                "name": "Telesecundaria",
+                "id": 8,
+                "end": true,
+                "service": "consultar_indicadores_institucionales",
+              },
+              {
+                "name": "SubFísica",
+                "id": 9,
+                "end": true,
+                "service": "consultar_indicadores_institucionales",
               },
             ]
           },
           {
             "name": "Desarrollo Curricular",
-            "id": 2,
+            "id": 9,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
             "name": "Fortalecimiento Educativo",
-            "id": 3,
+            "id": 10,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
-            "name": "Formación Superior Docente",
-            "id": 4,
+            "name": "Servicios Regionales",
+            "id": 11,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
-            "name": "Servicio Regionales",
-            "id": 5,
+            "name": "Formación y Superación Docente",
+            "id": 12,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
+            "name": "Centro Regional de Educación Normal 'Benito Juárez'",
+            "id": 13,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
+            "name": "Escuela Normal de las Huastecas",
+            "id": 14,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
+            "name": "Escuela Normal Sierra Hidalguense",
+            "id": 15,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
+            "name": "Escuela Normal Valle del Mezquital",
+            "id": 16,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
+            "name": "Escuela Normal Superior Pública del Estado de Hidalgo",
+            "id": 17,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
+            "name": "Universidad Pedagógica Nacional-Hidalgo",
+            "id": 18,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
         ]
       },
       {
-        "name": "Planeación",
+        "name": "Subsecretaría De Planeación Y Evaluación",
         "id": 3,
         "end": false,
         "direcciones_generales": [
           {
-            "name": "Planeación",
-            "id": 1,
+            "name": "Subsecretaría de Planeación y Evaluación (Coordinación General)",
+            "id": 19,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
+            "name": "Planeación",
+            "id": 20,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
             "name": "Evaluación",
-            "id": 2,
+            "id": 21,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
-            "name": "Estadística",
-            "id": 3,
+            "name": "Registro y Estadística",
+            "id": 22,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
-            "name": "USICAMM",
-            "id": 4,
+            "name": "Unidad Estatal del Sistema para la Carrera de las Maestras y los Maestros.",
+            "id": 23,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
         ]
       },
       {
-        "name": "Administración y Finanzas",
+        "name": "Subsecretaría De Administración Y Finanzas",
         "id": 4,
         "end": false,
         "direcciones_generales": [
           {
+            "name": "Subsecretaría de Administración y Finanzas (Coordinación General)",
+            "id": 24,
+            "end": true,
+            "service": "consultar_indicadores_institucionales",
+            "niveles_educativos": []
+          },
+          {
             "name": "Recursos Financieros",
-            "id": 1,
+            "id": 25,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
-            "name": "Administración de Personal",
-            "id": 2,
+            "name": "Recursos Humanos",
+            "id": 26,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
-            "name": "Recursos Materiales",
-            "id": 3,
+            "name": "Recursos Materiales y Servicios",
+            "id": 27,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
-            "name": "Tecnologías de la información",
-            "id": 4,
+            "name": "Innovación, Calidad y Organización",
+            "id": 28,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
           {
-            "name": "Innovación y Calidad",
-            "id": 5,
+            "name": "Tecnologías de la Información",
+            "id": 29,
             "end": true,
+            "service": "consultar_indicadores_institucionales",
             "niveles_educativos": []
           },
         ]
@@ -341,6 +469,10 @@ const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valo
   return `<i class="bi bi-circle-fill" style="color: ${(semaforo_nacional + semaforo_hidalgo) >= 5 ? "green" : (semaforo_nacional + semaforo_hidalgo) >= 2 ? "yellow" : "red"}"></i><i style="color: transparent">${semaforo_nacional + semaforo_hidalgo}</i>`
 }
 
+const calcular_semaforo_indicadores_institucionales = (avance) => {
+  return `<i class="bi bi-circle-fill" style="color: ${(avance) > 100 ? "purple" : (avance) >= 85 ? "green" : (avance) >= 65 ? "yellow" : "red"}"></i><i style="color: transparent">${(avance) > 100 ? 1 : (avance) >= 85 ? 2 : (avance) >= 65 ? 3 : 4}</i>`
+}
+
 const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_internacionales) => {
   notificacion_toastify("Tabla de indicadores internacionales consultada")
 
@@ -362,8 +494,8 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_inte
                 </thead>
                 <tbody> `;
 
-  indicadores_internacionales.forEach((indicador) => {
-    const {meta_internacional, indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, hidalgo_calculo, nacional_calculo} = indicador
+  indicadores_internacionales.forEach((indicador_internacional) => {
+    const {meta_internacional, indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, hidalgo_calculo, nacional_calculo} = indicador_internacional
 
     table += `<tr>
                 <td style="text-align: left">${notificacion_palabra("Meta", `Meta ${meta_internacional.split(" ")[0]}`, meta_internacional)}</td>
@@ -455,6 +587,57 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
   })
 }
 
+const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_institucionales) => {
+  notificacion_toastify("Tabla de indicadores internacionales consultada")
+
+  $("#container_tittle_indicadores").empty();
+  $("#container_table_indicadores").empty();
+
+  $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
+
+  let table = `<table class="table" style="text-align: center" id="table_indicadores">
+                <thead>
+                  <tr>
+                    <th style="text-align: center">Nivel</th>
+                    <th style="text-align: center">Resumen</th>
+                    <th style="text-align: center">Indicador</th>
+                    <th style="text-align: center">Frecuencia</th>
+                    <th style="text-align: center">Meta Programada</th>
+                    <th style="text-align: center">Meta Alcanzada</th>
+                    <th style="text-align: center">Avance</th>
+                    <th style="text-align: center">Semáforo</th>
+                  </tr>
+                </thead>
+                <tbody> `;
+
+  indicadores_institucionales.forEach((indicador_institucional) => {
+    const {nivel, resumen, indicador, frecuencia, meta_programada, meta_alcanzada, avance} = indicador_institucional
+
+    table += `<tr>
+                <td style="text-align: left">${nivel}</td>
+                <td style="text-align: left">${resumen}</td>
+                <td style="text-align: left">${indicador}</td>
+                <td>${frecuencia}</td>
+                <td>${meta_programada}</td>
+                <td>${meta_alcanzada}</td>
+                <td>${avance}</td>
+                <td>${calcular_semaforo_indicadores_institucionales(avance)}</td>
+              </tr>`;
+  })
+
+  table += ` </tbody> 
+            </table>`;
+
+  $("#container_table_indicadores").append(table);
+
+  //Datatable
+  $("#table_indicadores").DataTable({
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+    },
+  });
+}
+
 //Opciones indicadores
 indicadores.forEach((indicador) => {
   const {name, id, end, service} = indicador
@@ -472,6 +655,9 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
   const id_subsecretaria = button.dataset.idSubsecretaria
   const id_direccion_general = button.dataset.idDireccionGeneral
   const id_nivel_educativo = button.dataset.idNivelEducativo
+
+  let id_direccion_general_indicador;
+  id_direccion_general_indicador = id_direccion_general > 23 ? 24 : id_direccion_general_indicador = id_direccion_general > 18 ? 19 : id_direccion_general_indicador = id_direccion_general > 6 ? 7 : 1;
 
   let btn_subsecretarias = ``
   let btn_direcciones_generales = ``
@@ -494,31 +680,30 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
     indicadores[id_indicador - 1].subsecretarias.forEach((subsecretaria) => {
       const {name, id, end} = subsecretaria
-      btn_subsecretarias += `<button type="button" id="subsecretaria_${id}" data-type="subsecretaria" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id}" data-end="${end}" class="btn btn-primary control_subsecretarias">${name}</button>`
+      btn_subsecretarias += `<button type="button" id="subsecretaria_${id}" data-type="subsecretaria" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id}" data-end="${end}"  class="btn btn-primary control_subsecretarias">${name}</button>`
     })
 
-    if (end === "true") {
+    if (end === "true" && service && service !== "") {
       $("#menu_indicadores").removeClass("d-none")
 
-      if (service && service !== "") {
-        notificacion_toastify_carga()
-        request_post(`/api/v1/indicadores/${service}`, {}).then((response) => {
-          const {success, response: indicador} = response;
+      notificacion_toastify_carga()
+      request_post(`/api/v1/indicadores/${service}`, {}).then((response) => {
+        const {success, response: indicador} = response;
 
-          if (success) {
-            switch (service) {
-              case "consultar_indicadores_internacionales":
-                pintar_tabla_indicadores_internacionales(indicadores[id_indicador - 1].name, "Indicador", indicador);
-                break
-              case "consultar_indicadores_nacionales":
-                pintar_tabla_indicadores_nacionales(indicadores[id_indicador - 1].name, "Indicador", indicador);
-                break
-            }
+        if (success) {
+          switch (service) {
+            case "consultar_indicadores_internacionales":
+              pintar_tabla_indicadores_internacionales(indicadores[id_indicador - 1].name, "Indicador", indicador);
+              break
+            case "consultar_indicadores_nacionales":
+              pintar_tabla_indicadores_nacionales(indicadores[id_indicador - 1].name, "Indicador", indicador);
+              break
           }
-        })
-      } else {
-        pintar_tabla_indicadores(indicadores[id_indicador - 1].name, "Indicador")
-      }
+        }
+      })
+    } else {
+      $("#menu_indicadores").removeClass("d-none")
+      pintar_tabla_indicadores(indicadores[id_indicador - 1].name, "Indicador")
     }
 
     $("#subsecretaria").append(btn_subsecretarias)
@@ -536,14 +721,9 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
     if (indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales.length > 0) $("#divider_direcciones_generales").removeClass("d-none")
 
     indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales.forEach((direccion_general) => {
-      const {name, id, end} = direccion_general
-      btn_direcciones_generales += `<button type="button" id="direccion_general_${id}" data-type="direccion_general" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id_subsecretaria}" data-id-direccion-general="${id}" data-end="${end}" class="btn btn-primary control_direccion_general">${name}</button>`
+      const {name, id, end, service} = direccion_general
+      btn_direcciones_generales += `<button type="button" id="direccion_general_${id}" data-type="direccion_general" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id_subsecretaria}" data-id-direccion-general="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn btn-primary control_direccion_general">${name}</button>`
     })
-
-    if (end === "true") {
-      $("#menu_indicadores").removeClass("d-none")
-      pintar_tabla_indicadores(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].name, "Subsecretaria")
-    }
 
     $("#direccion_general").append(btn_direcciones_generales)
   }
@@ -555,16 +735,26 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
     $("#divider_niveles_educativos").addClass("d-none")
 
-    if (indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - 1].niveles_educativos.length > 0) $("#divider_niveles_educativos").removeClass("d-none")
+    if (indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].niveles_educativos.length > 0) $("#divider_niveles_educativos").removeClass("d-none")
 
-    indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - 1].niveles_educativos.forEach((nivel_educativo) => {
-      const {name, id, end} = nivel_educativo
-      btn_niveles_educativos += `<button type="button" id="nivel_educativo_${id}" data-type="nivel_educativo" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id_subsecretaria}" data-id-direccion-general="${id_direccion_general}" data-id-nivel-educativo="${id}" data-end="${end}" class="btn btn-primary control_nivel_educativo">${name}</button>`
+    indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].niveles_educativos.forEach((nivel_educativo) => {
+      const {name, id, end, service} = nivel_educativo
+      btn_niveles_educativos += `<button type="button" id="nivel_educativo_${id}" data-type="nivel_educativo" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id_subsecretaria}" data-id-direccion-general="${id_direccion_general}" data-id-nivel-educativo="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn btn-primary control_nivel_educativo">${name}</button>`
     })
 
-    if (end === "true") {
+    if (end === "true" && service && service !== "") {
       $("#menu_indicadores").removeClass("d-none")
-      pintar_tabla_indicadores(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - 1].name, "Dirección General")
+
+      notificacion_toastify_carga()
+      request_post(`/api/v1/indicadores/${service}`, {
+        "subsecretaria": id_subsecretaria,
+        "direccion_general": id_direccion_general,
+        "nivel_educativo": ""
+      }).then((response) => {
+        const {success, response: indicador} = response;
+
+        if (success) pintar_tabla_indicadores_institucionales(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].name, "Dirección General", indicador)
+      })
     }
 
     $("#nivel_educativo").append(btn_niveles_educativos)
@@ -573,9 +763,19 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
   if (type === "nivel_educativo") {
     $(".control_nivel_educativo").removeClass("btn-success")
 
-    if (end === "true") {
+    if (end === "true" && service && service !== "") {
       $("#menu_indicadores").removeClass("d-none")
-      pintar_tabla_indicadores(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - 1].niveles_educativos[id_nivel_educativo - 1].name, "Nivel Educativo")
+
+      notificacion_toastify_carga()
+      request_post(`/api/v1/indicadores/${service}`, {
+        "subsecretaria": id_subsecretaria,
+        "direccion_general": id_direccion_general,
+        "nivel_educativo": id_nivel_educativo
+      }).then((response) => {
+        const {success, response: indicador} = response;
+
+        if (success) pintar_tabla_indicadores_institucionales(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].niveles_educativos[id_nivel_educativo - 1].name, "Nivel Educativo", indicador)
+      })
     }
   }
 
