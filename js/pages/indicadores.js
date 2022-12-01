@@ -300,6 +300,15 @@ const agregar_glosario = (oracion, glosario) => {
   return oracion_glosario.replaceAll("-", " ");
 }
 
+const agregar_separacion = (textos) => {
+  const textos_split = textos.split("\n");
+  let texto_separado = ""
+
+  textos_split.forEach((texto) => texto_separado += `<p style="margin: auto;">${texto}</p>`)
+
+  return texto_separado
+}
+
 const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valor_nacional) => {
   let semaforo_nacional = 0, semaforo_hidalgo = 0
 
@@ -353,20 +362,17 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_inte
                 </thead>
                 <tbody> `;
 
-  indicadores_internacionales.forEach((meta_indicadores) => {
-    const {meta_internacional} = meta_indicadores
-    meta_indicadores.indicadores.forEach((indicador) => {
-      const {indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, hidalgo_calculo, nacional_calculo} = indicador
+  indicadores_internacionales.forEach((indicador) => {
+    const {meta_internacional, indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, hidalgo_calculo, nacional_calculo} = indicador
 
-      table += `<tr>
+    table += `<tr>
                 <td style="text-align: left">${notificacion_palabra("Meta", `Meta ${meta_internacional.split(" ")[0]}`, meta_internacional)}</td>
                 <td style="text-align: left">${indicador_mexico}</td>
-                <td>${nacional_porcentaje}</td>
-                <td>${hidalgo_porcentaje}</td>
+                <td>${agregar_separacion(nacional_porcentaje)}</td>
+                <td>${agregar_separacion(hidalgo_porcentaje)}</td>
                 <td>${posicion}</td>
                 <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_calculo, nacional_calculo)}</td>
               </tr>`;
-    })
   })
 
   table += ` </tbody> 

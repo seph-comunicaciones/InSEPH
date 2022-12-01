@@ -10,32 +10,17 @@ const consultar_indicadores_internacionales = async (request, response) => {
 
   //Consulta query
   if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
-    const query_meta = await pool_query(`SELECT id_meta_internacional, meta_internacional FROM meta_internacional;`, "Indicadores internacionales consultados exitosamente", "Error, no se pudieron consultar indicadores internacionales");
-    const query_indicador = await pool_query(`SELECT indicador_mexico, nacional_porcentaje, hidalgo_porcentaje, posicion, meta_internacional_id, nacional_calculo, hidalgo_calculo, ascendente FROM indicador_internacional;`, "", "Error, no se pudieron consultar indicadores internacionales");
+    const query = await pool_query(`SELECT meta_internacional.meta_internacional, indicador_internacional.*
+                                          FROM meta_internacional
+                                                   JOIN indicador_internacional
+                                                        on meta_internacional.id_meta_internacional = indicador_internacional.meta_internacional_id;`, "Indicadores internacionales consultados exitosamente", "Error, no se pudieron consultar indicadores internacionales");
 
-    if (query_meta.success && query_indicador.success) {
-      const {response: metas} = query_meta
-      const {response: indicadores} = query_indicador
-
-      metas.forEach((meta) => {
-        const {id_meta} = meta
-        let indicadores_metas = []
-
-        for (let i = 0; i < indicadores.length; i++) {
-          const {meta_id} = indicadores[i]
-          if (meta_id === id_meta) {
-            indicadores_metas.push(indicadores[i])
-            indicadores.slice(i, i + 1)
-          }
-        }
-
-        meta.indicadores = indicadores_metas
-      })
-
-      return response.status(200).json(query_meta);
+    if (query.success) {
+      return response.status(200).json(query);
     } else {
-      if (query_meta.failure) return response.status(400).json(query_meta);
-      if (query_indicador.failure) return response.status(400).json(query_indicador);
+      if (query.failure) {
+        return response.status(400).json(query)
+      }
     }
   } else {
     return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
