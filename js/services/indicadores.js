@@ -127,7 +127,7 @@ const consultar_indicadores_institucionales = async (request, response) => {
       where += ` nivel_edcuativo_indicador_institucional_id = ${nivel_educativo} `
     }
 
-    const query = await pool_query(`SELECT * FROM indicador_institucional ${where.replaceAll("  ", " AND ")};`, "Indicadores institucionales consultados exitosamente", "Error, no se pudieron consultar indicadores institucionales");
+    const query = await pool_query(`SELECT * FROM indicador_institucional ${where.replaceAll("  ", " AND ")}  ORDER BY id_indicador_institucional;`, "Indicadores institucionales consultados exitosamente", "Error, no se pudieron consultar indicadores institucionales");
 
     if (query.success) {
       return response.status(200).json(query);

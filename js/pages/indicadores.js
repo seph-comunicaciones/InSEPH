@@ -403,11 +403,11 @@ const pintar_tabla_indicadores = (tittle, type) => {
   $("#container_table_indicadores").append(table);
 
   //Datatable
-  $("#table_indicadores").DataTable({
-    language: {
-      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-    },
-  });
+  // $("#table_indicadores").DataTable({
+  //   language: {
+  //     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+  //   },
+  // });
 }
 
 const notificacion_palabra = (tittle, text, message) => {
@@ -435,6 +435,10 @@ const agregar_separacion = (textos) => {
   textos_split.forEach((texto) => texto_separado += `<p style="margin: auto;">${texto}</p>`)
 
   return texto_separado
+}
+
+const mostrar_componentes = (id_indicador_componente, nivel) => {
+  return `<label style="text-decoration: underline; color: royalblue; cursor: pointer;" onclick="mostrar_actividades(${id_indicador_componente})">${nivel}</label>`
 }
 
 const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valor_nacional) => {
@@ -471,6 +475,11 @@ const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valo
 
 const calcular_semaforo_indicadores_institucionales = (avance) => {
   return `<i class="bi bi-circle-fill" style="color: ${(avance) > 100 ? "purple" : (avance) >= 85 ? "green" : (avance) >= 65 ? "yellow" : "red"}"></i><i style="color: transparent">${(avance) > 100 ? 1 : (avance) >= 85 ? 2 : (avance) >= 65 ? 3 : 4}</i>`
+}
+
+const mostrar_actividades = (id_indicador_institucional) => {
+  $(".actividad_indicador_institucional").addClass("d-none")
+  $(`.actividad_indicador_institucional_${id_indicador_institucional}`).removeClass("d-none")
 }
 
 const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_internacionales) => {
@@ -513,11 +522,11 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_inte
   $("#container_table_indicadores").append(table);
 
   //Datatable
-  $("#table_indicadores").DataTable({
-    language: {
-      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-    },
-  });
+  // $("#table_indicadores").DataTable({
+  //   language: {
+  //     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+  //   },
+  // });
 }
 
 const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionales) => {
@@ -553,7 +562,7 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
 
       switch (nombre_indicador) {
         case "SEP":
-          table += `<tr><td>${categoria_indicador_nacional}</td><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_SEP)}</td>`
+          table += `<tr><td style="text-align: left">${categoria_indicador_nacional}</td><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_SEP)}</td>`
           break
         case "INEGI 2022":
           table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_INEGI)}</td>`;
@@ -579,11 +588,11 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
     $("#container_table_indicadores").append(table);
 
     //Datatable
-    $(`#table_indicadores_${nombre_indicador.replaceAll(" ", "_")}`).DataTable({
-      language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-      },
-    });
+    // $(`#table_indicadores_${nombre_indicador.replaceAll(" ", "_")}`).DataTable({
+    //   language: {
+    //     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+    //   },
+    // });
   })
 }
 
@@ -610,11 +619,15 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
                 </thead>
                 <tbody> `;
 
-  indicadores_institucionales.forEach((indicador_institucional) => {
-    const {nivel, resumen, indicador, frecuencia, meta_programada, meta_alcanzada, avance} = indicador_institucional
+  let id_indicador_componente = 0
 
-    table += `<tr>
-                <td style="text-align: left">${nivel}</td>
+  indicadores_institucionales.forEach((indicador_institucional) => {
+    const {id_indicador_institucional, nivel, resumen, indicador, frecuencia, meta_programada, meta_alcanzada, avance} = indicador_institucional
+
+    id_indicador_componente = nivel.includes(".") ? id_indicador_componente : id_indicador_institucional;
+
+    table += `<tr class="${nivel.includes(".") ? `d-none actividad_indicador_institucional actividad_indicador_institucional_${id_indicador_componente}` : "componente_indicador_institucional"}">
+                <td style="text-align: left">${nivel.includes(".") ? `${nivel}` : `${mostrar_componentes(id_indicador_componente, nivel)}`}</td>
                 <td style="text-align: left">${resumen}</td>
                 <td style="text-align: left">${indicador}</td>
                 <td>${frecuencia}</td>
@@ -631,11 +644,11 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
   $("#container_table_indicadores").append(table);
 
   //Datatable
-  $("#table_indicadores").DataTable({
-    language: {
-      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-    },
-  });
+  // $("#table_indicadores").DataTable({
+  //   language: {
+  //     url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+  //   },
+  // });
 }
 
 //Opciones indicadores
