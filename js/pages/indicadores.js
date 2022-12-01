@@ -329,7 +329,7 @@ const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valo
     }
   }
 
-  return `<i class="bi bi-circle-fill" style="color: ${(semaforo_nacional + semaforo_hidalgo) >= 5 ? "green" : (semaforo_nacional + semaforo_hidalgo) >= 2 ? "yellow" : "red"}"></i>`
+  return `<i class="bi bi-circle-fill" style="color: ${(semaforo_nacional + semaforo_hidalgo) >= 5 ? "green" : (semaforo_nacional + semaforo_hidalgo) >= 2 ? "yellow" : "red"}"></i><i style="color: transparent">${semaforo_nacional + semaforo_hidalgo}</i>`
 }
 
 const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_internacionales) => {
@@ -401,7 +401,7 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
       table += `<th style="text-align: center">Nivel Educativo</th>`
     }
 
-    table +=`<th style="text-align: center">Indicador</th>
+    table += `<th style="text-align: center">Indicador</th>
                      <th style="text-align: center">% Nacional</th>
                     <th style="text-align: center">% Hidalgo</th>
                     <th style="text-align: center">% Posición</th>
@@ -428,7 +428,7 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
           break
       }
 
-      table +=` <td>${nacional_porcentaje}</td>
+      table += ` <td>${nacional_porcentaje}</td>
                 <td>${hidalgo_porcentaje}</td>
                 <td>${posicion}</td>
                 <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
