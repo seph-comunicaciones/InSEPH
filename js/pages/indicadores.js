@@ -624,13 +624,13 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
   let id_indicador_componente = 0
 
   indicadores_institucionales.forEach((indicador_institucional) => {
-    const {id_indicador_institucional, nivel, resumen, indicador, frecuencia, meta_programada, meta_alcanzada, avance} = indicador_institucional
+    const {id_indicador_institucional, nivel, resumen, indicador, frecuencia, meta_programada, meta_alcanzada, avance, componente} = indicador_institucional
 
-    id_indicador_componente = nivel.includes(".") ? id_indicador_componente : id_indicador_institucional;
+    id_indicador_componente = !componente ? id_indicador_componente : id_indicador_institucional;
 
-    table += `<tr class="${nivel.includes(".") ? `d-none actividad_indicador_institucional actividad_indicador_institucional_${id_indicador_componente}` : "componente_indicador_institucional"}">
-                <td style="text-align: left">${nivel.includes(".") ? `<p style="color: transparent">${nivel}</p>` : `${mostrar_componentes(id_indicador_componente, nivel)}`}</td>
-                <td  class="d-none column_actividad" style="text-align: left">${nivel.includes(".") ? `${nivel}` : `<p>${nivel}</p>`}</td>
+    table += `<tr class="${!componente ? `d-none actividad_indicador_institucional actividad_indicador_institucional_${id_indicador_componente}` : "componente_indicador_institucional"}">
+                <td style="text-align: left">${!componente ? `<p style="color: transparent">${nivel}</p>` : `${mostrar_componentes(id_indicador_componente, nivel)}`}</td>
+                <td  class="d-none column_actividad" style="text-align: left">${!componente ? `${nivel}` : `<p>${nivel}</p>`}</td>
                 <td style="text-align: left">${resumen}</td>
                 <td style="text-align: left">${indicador}</td>
                 <td>${frecuencia}</td>
