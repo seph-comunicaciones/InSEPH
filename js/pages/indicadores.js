@@ -598,7 +598,7 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
 }
 
 const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_institucionales) => {
-  notificacion_toastify("Tabla de indicadores internacionales consultada")
+  notificacion_toastify("Tabla de indicadores institucionales consultada")
 
   $("#container_tittle_indicadores").empty();
   $("#container_table_indicadores").empty();
