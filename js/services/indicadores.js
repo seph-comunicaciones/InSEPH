@@ -51,19 +51,19 @@ const consultar_indicadores_nacionales = async (request, response) => {
       const indicador_imco = []
 
       query.response.forEach((indicador) => {
-        const {filtro_indicador_nacional} = indicador
+        const {filtro_indicador_nacional_id} = indicador
 
-        switch (filtro_indicador_nacional) {
-          case "SEP":
+        switch (filtro_indicador_nacional_id) {
+          case 1:
             indicador_sep.push(indicador)
             break
-          case "INEGI 2022":
+          case 2:
             indicador_inegi.push(indicador)
             break
-          case "CONEVAL 2022":
+          case 3:
             indicador_coneval.push(indicador)
             break
-          case "IMCO 2021-2022":
+          case 4:
             indicador_imco.push(indicador)
             break
         }
@@ -141,8 +141,61 @@ const consultar_indicadores_institucionales = async (request, response) => {
   }
 }
 
+const consultar_indicadores_estatales = async (request, response) => {
+  const {token_acceso} = request.body;
+
+  const validacion_session = await validate_session(request, response, token_acceso)
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
+  //Consulta query
+  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
+    const query = await pool_query(`SELECT indicador_estatal.*, filtro_indicador_estatal.filtro
+                                          FROM indicador_estatal
+                                                   JOIN filtro_indicador_estatal
+                                                        on filtro_indicador_estatal.id_filtro_indicador_estatal = indicador_estatal.filtro_indicador_estatal_id;`, "", "Error, no se pudieron consultar indicadores estatales");
+
+    if (query.success) {
+      const indicador_educacion_cultura = []
+      const indicador_institucional_desarrollo = []
+
+      query.response.forEach((indicador) => {
+        const {filtro_indicador_estatal_id} = indicador
+
+        switch (filtro_indicador_estatal_id) {
+          case 1:
+            indicador_educacion_cultura.push(indicador)
+            break
+          case 2:
+            indicador_institucional_desarrollo.push(indicador)
+            break
+        }
+      })
+
+      const indicadores_nacionales = [
+        {
+          "nombre_indicador": "Programa Sectorial De Educación Y Cultura 2020-2022",
+          "indicadores": indicador_educacion_cultura
+        },
+        {
+          "nombre_indicador": "Programa Institucional De Desarrollo (PID) Del Instituto Hidalguense De Educación (IHE)",
+          "indicadores": indicador_institucional_desarrollo
+        },
+      ]
+
+      return response.status(200).json(message_success("Indicadores estatales consultados exitosamente", indicadores_nacionales));
+    } else {
+      if (query.failure) {
+        return response.status(400).json(query);
+      }
+    }
+  } else {
+    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
+  }
+}
+
 module.exports = {
   consultar_indicadores_internacionales,
   consultar_indicadores_nacionales,
-  consultar_indicadores_institucionales
+  consultar_indicadores_institucionales,
+  consultar_indicadores_estatales
 }

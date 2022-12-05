@@ -15,7 +15,7 @@ const {consultar_escuelas, consultar_escuela, eliminar_escuela, editar_escuela, 
 const {subir_archivo} = require("./js/services/archivo")
 const {editar_usuario, validar_usuario, consultar_usuarios, consultar_usuario, consultar_rol_usuario, consultar_roles, agregar_usuario, eliminar_usuario} = require("./js/services/usuario");
 const {consultar_niveles, consultar_servicios, consultar_tipos, consultar_municipios, consultar_turnos, consultar_modelos, consultar_sostenimientos, consultar_controles} = require("./js/services/catalogo");
-const {consultar_indicadores_internacionales, consultar_indicadores_nacionales, consultar_indicadores_institucionales} = require("./js/services/indicadores");
+const {consultar_indicadores_internacionales, consultar_indicadores_nacionales, consultar_indicadores_institucionales, consultar_indicadores_estatales} = require("./js/services/indicadores");
 
 const {PORT} = process.env
 let my_session;
@@ -95,6 +95,7 @@ app.get("/api/v1/controles/consultar_controles", async (request, response) => aw
 app.post("/api/v1/indicadores/consultar_indicadores_internacionales", async (request, response) => await consultar_indicadores_internacionales(request, response, socket));
 app.post("/api/v1/indicadores/consultar_indicadores_nacionales", async (request, response) => await consultar_indicadores_nacionales(request, response, socket));
 app.post("/api/v1/indicadores/consultar_indicadores_institucionales", async (request, response) => await consultar_indicadores_institucionales(request, response, socket));
+app.post("/api/v1/indicadores/consultar_indicadores_estatales", async (request, response) => await consultar_indicadores_estatales(request, response, socket));
 
 //Usuario
 app.post("/api/v1/usuarios/validar_usuario", async (request, response) => await validar_usuario(request, response, socket));
