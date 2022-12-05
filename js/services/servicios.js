@@ -222,7 +222,7 @@ const validate_session = async (request, response, token_acceso) => {
       rol_id = query_permisos.response.rol_id
     }
 
-    if (query_permisos.response && !activo) {
+    if ((query_permisos.response && !activo) || !query_permisos.response) {
       console.log("Sin permisos")
       request.session.login = false;
       request.session.rol_id = 0;

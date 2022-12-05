@@ -383,34 +383,6 @@ const glosario_IMCO = [
 ]
 
 //Funciones
-const pintar_tabla_indicadores = (tittle, type) => {
-  $("#container_tittle_indicadores").empty();
-  $("#container_table_indicadores").empty();
-
-  $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
-
-  let table = `<table class="table" style="text-align: center" id="table_indicadores">
-                <thead>
-                  <tr>
-                    <th style="text-align: center">Nombre</th>
-                  </tr>
-                </thead>
-                <tbody> `;
-
-
-  table += ` </tbody> 
-            </table>`;
-
-  $("#container_table_indicadores").append(table);
-
-  //Datatable
-  $("#table_indicadores").DataTable({
-    language: {
-      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-    },
-  });
-}
-
 const notificacion_palabra = (tittle, text, message) => {
   return `<a href="#" onclick="notificacion_sweetalert('${tittle}','${message}')">${text}</a>`
 }
@@ -712,7 +684,7 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
   });
 }
 
-//Opciones indicadores
+//Opciones de indicadores
 indicadores.forEach((indicador) => {
   const {name, id, end, service} = indicador
 
