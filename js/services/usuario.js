@@ -284,7 +284,7 @@ const editar_usuario = async (request, response, socket) => {
 }
 
 const validacion_session = async (request, response, socket) => {
-  const validacion_session = await validate_session(request, response, "")
+  const validacion_session = await validate_session(request, response, null)
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   return response.status(200).json(message_success("", {}));

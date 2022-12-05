@@ -106,7 +106,7 @@ app.post("/api/v1/usuarios/consultar_roles", async (request, response) => await 
 app.post("/api/v1/usuarios/agregar_usuario", async (request, response) => await agregar_usuario(request, response, socket));
 app.post("/api/v1/usuarios/eliminar_usuario", async (request, response) => await eliminar_usuario(request, response, socket));
 app.post("/api/v1/usuarios/editar_usuario", async (request, response) => await editar_usuario(request, response, socket));
-app.get("/api/v1/usuarios/validar_session", async (request, response) => await validacion_session(request, response));
+app.get("/api/v1/usuarios/validar_session", async (request, response) => await validacion_session(request, response, socket));
 
 //Carga de vistas
 app.get("/", (request, response) => routes_session(request, response, "/", "dashboard.html", "login.html", false, __dirname));
