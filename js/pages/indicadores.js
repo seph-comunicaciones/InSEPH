@@ -474,6 +474,10 @@ const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valo
   return `<i class="bi bi-circle-fill" style="color: ${(semaforo_nacional + semaforo_hidalgo) >= 5 ? "green" : (semaforo_nacional + semaforo_hidalgo) >= 2 ? "yellow" : "red"}"></i><i style="color: transparent">${semaforo_nacional + semaforo_hidalgo}</i>`
 }
 
+const calcular_semaforo_indicadores_estatales = (cumplimiento) => {
+  return `<i class="bi bi-circle-fill" style="color: ${(cumplimiento) >= 85 ? "green" : (cumplimiento) >= 65 ? "yellow" : "red"}"></i><i style="color: transparent">${(cumplimiento) >= 85 ? 2 : (cumplimiento) >= 65 ? 3 : 4}</i>`
+}
+
 const calcular_semaforo_indicadores_institucionales = (avance, meta_programada) => {
   return `<i class="bi bi-circle-fill" style="color: ${(avance) >= 120 ? "purple" : (avance) >= 85 || meta_programada === 0 ? "green" : (avance) >= 65 ? "yellow" : "red"}"></i> ${avance >= 120 ? `<i style="color: orange" class="bi bi-exclamation-diamond" title="Meta subestimada"></i>` : ``}<i style="color: transparent">${(avance) >= 120 ? 1 : (avance) >= 85 || meta_programada === 0 ? 2 : (avance) >= 65 ? 3 : 4}</i>`
 }
@@ -598,7 +602,7 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
   })
 }
 
-const pintar_tabla_indicadores_estatales = (tittle, type, indicadores_nacionales) => {
+const pintar_tabla_indicadores_estatales = (tittle, type, indicadores_estatales) => {
   notificacion_toastify("Tabla de indicadores nacionales consultada")
 
   $("#container_tittle_indicadores").empty();
@@ -606,48 +610,33 @@ const pintar_tabla_indicadores_estatales = (tittle, type, indicadores_nacionales
 
   $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
 
-  indicadores_nacionales.forEach((indicador_nacional) => {
-    const {nombre_indicador, indicadores} = indicador_nacional
+  indicadores_estatales.forEach((indicador_estatal) => {
+    const {nombre_indicador, indicadores} = indicador_estatal
 
     let table = `<hr><h3>Categoria: ${nombre_indicador}</h3>`
 
     table += `<table class="table" style="text-align: center" id="table_indicadores_${nombre_indicador.replaceAll(" ", "_")}"><thead><tr>`
 
-    if (nombre_indicador === "SEP") {
-      table += `<th style="text-align: center">Nivel Educativo</th>`
-    }
-
-    table += `<th style="text-align: center">Indicador</th>
-                     <th style="text-align: center">% Nacional</th>
-                    <th style="text-align: center">% Hidalgo</th>
-                    <th style="text-align: center">% Posición</th>
+    table += `<th style="text-align: center">No.</th>
+                <th style="text-align: center">Indicador</th>
+                     <th style="text-align: center">Meta</th>
+                    <th style="text-align: center">Avance</th>
+                    <th style="text-align: center">Cumplimiento</th>
                     <th style="text-align: center">Semáforo</th>
                   </tr>
                 </thead>
                 <tbody>`;
 
     indicadores.forEach((indicador) => {
-      const {indicador_nacional, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, categoria_indicador_nacional} = indicador
+      const {indicador_estatal, meta, avance, cumplimiento, No} = indicador
 
-      switch (nombre_indicador) {
-        case "SEP":
-          table += `<tr><td style="text-align: left">${categoria_indicador_nacional}</td><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_SEP)}</td>`
-          break
-        case "INEGI 2022":
-          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_INEGI)}</td>`;
-          break
-        case "CONEVAL 2022":
-          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_CONEVAL)}</td>`;
-          break
-        case "IMCO 2021-2022":
-          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_IMCO)}</td>`;
-          break
-      }
-
-      table += ` <td>${nacional_porcentaje}</td>
-                <td>${hidalgo_porcentaje}</td>
-                <td>${posicion}</td>
-                <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
+      table += `<tr>
+                <td>${No}</td> 
+                <td style="text-align: left">${indicador_estatal}</td> 
+                <td>${meta}</td>
+                <td>${avance}</td>
+                <td>${cumplimiento}</td>
+                <td>${calcular_semaforo_indicadores_estatales(cumplimiento)}</td>
               </tr>`
     })
 
@@ -785,6 +774,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
               break
             case "consultar_indicadores_estatales":
               pintar_tabla_indicadores_estatales(indicadores[id_indicador - 1].name, "Indicador", indicador);
+              break
           }
         }
       })

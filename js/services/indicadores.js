@@ -182,7 +182,7 @@ const consultar_indicadores_estatales = async (request, response) => {
           "indicadores": indicador_educacion_cultura
         },
         {
-          "nombre_indicador": "Programa Institucional De Desarrollo (PID) Del Instituto Hidalguense De Educación (IHE)",
+          "nombre_indicador": "Programa Institucional De Desarrollo Del Instituto Hidalguense De Educación",
           "filtro_indicador_estatal_id": 1,
           "indicadores": indicador_institucional_desarrollo
         },
