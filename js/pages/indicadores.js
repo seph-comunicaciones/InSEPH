@@ -685,6 +685,8 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
 }
 
 //Opciones de indicadores
+request_get("/api/v1/usuarios/validar_session").then()
+
 indicadores.forEach((indicador) => {
   const {name, id, end, service} = indicador
 

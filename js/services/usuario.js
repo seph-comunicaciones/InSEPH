@@ -1,4 +1,4 @@
-const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_update, filtrar_llaves, validate_session, pool_query_insert} = require("./servicios");
+const {validar_llaves, message_failure, pool_query_unique, pool_query, pool_query_update, filtrar_llaves, validate_session, pool_query_insert, message_success} = require("./servicios");
 
 const {TOKEN_WEB, TOKEN_MOVIL} = process.env
 
@@ -283,6 +283,12 @@ const editar_usuario = async (request, response, socket) => {
   }
 }
 
+const validacion_session = async (request, response, socket) => {
+  const validacion_session = await validate_session(request, response, "")
+  if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
+
+  return response.status(200).json(message_success("", {}));
+}
 
 module.exports = {
   editar_usuario,
@@ -293,4 +299,5 @@ module.exports = {
   consultar_roles,
   agregar_usuario,
   eliminar_usuario,
+  validacion_session
 }

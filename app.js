@@ -9,11 +9,11 @@ const {Server} = require("socket.io");
 const socket = new Server(server);
 require("dotenv").config()
 
-const {validate_session, routes_session} = require("./js/services/servicios");
+const {routes_session} = require("./js/services/servicios");
 const {consultar_datos_dashboard} = require("./js/services/dashboard");
 const {consultar_escuelas, consultar_escuela, eliminar_escuela, editar_escuela, agregar_escuela} = require("./js/services/escuela");
 const {subir_archivo} = require("./js/services/archivo")
-const {editar_usuario, validar_usuario, consultar_usuarios, consultar_usuario, consultar_rol_usuario, consultar_roles, agregar_usuario, eliminar_usuario} = require("./js/services/usuario");
+const {editar_usuario, validar_usuario, consultar_usuarios, consultar_usuario, consultar_rol_usuario, consultar_roles, agregar_usuario, eliminar_usuario, validacion_session} = require("./js/services/usuario");
 const {consultar_niveles, consultar_servicios, consultar_tipos, consultar_municipios, consultar_turnos, consultar_modelos, consultar_sostenimientos, consultar_controles} = require("./js/services/catalogo");
 const {consultar_indicadores_internacionales, consultar_indicadores_nacionales, consultar_indicadores_institucionales, consultar_indicadores_estatales} = require("./js/services/indicadores");
 
@@ -106,7 +106,7 @@ app.post("/api/v1/usuarios/consultar_roles", async (request, response) => await 
 app.post("/api/v1/usuarios/agregar_usuario", async (request, response) => await agregar_usuario(request, response, socket));
 app.post("/api/v1/usuarios/eliminar_usuario", async (request, response) => await eliminar_usuario(request, response, socket));
 app.post("/api/v1/usuarios/editar_usuario", async (request, response) => await editar_usuario(request, response, socket));
-app.get("/api/v1/usuarios/validar_session", async (request, response) => await validate_session(request, response, socket));
+app.get("/api/v1/usuarios/validar_session", async (request, response) => await validacion_session(request, response));
 
 //Carga de vistas
 app.get("/", (request, response) => routes_session(request, response, "/", "dashboard.html", "login.html", false, __dirname));
