@@ -471,7 +471,7 @@ const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valo
     }
   }
 
-  return `<i class="bi bi-circle-fill" style="color: ${(semaforo_nacional + semaforo_hidalgo) >= 5 ? "green" : (semaforo_nacional + semaforo_hidalgo) >= 2 ? "yellow" : "red"}"></i><i style="color: transparent">${semaforo_nacional + semaforo_hidalgo}</i>`
+  return `<i class="bi bi-circle-fill" style="color: ${(semaforo_nacional + semaforo_hidalgo) >= 5 ? "green" : (semaforo_nacional + semaforo_hidalgo) >= 2 ? "yellow" : "red"}"></i><i style="color: transparent">${(semaforo_nacional + semaforo_hidalgo) >= 5 ? 1 : (semaforo_nacional + semaforo_hidalgo) >= 2 ? 2 : 3}</i>`
 }
 
 const calcular_semaforo_indicadores_estatales = (cumplimiento) => {
