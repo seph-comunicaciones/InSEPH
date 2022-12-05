@@ -9,7 +9,7 @@ const consultar_indicadores_internacionales = async (request, response) => {
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Consulta query
-  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
+  if (request.session.login || token_acceso === TOKEN_WEB) {
     const query = await pool_query(`SELECT meta_internacional.meta_internacional, indicador_internacional.*
                                           FROM meta_internacional
                                                    JOIN indicador_internacional
@@ -34,7 +34,7 @@ const consultar_indicadores_nacionales = async (request, response) => {
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Consulta query
-  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
+  if (request.session.login || token_acceso === TOKEN_WEB) {
     const query = await pool_query(`SELECT indicador_nacional.*,
                                                  categoria_indicador_nacional.categoria_indicador_nacional,
                                                  filtro_indicador_nacional.filtro_indicador_nacional
@@ -117,7 +117,7 @@ const consultar_indicadores_institucionales = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
+  if (request.session.login || token_acceso === TOKEN_WEB) {
     const {subsecretaria, direccion_general, nivel_educativo} = request.body
     let where = "Where"
 
@@ -152,7 +152,7 @@ const consultar_indicadores_estatales = async (request, response) => {
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Consulta query
-  if (request.session.rol_id === 1 || token_acceso === TOKEN_WEB) {
+  if (request.session.login || token_acceso === TOKEN_WEB) {
     const query = await pool_query(`SELECT indicador_estatal.*, filtro_indicador_estatal.filtro
                                           FROM indicador_estatal
                                                    JOIN filtro_indicador_estatal
