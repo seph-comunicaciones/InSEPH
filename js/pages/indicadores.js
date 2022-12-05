@@ -474,7 +474,7 @@ const calcular_semaforo_indicadores = (posicion, ascendente, valor_hidalgo, valo
 }
 
 const calcular_semaforo_indicadores_institucionales = (avance, meta_programada) => {
-  return `<i class="bi bi-circle-fill" style="color: ${(avance) > 100 ? "purple" : (avance) >= 85 || meta_programada === 0 ? "green" : (avance) >= 65 ? "yellow" : "red"}"></i><i style="color: transparent">${(avance) > 100 ? 1 : (avance) >= 85 || meta_programada === 0 ? 2 : (avance) >= 65 ? 3 : 4}</i>`
+  return `<i class="bi bi-circle-fill" style="color: ${(avance) >= 120 ? "purple" : (avance) >= 85 || meta_programada === 0 ? "green" : (avance) >= 65 ? "yellow" : "red"}"></i> ${avance >= 120 ? `<i style="color: orange" class="bi bi-exclamation-diamond" title="Meta subestimada"></i>` : ``}<i style="color: transparent">${(avance) >= 120 ? 1 : (avance) >= 85 || meta_programada === 0 ? 2 : (avance) >= 65 ? 3 : 4}</i>`
 }
 
 const mostrar_actividades = (id_indicador_institucional) => {
