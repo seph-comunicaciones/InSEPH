@@ -17,6 +17,7 @@ const indicadores = [
     "name": "Estatal",
     "id": 3,
     "end": true,
+    "service": "consultar_indicadores_estatales",
     "subsecretarias": []
   },
   {
@@ -539,6 +540,73 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
   $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
 
   indicadores_nacionales.forEach((indicador_nacional) => {
+    const {nombre_indicador, filtro_indicador_nacional_id, indicadores} = indicador_nacional
+
+    let table = `<hr><h3>Categoria: ${nombre_indicador}</h3>`
+
+    table += `<table class="table" style="text-align: center" id="table_indicadores_${nombre_indicador.replaceAll(" ", "_")}"><thead><tr>`
+
+    if (nombre_indicador === "SEP") {
+      table += `<th style="text-align: center">Nivel Educativo</th>`
+    }
+
+    table += `<th style="text-align: center">Indicador</th>
+                     <th style="text-align: center">% Nacional</th>
+                    <th style="text-align: center">% Hidalgo</th>
+                    <th style="text-align: center">% Posición</th>
+                    <th style="text-align: center">Semáforo</th>
+                  </tr>
+                </thead>
+                <tbody>`;
+
+    indicadores.forEach((indicador) => {
+      const {indicador_nacional, nacional_porcentaje, hidalgo_porcentaje, posicion, ascendente, categoria_indicador_nacional} = indicador
+
+      switch (filtro_indicador_nacional_id) {
+        case 1:
+          table += `<tr><td style="text-align: left">${categoria_indicador_nacional}</td><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_SEP)}</td>`
+          break
+        case 2:
+          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_INEGI)}</td>`;
+          break
+        case 3:
+          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_CONEVAL)}</td>`;
+          break
+        case 4:
+          table += `<tr><td style="text-align: left">${agregar_glosario(indicador_nacional, glosario_IMCO)}</td>`;
+          break
+      }
+
+      table += ` <td>${nacional_porcentaje}</td>
+                <td>${hidalgo_porcentaje}</td>
+                <td>${posicion}</td>
+                <td>${calcular_semaforo_indicadores(posicion, ascendente, hidalgo_porcentaje, nacional_porcentaje)}</td>
+              </tr>`
+    })
+
+    table += ` </tbody> 
+            </table>`;
+
+    $("#container_table_indicadores").append(table);
+
+    //Datatable
+    $(`#table_indicadores_${nombre_indicador.replaceAll(" ", "_")}`).DataTable({
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+      },
+    });
+  })
+}
+
+const pintar_tabla_indicadores_estatales = (tittle, type, indicadores_nacionales) => {
+  notificacion_toastify("Tabla de indicadores nacionales consultada")
+
+  $("#container_tittle_indicadores").empty();
+  $("#container_table_indicadores").empty();
+
+  $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
+
+  indicadores_nacionales.forEach((indicador_nacional) => {
     const {nombre_indicador, indicadores} = indicador_nacional
 
     let table = `<hr><h3>Categoria: ${nombre_indicador}</h3>`
@@ -715,12 +783,11 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
             case "consultar_indicadores_nacionales":
               pintar_tabla_indicadores_nacionales(indicadores[id_indicador - 1].name, "Indicador", indicador);
               break
+            case "consultar_indicadores_estatales":
+              pintar_tabla_indicadores_estatales(indicadores[id_indicador - 1].name, "Indicador", indicador);
           }
         }
       })
-    } else if (end === "true") {
-      $("#menu_indicadores").removeClass("d-none")
-      pintar_tabla_indicadores(indicadores[id_indicador - 1].name, "Indicador")
     }
 
     $("#subsecretaria").append(btn_subsecretarias)

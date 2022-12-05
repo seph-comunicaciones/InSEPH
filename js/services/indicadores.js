@@ -72,18 +72,22 @@ const consultar_indicadores_nacionales = async (request, response) => {
       const indicadores_nacionales = [
         {
           "nombre_indicador": "SEP",
+          "filtro_indicador_nacional_id": 1,
           "indicadores": indicador_sep
         },
         {
           "nombre_indicador": "INEGI 2022",
+          "filtro_indicador_nacional_id": 2,
           "indicadores": indicador_inegi
         },
         {
           "nombre_indicador": "CONEVAL 2022",
+          "filtro_indicador_nacional_id": 3,
           "indicadores": indicador_coneval
         },
         {
           "nombre_indicador": "IMCO 2021-2022",
+          "filtro_indicador_nacional_id": 4,
           "indicadores": indicador_imco
         },
       ]
@@ -174,10 +178,12 @@ const consultar_indicadores_estatales = async (request, response) => {
       const indicadores_nacionales = [
         {
           "nombre_indicador": "Programa Sectorial De Educación Y Cultura 2020-2022",
+          "filtro_indicador_estatal_id": 1,
           "indicadores": indicador_educacion_cultura
         },
         {
           "nombre_indicador": "Programa Institucional De Desarrollo (PID) Del Instituto Hidalguense De Educación (IHE)",
+          "filtro_indicador_estatal_id": 1,
           "indicadores": indicador_institucional_desarrollo
         },
       ]
