@@ -208,7 +208,7 @@ const create_directory = async (path) => {
 };
 
 const validate_session = async (request, response, token_acceso) => {
-  if (token_acceso !== "") {
+  if (!token_acceso && token_acceso !== "") {
     //Consulta query
     const query_permisos = await pool_query_unique(`SELECT id_usuario, activo, rol_id
                                                     FROM usuario
