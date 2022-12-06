@@ -1083,11 +1083,6 @@ const mostrar_actividades = (id_indicador_institucional) => {
   $(`.actividad_indicador_institucional_${id_indicador_institucional}`).removeClass("d-none")
 }
 
-const get_message_color = () => {
-  const colors = ["#ffc000", "#c00000", "#9bbb59"]
-  return colors[Math.floor(Math.random() * colors.length)]
-}
-
 const pintar_chart_indicadores_nacionales = (indicadores_chart_nacionales, id) => {
   $(`#${id}`).append(`<div class="buttons" id="menu_chart_indicadores_nacionales" style="display: flex; flex-wrap: wrap; justify-content: space-between;padding: 0.5rem;"></div>`)
 
