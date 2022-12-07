@@ -902,7 +902,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
         "direccion_general": id_direccion_general,
         "nivel_educativo": ""
       }).then((response) => {
-        const {success, response: indicador} = response;
+        const {success, response: {indicador}} = response;
 
         if (success) pintar_tabla_indicadores_institucionales(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].name, "Dirección General", indicador)
       })
@@ -923,7 +923,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
         "direccion_general": id_direccion_general,
         "nivel_educativo": id_nivel_educativo
       }).then((response) => {
-        const {success, response: indicador} = response;
+        const {success, response: {indicador}} = response;
 
         if (success) pintar_tabla_indicadores_institucionales(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].niveles_educativos[id_nivel_educativo - 1].name, "Nivel Educativo", indicador)
       })

@@ -13,10 +13,14 @@ const consultar_indicadores_internacionales = async (request, response) => {
     const query = await pool_query(`SELECT meta_internacional.meta_internacional, indicador_internacional.*
                                           FROM meta_internacional
                                                    JOIN indicador_internacional
-                                                        on meta_internacional.id_meta_internacional = indicador_internacional.meta_internacional_id;`, "Indicadores internacionales consultados exitosamente", "Error, no se pudieron consultar indicadores internacionales");
+                                                        on meta_internacional.id_meta_internacional = indicador_internacional.meta_internacional_id;`, "", "Error, no se pudieron consultar indicadores internacionales");
 
     if (query.success) {
-      return response.status(200).json(query);
+      const respuesta = {
+        "indicador": query.response
+      }
+
+      return response.status(200).json(message_success("Indicadores internacionales consultados exitosamente", respuesta));
     } else {
       if (query.failure) {
         return response.status(400).json(query)
@@ -760,10 +764,14 @@ const consultar_indicadores_institucionales = async (request, response) => {
       where += ` nivel_edcuativo_indicador_institucional_id = ${nivel_educativo} `
     }
 
-    const query = await pool_query(`SELECT * FROM indicador_institucional ${where.replaceAll("  ", " AND ")}  ORDER BY id_indicador_institucional;`, "Indicadores institucionales consultados exitosamente", "Error, no se pudieron consultar indicadores institucionales");
+    const query = await pool_query(`SELECT * FROM indicador_institucional ${where.replaceAll("  ", " AND ")}  ORDER BY id_indicador_institucional;`, "", "Error, no se pudieron consultar indicadores institucionales");
 
     if (query.success) {
-      return response.status(200).json(query);
+      const respuesta = {
+        "indicador": query.response
+      }
+
+      return response.status(200).json(message_success("Indicadores institucionales consultados exitosamente", respuesta));
     } else {
       if (query.failure) {
         return response.status(400).json(query);
@@ -817,7 +825,11 @@ const consultar_indicadores_estatales = async (request, response) => {
         },
       ]
 
-      return response.status(200).json(message_success("Indicadores estatales consultados exitosamente", indicadores_nacionales));
+      const respuesta = {
+        "indicador": indicadores_nacionales
+      }
+
+      return response.status(200).json(message_success("Indicadores estatales consultados exitosamente", respuesta));
     } else {
       if (query.failure) {
         return response.status(400).json(query);
