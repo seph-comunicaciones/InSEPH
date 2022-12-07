@@ -23,7 +23,5 @@ request_post("/api/v1/avisos/consultar_avisos", {}).then((response) => {
     notificacion_toastify("Avisos consultados")
     pintar_avisos(avisos)
 
-  } else {
-    Swal.fire("Error", message, "error");
   }
 })
