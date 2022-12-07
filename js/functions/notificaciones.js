@@ -5,6 +5,7 @@ const notificacion_toastify = (mensaje) => {
     close: true,
     gravity: "top",
     position: "right",
+    backgroundColor: "#4E232E",
   }).showToast();
 };
 
@@ -15,6 +16,7 @@ const notificacion_toastify_carga = () => {
     close: true,
     gravity: "top",
     position: "right",
+    backgroundColor: "#4E232E",
   }).showToast();
 };
 

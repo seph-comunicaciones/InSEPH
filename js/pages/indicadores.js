@@ -468,7 +468,7 @@ const pintar_chart_indicadores = (indicadores_chart_nacionales, id) => {
     const id_tittle = tittle.toLowerCase().replaceAll(" ", "_").replaceAll(",", "").replaceAll("(", "").replaceAll(")", "").replaceAll(".", "_")
 
     $(`#${id}`).append(`<h2 class="indicador_nacional_chart container_indicador_nacional_${id_tittle}">${tittle}</h2>`)
-    $(`#menu_chart_indicadores_nacionales`).append(`<button id="indicador_nacional_chart_${id_tittle}" type="button" data-type="${id_tittle}" class="btn btn-primary control_chart_indicadores_nacionales">${tittle}</button>`)
+    $(`#menu_chart_indicadores_nacionales`).append(`<button id="indicador_nacional_chart_${id_tittle}" type="button" data-type="${id_tittle}" class="btn  btn-marron-seph control_chart_indicadores_nacionales">${tittle}</button>`)
 
     charts.forEach((chart) => {
       const {sub_tittle, series, categories, message, semaforo, note, colors, footer} = chart
@@ -545,8 +545,10 @@ $("#menu_indicadores").on("click", ".control_chart_indicadores_nacionales", (eve
   const id = button.id
   const type = button.dataset.type
 
-  $(".control_chart_indicadores_nacionales").removeClass("btn-success")
-  $(`#${id}`).addClass('btn-success');
+  $(".control_chart_indicadores_nacionales").removeClass("btn-cafe-seph")
+  $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
+  $(`#${id}`).addClass('btn-cafe-seph');
+  $(`#${id}`).removeClass('btn-marron-seph');
 
   $(`.indicador_nacional_chart`).addClass("d-none")
   $(`.container_indicador_nacional_${type}`).removeClass("d-none")
@@ -798,7 +800,7 @@ request_get("/api/v1/usuarios/validar_session").then()
 indicadores.forEach((indicador) => {
   const {name, id, end, service} = indicador
 
-  $("#indicadores").append(`<button type="button" id="indicador_${id}" data-type="indicador" data-id-indicador="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn btn-primary control_indicadores">${name}</button>`)
+  $("#indicadores").append(`<button type="button" id="indicador_${id}" data-type="indicador" data-id-indicador="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn  btn-marron-seph control_indicadores">${name}</button>`)
 })
 
 $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_direccion_general, .control_nivel_educativo", (event) => {
@@ -822,7 +824,8 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
   $("#menu_indicadores").addClass("d-none")
 
   if (type === "indicador") {
-    $(".control_indicadores").removeClass("btn-success")
+    $(".control_indicadores").removeClass("btn-cafe-seph")
+    $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
 
     $("#subsecretaria").empty()
     $("#direccion_general").empty()
@@ -836,7 +839,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
     indicadores[id_indicador - 1].subsecretarias.forEach((subsecretaria) => {
       const {name, id, end} = subsecretaria
-      btn_subsecretarias += `<button type="button" id="subsecretaria_${id}" data-type="subsecretaria" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id}" data-end="${end}"  class="btn btn-primary control_subsecretarias">${name}</button>`
+      btn_subsecretarias += `<button type="button" id="subsecretaria_${id}" data-type="subsecretaria" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id}" data-end="${end}"  class="btn  btn-marron-seph control_subsecretarias">${name}</button>`
     })
 
     if (end === "true" && service && service !== "") {
@@ -866,7 +869,8 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
   }
 
   if (type === "subsecretaria") {
-    $(".control_subsecretarias").removeClass("btn-success")
+    $(".control_subsecretarias").removeClass("btn-cafe-seph")
+    $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
 
     $("#direccion_general").empty()
     $("#nivel_educativo").empty()
@@ -878,14 +882,15 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
     indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales.forEach((direccion_general) => {
       const {name, id, end, service} = direccion_general
-      btn_direcciones_generales += `<button type="button" id="direccion_general_${id}" data-type="direccion_general" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id_subsecretaria}" data-id-direccion-general="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn btn-primary control_direccion_general">${name}</button>`
+      btn_direcciones_generales += `<button type="button" id="direccion_general_${id}" data-type="direccion_general" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id_subsecretaria}" data-id-direccion-general="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn  btn-marron-seph control_direccion_general">${name}</button>`
     })
 
     $("#direccion_general").append(btn_direcciones_generales)
   }
 
   if (type === "direccion_general") {
-    $(".control_direccion_general").removeClass("btn-success")
+    $(".control_direccion_general").removeClass("btn-cafe-seph")
+    $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
 
     $("#nivel_educativo").empty()
 
@@ -895,7 +900,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
     indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].niveles_educativos.forEach((nivel_educativo) => {
       const {name, id, end, service} = nivel_educativo
-      btn_niveles_educativos += `<button type="button" id="nivel_educativo_${id}" data-type="nivel_educativo" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id_subsecretaria}" data-id-direccion-general="${id_direccion_general}" data-id-nivel-educativo="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn btn-primary control_nivel_educativo">${name}</button>`
+      btn_niveles_educativos += `<button type="button" id="nivel_educativo_${id}" data-type="nivel_educativo" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id_subsecretaria}" data-id-direccion-general="${id_direccion_general}" data-id-nivel-educativo="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn  btn-marron-seph control_nivel_educativo">${name}</button>`
     })
 
     if (end === "true" && service && service !== "") {
@@ -917,7 +922,8 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
   }
 
   if (type === "nivel_educativo") {
-    $(".control_nivel_educativo").removeClass("btn-success")
+    $(".control_nivel_educativo").removeClass("btn-cafe-seph")
+    $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
 
     if (end === "true" && service && service !== "") {
       $("#menu_indicadores").removeClass("d-none")
@@ -935,5 +941,6 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
     }
   }
 
-  $(`#${id}`).addClass('btn-success');
+  $(`#${id}`).addClass('btn-cafe-seph');
+  $(`#${id}`).removeClass('btn-marron-seph');
 })
