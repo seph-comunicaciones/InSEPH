@@ -270,6 +270,9 @@ const routes_session = (request, response, route, session_true, session_false, l
         case "/indicadores.html":
           response.sendFile(dir_name + `/public/indicadores_us.html`);
           break
+        case "/avisos.html":
+          response.sendFile(dir_name + `/public/avisos_us.html`);
+          break
         case "/logout.html":
           response.sendFile(dir_name + `/public/login.html`);
           break

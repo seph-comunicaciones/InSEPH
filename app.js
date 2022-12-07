@@ -16,6 +16,7 @@ const {subir_archivo} = require("./js/services/archivo")
 const {editar_usuario, validar_usuario, consultar_usuarios, consultar_usuario, consultar_rol_usuario, consultar_roles, agregar_usuario, eliminar_usuario, validacion_session} = require("./js/services/usuario");
 const {consultar_niveles, consultar_servicios, consultar_tipos, consultar_municipios, consultar_turnos, consultar_modelos, consultar_sostenimientos, consultar_controles} = require("./js/services/catalogo");
 const {consultar_indicadores_internacionales, consultar_indicadores_nacionales, consultar_indicadores_institucionales, consultar_indicadores_estatales} = require("./js/services/indicadores");
+const {consultar_avisos} = require("./js/services/aviso");
 
 const {PORT} = process.env
 let my_session;
@@ -97,6 +98,9 @@ app.post("/api/v1/indicadores/consultar_indicadores_nacionales", async (request,
 app.post("/api/v1/indicadores/consultar_indicadores_institucionales", async (request, response) => await consultar_indicadores_institucionales(request, response, socket));
 app.post("/api/v1/indicadores/consultar_indicadores_estatales", async (request, response) => await consultar_indicadores_estatales(request, response, socket));
 
+//Avisos
+app.post("/api/v1/avisos/consultar_avisos", async (request, response) => await consultar_avisos(request, response, socket));
+
 //Usuario
 app.post("/api/v1/usuarios/validar_usuario", async (request, response) => await validar_usuario(request, response, socket));
 app.post("/api/v1/usuarios/consultar_usuarios", async (request, response) => await consultar_usuarios(request, response, socket));
@@ -115,6 +119,7 @@ app.get("/logout.html", (request, response) => routes_session(request, response,
 app.get("/dashboard.html", (request, response) => routes_session(request, response, "/dashboard.html", "dashboard.html", "login.html", false, __dirname));
 app.get("/escuelas.html", (request, response) => routes_session(request, response, "/escuelas.html", "escuelas.html", "login.html", false, __dirname));
 app.get("/indicadores.html", (request, response) => routes_session(request, response, "/indicadores.html", "indicadores.html", "login.html", false, __dirname));
+app.get("/avisos.html", (request, response) => routes_session(request, response, "/avisos.html", "avisos.html", "login.html", false, __dirname));
 app.get("/usuarios.html", (request, response) => routes_session(request, response, "/usuarios.html", "usuarios.html", "login.html", false, __dirname));
 
 app.use((request, response) => {
