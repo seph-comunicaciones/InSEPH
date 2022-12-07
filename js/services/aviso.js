@@ -10,7 +10,7 @@ const consultar_avisos = async (request, response) => {
 
   //Consulta query
   if (request.session.login || token_acceso === TOKEN_WEB) {
-    const query = await pool_query(`SELECT * FROM aviso order by id_avisos;`, "Avisos consultados exitosamente", "Error, no se pudieron consultar los avisos");
+    const query = await pool_query(`SELECT * FROM aviso order by id_avisos DESC;`, "Avisos consultados exitosamente", "Error, no se pudieron consultar los avisos");
 
     if (query.success) {
       return response.status(200).json(query);
