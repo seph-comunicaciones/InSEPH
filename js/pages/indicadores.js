@@ -460,19 +460,19 @@ const mostrar_actividades = (id_indicador_institucional) => {
   $(`.actividad_indicador_institucional_${id_indicador_institucional}`).removeClass("d-none")
 }
 
-const pintar_chart_indicadores_nacionales = (indicadores_chart_nacionales, id) => {
+const pintar_chart_indicadores = (indicadores_chart_nacionales, id) => {
   $(`#${id}`).append(`<div class="buttons" id="menu_chart_indicadores_nacionales" style="display: flex; flex-wrap: wrap; justify-content: space-between;padding: 0.5rem;"></div>`)
 
   indicadores_chart_nacionales.forEach((indicador_chart) => {
     const {tittle, charts} = indicador_chart
-    const id_tittle = tittle.toLowerCase().replaceAll(" ", "_").replaceAll(",", "").replaceAll("(", "").replaceAll(")", "")
+    const id_tittle = tittle.toLowerCase().replaceAll(" ", "_").replaceAll(",", "").replaceAll("(", "").replaceAll(")", "").replaceAll(".", "_")
 
     $(`#${id}`).append(`<h2 class="indicador_nacional_chart container_indicador_nacional_${id_tittle}">${tittle}</h2>`)
     $(`#menu_chart_indicadores_nacionales`).append(`<button id="indicador_nacional_chart_${id_tittle}" type="button" data-type="${id_tittle}" class="btn btn-primary control_chart_indicadores_nacionales">${tittle}</button>`)
 
     charts.forEach((chart) => {
       const {sub_tittle, series, categories, message, semaforo, note, colors, footer} = chart
-      const id_sub_tittle = sub_tittle.toLowerCase().replaceAll(" ", "_").replaceAll(",", "").replaceAll("(", "").replaceAll(")", "")
+      const id_sub_tittle = sub_tittle.toLowerCase().replaceAll(" ", "_").replaceAll(",", "").replaceAll("(", "").replaceAll(")", "").replaceAll(".", "_")
 
       const id_chart = `chart_${id_tittle}_${id_sub_tittle}`
 
@@ -522,7 +522,7 @@ const pintar_chart_indicadores_nacionales = (indicadores_chart_nacionales, id) =
                               <div class="col-md-3 col-12" style="display: flex;align-items: center;flex-direction: column;">
                                 ${note ? `<div style="display: flex;"><p style="text-align: center;">${note}</p></div>` : ``}
                                 <div style="display: flex;background-color: ${semaforo};border-radius: 50%;width: 150px;height: 150px;">
-                                  <p style="text-align: center;margin: auto;color: white;">${message}</p>
+                                  <p style="text-align: center;margin: auto;color: white;font-size: 10px;">${message}</p>
                                 </div>
                               </div>
                             </div>
@@ -552,12 +552,17 @@ $("#menu_indicadores").on("click", ".control_chart_indicadores_nacionales", (eve
   $(`.container_indicador_nacional_${type}`).removeClass("d-none")
 })
 
-const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_internacionales) => {
+const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_internacionales, charts) => {
   notificacion_toastify("Tabla de indicadores internacionales consultada")
 
   $("#container_tittle_indicadores").empty();
   $("#container_table_indicadores").empty();
-  $("#container_chart_indicadores").addClass("d-none");
+  $("#container_chart_indicadores").empty();
+  $("#container_chart_indicadores").removeClass("d-none");
+
+  pintar_chart_indicadores(charts, "container_chart_indicadores")
+
+  $("#indicador_nacional_chart_meta_4_2").click()
 
   $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
 
@@ -608,7 +613,7 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
   $("#container_chart_indicadores").empty();
   $("#container_chart_indicadores").removeClass("d-none");
 
-  pintar_chart_indicadores_nacionales(charts, "container_chart_indicadores")
+  pintar_chart_indicadores(charts, "container_chart_indicadores")
 
   $("#indicador_nacional_chart_global").click()
 
@@ -844,7 +849,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
         if (success) {
           switch (service) {
             case "consultar_indicadores_internacionales":
-              pintar_tabla_indicadores_internacionales(indicadores[id_indicador - 1].name, "Indicador", indicador);
+              pintar_tabla_indicadores_internacionales(indicadores[id_indicador - 1].name, "Indicador", indicador, charts);
               break
             case "consultar_indicadores_nacionales":
               pintar_tabla_indicadores_nacionales(indicadores[id_indicador - 1].name, "Indicador", indicador, charts);
@@ -902,7 +907,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
         "direccion_general": id_direccion_general,
         "nivel_educativo": ""
       }).then((response) => {
-        const {success, response: {indicador}} = response;
+        const {success, response: {indicador, charts}} = response;
 
         if (success) pintar_tabla_indicadores_institucionales(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].name, "Dirección General", indicador)
       })
@@ -923,7 +928,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
         "direccion_general": id_direccion_general,
         "nivel_educativo": id_nivel_educativo
       }).then((response) => {
-        const {success, response: {indicador}} = response;
+        const {success, response: {indicador, charts}} = response;
 
         if (success) pintar_tabla_indicadores_institucionales(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].niveles_educativos[id_nivel_educativo - 1].name, "Nivel Educativo", indicador)
       })

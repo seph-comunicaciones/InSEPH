@@ -16,8 +16,341 @@ const consultar_indicadores_internacionales = async (request, response) => {
                                                         on meta_internacional.id_meta_internacional = indicador_internacional.meta_internacional_id;`, "", "Error, no se pudieron consultar indicadores internacionales");
 
     if (query.success) {
+      const indicadores_chart_internacionales = [
+        {
+          "tittle": "Meta 4.2",
+          "charts": [
+            {
+              "sub_tittle": "4.2.2 Tasa de participación en el aprendizaje organizado antes de la Primaria (3° de Preescolar)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [91.9, 91.7]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [95.9, 97.2]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ['2015-2016', '2021-2022'],
+              "message": "4° Lugar nacional 5.5 puntos por arriba de la media nacional",
+              "semaforo": "#9bbb59",
+            },
+          ],
+        },
+        {
+          "tittle": "Meta 4.3",
+          "charts": [
+            {
+              "sub_tittle": "4.3.1 Tasa de participación en la enseñanza superior",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [37.5, 36.9]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [40.4, 41.9]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ['2015-2016', '2021-2022'],
+              "message": "4° Lugar nacional Solo 4 de cada 10 jóvenes tiene acceso a la educación superior",
+              "semaforo": "#ffc000",
+            },
+          ],
+        },
+        {
+          "tittle": "Meta 4.4",
+          "charts": [
+            {
+              "sub_tittle": "4.4.1 Proporción de jóvenes y adultos con conocimientos de TIC’s",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [31.4, 30.6]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [33.5, 29.5]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ['2016', "2019"],
+              "message": "Lugar 19 nacional Solo 3 de cada 10 jóvenes y adultos tiene conocimientos de TIC’s",
+              "semaforo": "#c00000",
+            },
+          ],
+        },
+        {
+          "tittle": "Meta 4.6",
+          "charts": [
+            {
+              "sub_tittle": "4.6.1 Porcentaje de jóvenes y adultos con competencias básicas en alfabetización y aritmética",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [99, 99.1]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [99.2, 99.4]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ['2015-2016', '2021-2022'],
+              "message": "Lugar 14 nacional Cercano al 100%",
+              "semaforo": "#ffc000",
+            },
+          ],
+        },
+        {
+          "tittle": "Meta 4.a",
+          "charts": [
+            {
+              "sub_tittle": "4.a.1.a Proporción de escuelas con acceso a electricidad (2021-2022)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [91, 86.3]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [94.4, 90]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ["Básica", "Media Superior"],
+              "message": "Lugar 16 nacional 5% de escuelas de Básica y 10%de EMS no tiene electricidad",
+              "semaforo": "#ffc000",
+            },
+            {
+              "sub_tittle": "4.a.1.b Proporción de escuelas con acceso a internet (2021-2022)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [29.9, 51.6]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [23.2, 65.6]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ["Básica", "Media Superior"],
+              "message": "Lugar 23 nacional Menos del 25% de escuelas de Básica tiene acceso a internet",
+              "semaforo": "#c00000",
+            },
+            {
+              "sub_tittle": "4.a.1.c Proporción de escuelas con equipo de cómputo en funcionamiento (2021-2022)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [50.7, 68.9]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [59, 83.2]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ["Básica", "Media Superior"],
+              "message": "Lugar 15 nacional 41% de escuelas de Básica y 17% de EMS no cuenta con computadoras funcionales",
+              "semaforo": "#ffc000",
+            },
+            {
+              "sub_tittle": "4.a.1.d1 Proporción de escuelas con infraestructura para discapacidad (2021-2022)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [24.4, 37.8]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [18.9, 43.1]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ["Básica", "Media Superior"],
+              "message": "Lugar 25 nacional Menos del 20% de escuelas de Básica tiene infraestructura adaptada para discapacidad",
+              "semaforo": "#c00000",
+            },
+            {
+              "sub_tittle": "4.a.1.d2 Proporción de escuelas con materiales adaptados para discapacidad (2021-2022)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [15.2, 1.3]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [17, 2]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ["Básica", "Media Superior"],
+              "message": "Lugar 19 nacional Solo 17% de escuelas de Básica cuenta con materiales adaptados para discapacidad",
+              "semaforo": "#c00000",
+            },
+            {
+              "sub_tittle": "4.a.1.e Proporción de escuelas con conexión a la red de agua potable (2021-2022)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [77, 74.3]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [80.6, 80.3]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ["Básica", "Media Superior"],
+              "message": "Lugar 20 nacional 20% de escuelas de Básica y de EMS no tiene conexión a la red de agua potable",
+              "semaforo": "#c00000",
+            },
+            {
+              "sub_tittle": "4.a.1.f Proporción de escuelas con sanitarios independientes (2021-2022)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [83.3, 84.6]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [83.9, 87.9]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ["Básica", "Media Superior"],
+              "message": "Lugar 24 nacional 16% de escuelas de Básica y 12% de EMS no cuenta con sanitarios independientes",
+              "semaforo": "#c00000",
+            },
+            {
+              "sub_tittle": "4.a.1.g Proporción de escuelas con lavabo de manos (2021-2022)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [81.6, 80.1]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [82.4, 86.4]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ["Básica", "Media Superior"],
+              "message": "Lugar 20 nacional 20% de escuelas de Básica y de EMS no tiene conexión a la red de agua potable",
+              "semaforo": "#c00000",
+            },
+          ],
+        },
+        {
+          "tittle": "Meta 4.c",
+          "charts": [
+            {
+              "sub_tittle": "4.c.1.a Proporción de profesorado de educación preescolar con formación docente mínima",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [73.3, 81.2]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [64.9, 69.5]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ['2015-2016', '2021-2022'],
+              "message": "Lugar 30 nacional 30% del profesorado de Preescolar no cuenta con formación docente mínima",
+              "semaforo": "#c00000",
+            },
+            {
+              "sub_tittle": "4.c.1.b Proporción de profesorado de educación primaria con formación docente mínima",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [85.7, 91.1]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [80.8, 86.9]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ['2015-2016', '2021-2022'],
+              "message": "Lugar 30 nacional 30% del profesorado de Preescolar no cuenta con formación docente mínima",
+              "semaforo": "#c00000",
+            },
+            {
+              "sub_tittle": "4.c.1.c Proporción de profesorado de educación secundaria con formación docente mínima",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [76.6, 84.7]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [78.3, 83.8]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ['2015-2016', '2021-2022'],
+              "message": "Lugar 21 nacional 16% del profesorado de Secundaria no cuenta con formación docente mínima",
+              "semaforo": "#c00000",
+            },
+          ],
+        },
+        {
+          "tittle": "Meta 4n.1",
+          "charts": [
+            {
+              "sub_tittle": "4.n.1.1 Porcentaje de alumnos en escuelas multigrado (Primaria)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [15.4, 16.2]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [17.3, 16.1]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ['2015-2016', '2021-2022'],
+              "message": "16% del la matrícula de Primaria asiste a escuelas multigrado",
+              "semaforo": "#c00000",
+            },
+          ],
+        },
+        {
+          "tittle": "Meta 4n.2",
+          "charts": [
+            {
+              "sub_tittle": "4.n.2.1 Prevalencia de violencia hacia las mujeres, en el ámbito escolar (15 años y más)",
+              "series": [
+                {
+                  "name": 'Nacional',
+                  "data": [17.4]
+                },
+                {
+                  "name": 'Hidalgo',
+                  "data": [16.3]
+                }
+              ],
+              "colors": ["#bc955c", "#621132"],
+              "categories": ['2016'],
+              "message": "Lugar 13 nacional 16% de las mujeres de 15 años y más, ha sufrido violencia en el ámbito escolar",
+              "semaforo": "#c00000",
+            },
+          ],
+        },
+      ]
+
       const respuesta = {
-        "indicador": query.response
+        "indicador": query.response,
+        "charts": indicadores_chart_internacionales
       }
 
       return response.status(200).json(message_success("Indicadores internacionales consultados exitosamente", respuesta));
