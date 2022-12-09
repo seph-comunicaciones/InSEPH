@@ -33,6 +33,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(fileUpload({createParentPath: true,}))
 
 server.listen(PORT);
+console.log(`"Server on port ${PORT}"`)
 
 //Socket
 socket.on('connection', (socket) => {
