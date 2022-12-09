@@ -477,6 +477,7 @@ const pintar_chart_indicadores = (indicadores_chart_nacionales, id) => {
       const id_chart = `chart_${id_tittle}_${id_sub_tittle}`
 
       const options = {
+        colors : colors,
         series: series,
         chart: {
           type: 'bar',
@@ -507,7 +508,6 @@ const pintar_chart_indicadores = (indicadores_chart_nacionales, id) => {
         },
         fill: {
           opacity: 1,
-          colors: colors
         },
         tooltip: {
           y: {
@@ -735,7 +735,7 @@ const pintar_tabla_indicadores_estatales = (tittle, type, indicadores_estatales)
   })
 }
 
-const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_institucionales) => {
+const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_institucionales) =>   {
   notificacion_toastify("Tabla de indicadores institucionales consultada")
 
   $("#container_tittle_indicadores").empty();
@@ -791,6 +791,7 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
       url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
     },
     paging: false,
+    info: false,
   });
 }
 
