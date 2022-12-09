@@ -825,7 +825,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
   if (type === "indicador") {
     $(".control_indicadores").removeClass("btn-cafe-seph")
-    $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
+    $(".control_indicadores").addClass("btn-marron-seph")
 
     $("#subsecretaria").empty()
     $("#direccion_general").empty()
