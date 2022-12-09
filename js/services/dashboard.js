@@ -9,7 +9,7 @@ const consultar_datos_dashboard = async (request, response) => {
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Consulta query
-  if (token_acceso === TOKEN_WEB || request.session.login) {
+  if ((token_acceso === TOKEN_WEB || token_acceso === TOKEN_MOVIL) || request.session.login) {
     const {municipio_id} = request.body
     const datos_niveles = {}
 

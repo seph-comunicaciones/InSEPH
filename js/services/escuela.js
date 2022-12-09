@@ -18,7 +18,7 @@ const consultar_escuelas = async (request, response) => {
   }
 
   //Consulta query
-  if (request.session.login || (token_acceso === TOKEN_WEB)) {
+  if (request.session.login || (token_acceso === TOKEN_WEB || token_acceso === TOKEN_MOVIL)) {
     const query = await pool_query(
       `Select escuela.id_escuela, escuela.clave, escuela.nombre, turno.nom_turno, municipio.nom_municipio
        From escuela
@@ -52,7 +52,7 @@ const consultar_escuela = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if (request.session.login || (token_acceso === TOKEN_WEB)) {
+  if (request.session.login || (token_acceso === TOKEN_WEB || token_acceso === TOKEN_MOVIL)) {
     const query = await pool_query_unique(
       `Select escuela.*, LEFT (cast (escuela.fecha_modificacion AS varchar), 10) AS fecha_modificacion, turno.nom_turno, sost_control.nom_sost_control, modelo.nom_modelo, sostenimiento.nom_sostenimiento, municipio.nom_municipio, nivel.nom_nivel, tipo.nom_tipo, servicio_educativo.nom_servicio_educativo, usuario.nombre AS usuario_nombre_modificacion, usuario.apellido_paterno AS usuario_apellido_paterno_modificacion, usuario.apellido_materno AS usuario_apellido_materno_modificacion, direccion.direccion, direccion.codigo_postal, direccion.colonia, direccion.num_int, direccion.num_ext, direccion.localidad
        From escuela
