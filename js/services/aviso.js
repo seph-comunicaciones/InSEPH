@@ -3,14 +3,14 @@ const {validate_session, pool_query, message_failure, validar_llaves, pool_query
 const {TOKEN_WEB, TOKEN_MOVIL} = process.env
 
 const consultar_avisos = async (request, response) => {
-  const {token_acceso} = request.body;
+  const {informacion, token_acceso} = request.body;
 
   const validacion_session = await validate_session(request, response, token_acceso)
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Consulta query
   if (request.session.login || (token_acceso === TOKEN_WEB || token_acceso === TOKEN_MOVIL)) {
-    const query = await pool_query(`SELECT * FROM aviso order by id_aviso DESC;`, "Avisos consultados exitosamente", "Error, no se pudieron consultar los avisos");
+    const query = await pool_query(`${!informacion ? `SELECT uuid, id_aviso, titulo, sub_titulo FROM aviso order by id_aviso DESC;` : `SELECT * FROM aviso order by id_aviso DESC;`}`, "Avisos consultados exitosamente", "Error, no se pudieron consultar los avisos");
 
     if (query.success) {
       return response.status(200).json(query);
