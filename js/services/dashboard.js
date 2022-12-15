@@ -13,20 +13,23 @@ const consultar_datos_dashboard = async (request, response) => {
     const {municipio_id} = request.body
     const datos_niveles = {}
 
-    const query_datos_alumnos_docentes_aulas = await pool_query_unique(`SELECT SUM(alumnos_hombres)                     as alum_hom,
-             SUM(alumnos_mujeres)                     as alum_muj,
-             SUM(alumnos_hombres + alumnos_mujeres)   as alum_tot,
-             SUM(docentes_hombres)                    as doc_hom,
-             SUM(docentes_mujeres)                    as doc_muj,
-             SUM(docentes_hombres + docentes_mujeres) as doc_tot,
-             SUM(aulas_existentes)                    as aulas_exist,
-             SUM(aulas_uso)                           as aulas_uso
-      FROM escuela WHERE ${municipio_id !== "" ? ` municipio_id_municipio = ${municipio_id} AND ` : ``} activo = true;`, "", "");
+    const query_datos_alumnos_docentes_aulas = await pool_query_unique(`SELECT SUM(alum_hom)            as alum_hom,
+                                                                               SUM(alum_muj)            as alum_muj,
+                                                                               SUM(alum_hom + alum_muj) as alum_tot,
+                                                                               SUM(doc_hom)             as doc_hom,
+                                                                               SUM(doc_muj)             as doc_muj,
+                                                                               SUM(doc_hom + doc_muj)   as doc_tot,
+                                                                               SUM(aulas_exist)         as aulas_exist,
+                                                                               SUM(aulas_uso)           as aulas_uso
+                                                                        FROM escuela
+                                                                        WHERE ${municipio_id !== "" ? ` municipio_id = ${municipio_id} AND ` : ``} activo = true;`, "", "");
 
-    const query_niveles = await pool_query(`SELECT nivel_id_nivel FROM escuela WHERE ${municipio_id !== "" ? ` municipio_id_municipio = ${municipio_id} AND ` : ``} activo = true;`, ``, ``)
+    const query_niveles = await pool_query(`SELECT tipo_id
+                                            FROM escuela
+                                            WHERE ${municipio_id !== "" ? ` municipio_id = ${municipio_id} AND ` : ``} activo = true;`, ``, ``)
 
-    const niveles = [{"name": "SIN_DEFINIR", "id": 0}, {"name": "INICIAL", "id": 1}, {"name": "BASICA", "id": 2}, {"name": "MEDIA_SUPERIOR", "id": 3}, {"name": "SUPERIOR", "id": 4}, {"name": "CAPACITACION", "id": 5}, {"name": "ESPECIAL", "id": 6}, {"name": "OTROS", "id": 6}]
-    niveles.forEach((nivel) => datos_niveles[nivel.name] = (query_niveles.response.filter(({nivel_id_nivel}) => nivel_id_nivel === nivel.id).length))
+    const niveles = [{"name": "preescolar", "id": 1}, {"name": "primaria", "id": 2}, {"name": "secundaria", "id": 3}, {"name": "bachiller", "id": 4}, {"name": "licenciatura", "id": 5}, {"name": "posgrado", "id": 6}]
+    niveles.forEach((nivel) => datos_niveles[nivel.name] = (query_niveles.response.filter(({tipo_id}) => tipo_id === nivel.id).length))
 
     if (query_datos_alumnos_docentes_aulas.success && query_niveles.success) {
       const query = {

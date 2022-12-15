@@ -134,7 +134,7 @@ const pintar_aulas = (aulas_uso, aulas_existentes) => {
   chart_aulas.render();
 }
 
-const pintar_niveles = (SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS) => {
+const pintar_niveles = (preescolar, primaria, secundaria, bachiller, licenciatura, posgrado) => {
   $("#dashboard_chart_niveles").empty()
 
   let options_niveles = {
@@ -155,7 +155,7 @@ const pintar_niveles = (SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, 
     series: [
       {
         name: "Niveles educativos",
-        data: [SIN_DEFINIR ? SIN_DEFINIR : 0, INICIAL ? INICIAL : 0, BASICA ? BASICA : 0, MEDIA_SUPERIOR ? MEDIA_SUPERIOR : 0, SUPERIOR ? SUPERIOR : 0, CAPACITACION ? CAPACITACION : 0, ESPECIAL ? ESPECIAL : 0, OTROS ? OTROS : 0,],
+        data: [preescolar ? preescolar : 0, primaria ? primaria : 0, secundaria ? secundaria : 0, bachiller ? bachiller : 0, licenciatura ? licenciatura : 0, posgrado ? posgrado : 0,],
       },
     ],
     plotOptions: {
@@ -165,14 +165,12 @@ const pintar_niveles = (SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, 
     },
     xaxis: {
       categories: [
-        "SIN_DEFINIR",
-        "INICIAL",
-        "BÁSICA",
-        "MEDIA_SUPERIOR",
-        "SUPERIOR",
-        "CAPACITACIÓN",
-        "ESPECIAL",
-        "OTROS",
+        "Preescolar",
+        "Primaria",
+        "Secundaria",
+        "Bachiller",
+        "Licenciatura",
+        "Posgrado",
       ],
     },
   };
@@ -224,31 +222,27 @@ const pintar_tabla_alumnos_docente_aulas = (alumnos_hombres, alumnos_mujeres, al
                     </table>`)
 }
 
-const pintar_tabla_niveles = (SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS) => {
+const pintar_tabla_niveles = (preescolar, primaria, secundaria, bachiller, licenciatura, posgrado) => {
   $("#container_tabla_niveles").empty()
   $("#container_tabla_niveles").append(`<table class="table mb-0">
                       <thead class="thead-dark">
                       <tr>
-                        <th>SIN DEFINIR</th>
-                        <th>INICIAL</th>
-                        <th>BÁSICA</th>
-                        <th>MEDIA SUPERIOR</th>
-                        <th>SUPERIOR</th>
-                        <th>CAPACITACIÓN</th>
-                        <th>ESPECIAL</th>
-                        <th>OTROS</th>
+                        <th>Preescolar</th>
+                        <th>Primaria</th>
+                        <th>Secundaria</th>
+                        <th>Bachiller</th>
+                        <th>Licenciatura</th>
+                        <th>Posgrado</th>
                       </tr>
                       </thead>
                       <tbody>
                       <tr>
-                        <td>${SIN_DEFINIR ? SIN_DEFINIR : 0}</td>
-                        <td>${INICIAL ? INICIAL : 0}</td>
-                        <td>${BASICA ? BASICA : 0}</td>
-                        <td>${MEDIA_SUPERIOR ? MEDIA_SUPERIOR : 0}</td>
-                        <td>${SUPERIOR ? SUPERIOR : 0}</td>
-                        <td>${CAPACITACION ? CAPACITACION : 0}</td>
-                        <td>${ESPECIAL ? ESPECIAL : 0}</td>
-                        <td>${OTROS ? OTROS : 0}</td>
+                        <td>${preescolar ? preescolar : 0}</td>
+                        <td>${primaria ? primaria : 0}</td>
+                        <td>${secundaria ? secundaria : 0}</td>
+                        <td>${bachiller ? bachiller : 0}</td>
+                        <td>${licenciatura ? licenciatura : 0}</td>
+                        <td>${posgrado ? posgrado : 0}</td>
                       </tr>
                       </tbody>
                     </table>`)
@@ -258,7 +252,7 @@ const pintar_dashboard = () => {
   request_post("/api/v1/dashboard/consultar_datos_dashboard", {
     "municipio_id": $("#bashboard_select_municipio").val()
   }).then((response) => {
-    const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_niveles: {SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS}}} = response;
+    const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_niveles: {preescolar, primaria, secundaria, bachiller, licenciatura, posgrado}}} = response;
 
     if (success) {
       notificacion_toastify("Datos consultados")
@@ -267,8 +261,8 @@ const pintar_dashboard = () => {
       pintar_docentes(doc_hom, doc_muj, doc_tot)
       pintar_aulas(aulas_uso, aulas_exist)
       pintar_tabla_alumnos_docente_aulas(alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_uso, aulas_exist)
-      pintar_niveles(SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS)
-      pintar_tabla_niveles(SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS)
+      pintar_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)
+      pintar_tabla_niveles(preescolar, primaria, secundaria, bachiller, licenciatura, posgrado)
     }
   });
 }
