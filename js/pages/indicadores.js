@@ -477,7 +477,7 @@ const pintar_chart_indicadores = (indicadores_chart_nacionales, id) => {
       const id_chart = `chart_${id_tittle}_${id_sub_tittle}`
 
       const options = {
-        colors : colors,
+        colors: colors,
         series: series,
         chart: {
           type: 'bar',
@@ -735,7 +735,7 @@ const pintar_tabla_indicadores_estatales = (tittle, type, indicadores_estatales)
   })
 }
 
-const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_institucionales) =>   {
+const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_institucionales) => {
   notificacion_toastify("Tabla de indicadores institucionales consultada")
 
   $("#container_tittle_indicadores").empty();
@@ -871,6 +871,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
   if (type === "subsecretaria") {
     $(".control_subsecretarias").removeClass("btn-cafe-seph")
+    $(".control_subsecretarias").addClass("btn-marron-seph")
     $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
 
     $("#direccion_general").empty()
@@ -891,6 +892,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
   if (type === "direccion_general") {
     $(".control_direccion_general").removeClass("btn-cafe-seph")
+    $(".control_direccion_general").addClass("btn-marron-seph")
     $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
 
     $("#nivel_educativo").empty()
@@ -924,6 +926,7 @@ $("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_d
 
   if (type === "nivel_educativo") {
     $(".control_nivel_educativo").removeClass("btn-cafe-seph")
+    $(".control_nivel_educativo").addClass("btn-marron-seph")
     $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
 
     if (end === "true" && service && service !== "") {
