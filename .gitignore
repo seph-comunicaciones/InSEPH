@@ -3,3 +3,4 @@ node_modules
 uploads
 .wwebjs_auth
 .env
+/js/chat_bot/chats

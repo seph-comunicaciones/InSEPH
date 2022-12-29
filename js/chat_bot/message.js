@@ -75,7 +75,7 @@ const reply = (step, from, split = false) => {
                 default:
                   json[datos_nuevo_usuario[j++]] = "3"
               }
-            }else {
+            } else {
               json[datos_nuevo_usuario[j++]] = message_reverse[i].message === "-" ? "" : message_reverse[i].message
             }
           }
@@ -131,6 +131,10 @@ const reply = (step, from, split = false) => {
 }
 
 const create_chat = (from, message) => {
+  fs.mkdir(`${__dirname}/chats`, (err) => {
+    if (err && err.code !== "EEXIST") console.log(err);
+  });
+
   return new Promise((resolve, reject) => {
     const new_message = {
       messages: [
