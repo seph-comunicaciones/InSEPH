@@ -62,7 +62,24 @@ const reply = (step, from, split = false) => {
         const datos_nuevo_usuario = ["rol_id", "contrasena", "usuario", "correo", "telefono", "apellido_materno", "apellido_paterno", "nombre"]
         let json = {}
         let j = 0
-        for (let i = 0; i < message_reverse.length; i++) if (i % 2 === 0) json[datos_nuevo_usuario[j++]] = message_reverse[i].message === "-" ? "" : message_reverse[i].message
+        for (let i = 0; i < message_reverse.length; i++) {
+          if (i % 2 === 0) {
+            if (datos_nuevo_usuario[j] === "rol_id") {
+              switch (message_reverse[i].message) {
+                case "1":
+                  json[datos_nuevo_usuario[j++]] = "2"
+                  break
+                case "2":
+                  json[datos_nuevo_usuario[j++]] = "3"
+                  break
+                default:
+                  json[datos_nuevo_usuario[j++]] = "3"
+              }
+            }else {
+              json[datos_nuevo_usuario[j++]] = message_reverse[i].message === "-" ? "" : message_reverse[i].message
+            }
+          }
+        }
         json.token_acceso = "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
         json.usuario_id_modificacion = 2
 
@@ -127,16 +144,21 @@ const create_chat = (from, message) => {
     fs.exists(`./js/chat_bot/chats/${from}.json`, (exists) => {
       if (exists) {
         fs.readFile(`./js/chat_bot/chats/${from}.json`, (err, data) => {
-          const message = JSON.parse(data)
-          message.messages.push(new_message.messages[0])
+          try {
+            const message = JSON.parse(data)
+            message.messages.push(new_message.messages[0])
 
-          fs.writeFile(`./js/chat_bot/chats/${from}.json`,
-            JSON.stringify(message),
-            (error) => {
-              resolve(true)
-              if (error) console.log(error);
-            }
-          );
+            fs.writeFile(`./js/chat_bot/chats/${from}.json`,
+              JSON.stringify(message),
+              (error) => {
+                resolve(true)
+                if (error) console.log(error);
+              }
+            );
+          } catch (error) {
+            console.log(error);
+            resolve(true)
+          }
         })
       } else {
         fs.writeFile(`./js/chat_bot/chats/${from}.json`,
