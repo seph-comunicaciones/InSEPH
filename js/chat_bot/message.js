@@ -4,6 +4,8 @@ const fs = require("fs");
 const step_message = require("./step.json");
 const {request_post} = require("../services/request");
 
+const {DOMAIN} = process.env
+
 const get_step = (message) => {
   return new Promise((resolve, reject) => {
     const {key} = initial_message.find(k => k.keywords.includes(message)) || {key: null}
@@ -11,7 +13,6 @@ const get_step = (message) => {
     resolve(response)
   });
 }
-
 
 const get_last_step = (from) => {
   return new Promise((resolve, reject) => {
@@ -61,7 +62,7 @@ const reply = (step, from, split = false) => {
         const datos_nuevo_usuario = ["rol_id", "contrasena", "usuario", "correo", "telefono", "apellido_materno", "apellido_paterno", "nombre"]
         let json = {}
         let j = 0
-        for (let i = 0; i < message_reverse.length; i++) if (i % 2 === 0) json[datos_nuevo_usuario[j++]] = message_reverse[i].message
+        for (let i = 0; i < message_reverse.length; i++) if (i % 2 === 0) json[datos_nuevo_usuario[j++]] = message_reverse[i].message === "-" ? "" : message_reverse[i].message
         json.token_acceso = "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
         json.usuario_id_modificacion = 2
 
@@ -69,7 +70,7 @@ const reply = (step, from, split = false) => {
 
           if (response.success) {
             resolve({
-              replyMessage: "¡Gracias! Su registro se ha completado. Ingrese a la pagina con su usuario y contraseña.  👩‍🏫 💬\n\nhttp://ihde.edu.mx/ \n\nTenga un excelente día. ⛅🌤 ",
+              replyMessage: `¡Gracias! Su registro se ha completado. Ingrese a la pagina con su usuario y contraseña.  👩‍🏫 💬\n\n${DOMAIN} \n\nTenga un excelente día. ⛅🌤 `,
               media: null,
               trigger: null
             })
