@@ -21,7 +21,7 @@
   },
   "STEP_4": {
     "replyMessage": [
-      "Ingrese su número telefónico (este fase es opcional, en dado caso de no ingresar'-'). 📲"
+      "Ingrese su número telefónico (numero de 10 dígitos, esta fase es opcional, en dado caso de no ingresar'-'). 📲"
     ]
   },
   "STEP_5": {
@@ -36,7 +36,7 @@
   },
   "STEP_7": {
     "replyMessage": [
-      "Ingrese la contraseña con el cual iniciará sesión (esta contraseña puede tener números, caracteres especiales como son '# < > /', y/o mayúsculas). ✱✱✱"
+      "Ingrese la contraseña con el cual iniciará sesión (esta contraseña debe de tener por lo menos 1 numero, 1 letra, 1 letra mayúscula, 1 letra minúscula y debe de ser de 8 caracteres). ✱✱✱"
     ]
   },
   "STEP_8": {

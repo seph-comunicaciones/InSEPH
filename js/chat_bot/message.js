@@ -8,7 +8,7 @@ const {DOMAIN} = process.env
 
 const get_step = (message) => {
   return new Promise((resolve, reject) => {
-    const {key} = initial_message.find(k => k.keywords.includes(message)) || {key: null}
+    const {key} = initial_message.find(key => key.keywords.includes(message)) || {key: null}
     const response = key || null
     resolve(response)
   });

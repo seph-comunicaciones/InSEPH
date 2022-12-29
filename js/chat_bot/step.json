@@ -12,7 +12,7 @@
     "key": "STEP_3"
   },
   {
-    "keyword": "Ingrese su número telefónico (este fase es opcional, en dado caso de no ingresar'-'). 📲",
+    "keyword": "Ingrese su número telefónico (numero de 10 dígitos, esta fase es opcional, en dado caso de no ingresar'-'). 📲",
     "key": "STEP_4"
   },
   {
@@ -24,7 +24,7 @@
     "key": "STEP_6"
   },
   {
-    "keyword": "Ingrese la contraseña con el cual iniciará sesión (esta contraseña puede tener números, caracteres especiales como son '# < > /', y/o mayúsculas). ✱✱✱",
+    "keyword": "Ingrese la contraseña con el cual iniciará sesión (esta contraseña debe de tener por lo menos 1 numero, 1 letra, 1 letra mayúscula, 1 letra minúscula y debe de ser de 8 caracteres). ✱✱✱",
     "key": "STEP_7"
   },
   {
