@@ -179,7 +179,9 @@ const agregar_usuario = async (request, response, socket) => {
       if (validacion.response.correo === correo) return response.status(200).json(message_failure("Correo no disponible"));
     }
 
-    const query = await pool_query(pool_query_insert(request.body, true, "usuario"), "Usuario agregado exitosamente", "Error, no se pudo agregar el usuario");
+    const llaves_filtrar = ["usuario", "correo", "contrasena", "nombre", "apellido_paterno", "apellido_materno", "rol_id", "telefono", "usuario_id_modificacion"];
+
+    const query = await pool_query(pool_query_insert(await filtrar_llaves(request.body, llaves_filtrar), true, "usuario"), "Usuario agregado exitosamente", "Error, no se pudo agregar el usuario");
 
     if (query.success) {
       const query_socket = await pool_query_unique(`SELECT usuario, nombre, apellido_materno, apellido_paterno, id_usuario

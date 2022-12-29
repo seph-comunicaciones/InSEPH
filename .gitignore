@@ -1,4 +1,5 @@
 node_modules
 .idea
 uploads
+.wwebjs_auth
 .env

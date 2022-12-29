@@ -1,0 +1,47 @@
+{
+  "DEFAULT": {
+    "replyMessage": [
+      "Bienvenido a InSEPH\n"
+    ]
+  },
+  "STEP_1": {
+    "replyMessage": [
+      "Ingresa el nombre del usuario"
+    ]
+  },
+  "STEP_2": {
+    "replyMessage": [
+      "Ingresa el apellido paterno del usuario"
+    ]
+  },
+  "STEP_3": {
+    "replyMessage": [
+      "Ingresa el apellido materno del usuario"
+    ]
+  },
+  "STEP_4": {
+    "replyMessage": [
+      "Ingresa el teléfono (opcional) del usuario"
+    ]
+  },
+  "STEP_5": {
+    "replyMessage": [
+      "Ingresa el correo del usuario"
+    ]
+  },
+  "STEP_6": {
+    "replyMessage": [
+      "Ingresa el usuario del usuario"
+    ]
+  },
+  "STEP_7": {
+    "replyMessage": [
+      "Ingresa la contraseña del usuario"
+    ]
+  },
+  "STEP_8": {
+    "replyMessage": [
+      "Ingresa el rol del usuario (1 ,2 ,3)"
+    ]
+  }
+}

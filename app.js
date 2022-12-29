@@ -9,6 +9,10 @@ const {Server} = require("socket.io");
 const socket = new Server(server);
 require("dotenv").config()
 
+const qrcode = require("qrcode-terminal");
+const {Client, LocalAuth} = require("whatsapp-web.js");
+const {reply, get_step, get_last_step, create_chat} = require("./js/chat_bot/message")
+
 const {routes_session} = require("./js/services/servicios");
 const {consultar_datos_dashboard} = require("./js/services/dashboard");
 const {consultar_escuelas, consultar_escuela, eliminar_escuela, editar_escuela, agregar_escuela} = require("./js/services/escuela");
@@ -17,8 +21,9 @@ const {editar_usuario, validar_usuario, consultar_usuarios, consultar_usuario, c
 const {consultar_niveles, consultar_servicios, consultar_tipos, consultar_municipios, consultar_turnos, consultar_modelos, consultar_sostenimientos, consultar_controles} = require("./js/services/catalogo");
 const {consultar_indicadores_internacionales, consultar_indicadores_nacionales, consultar_indicadores_institucionales, consultar_indicadores_estatales} = require("./js/services/indicadores");
 const {consultar_avisos, consultar_aviso} = require("./js/services/aviso");
+const fs = require("fs");
 
-const {PORT} = process.env
+const {PORT, DEFAULT_MESSAGE} = process.env
 let my_session;
 
 app.use("/js", express.static(__dirname + "/js"));
@@ -34,6 +39,57 @@ app.use(fileUpload({createParentPath: true,}))
 
 server.listen(PORT);
 console.log(`"Server on port ${PORT}"`)
+
+//Bot WhatsApp
+const client = new Client({
+  authStrategy: new LocalAuth(),
+});
+
+client.on("qr", (qr) => {
+  qrcode.generate(qr, {small: true});
+});
+
+client.on("authenticated", () => {
+  console.log("Autentificado");
+});
+
+client.on("ready", () => {
+  console.log("Cliente listo");
+});
+
+client.on("message", async (msg) => {
+  const {from, body} = msg;
+  const message = body.toLowerCase();
+
+  if (message !== "cancelar") {
+    const last_step = await get_last_step(from)
+    const step = last_step ? await last_step : await get_step(message);
+    await create_chat(from, body)
+
+    if (step) {
+      const data = await reply(step, from, true)
+      await create_chat(from, data.replyMessage)
+      await client.sendMessage(from, data.replyMessage);
+    }
+
+    if (DEFAULT_MESSAGE === 'true' && !step) {
+      const response = await reply('DEFAULT', from)
+      await create_chat(from, response.replyMessage)
+      await client.sendMessage(from, response.replyMessage);
+    }
+  } else {
+    await client.sendMessage(from, "Registro de usuario cancelado");
+
+    fs.writeFile(`./js/chat_bot/chats/${from}.json`,
+      JSON.stringify({messages: []}),
+      (error) => {
+        if (error) console.log(error);
+      }
+    );
+  }
+});
+
+client.initialize();
 
 //Socket
 socket.on('connection', (socket) => {

@@ -1,0 +1,34 @@
+[
+  {
+    "keyword": "Ingresa el nombre del usuario",
+    "key": "STEP_1"
+  },
+  {
+    "keyword": "Ingresa el apellido paterno del usuario",
+    "key": "STEP_2"
+  },
+  {
+    "keyword": "Ingresa el apellido materno del usuario",
+    "key": "STEP_3"
+  },
+  {
+    "keyword": "Ingresa el teléfono (opcional) del usuario",
+    "key": "STEP_4"
+  },
+  {
+    "keyword": "Ingresa el correo del usuario",
+    "key": "STEP_5"
+  },
+  {
+    "keyword": "Ingresa el usuario del usuario",
+    "key": "STEP_6"
+  },
+  {
+    "keyword": "Ingresa la contraseña del usuario",
+    "key": "STEP_7"
+  },
+  {
+    "keyword": "Ingresa el rol del usuario (1 ,2 ,3)",
+    "key": "STEP_8"
+  }
+]
