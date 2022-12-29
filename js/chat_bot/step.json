@@ -1,34 +1,34 @@
 [
   {
-    "keyword": "Ingresa el nombre del usuario",
+    "keyword": "Para continuar con el registro, ingrese su Nombre(s).  🤵 ",
     "key": "STEP_1"
   },
   {
-    "keyword": "Ingresa el apellido paterno del usuario",
+    "keyword": "Ingrese su Apellido Paterno.  🤵 ",
     "key": "STEP_2"
   },
   {
-    "keyword": "Ingresa el apellido materno del usuario",
+    "keyword": "Ingrese su Apellido Materno.  🤵 ",
     "key": "STEP_3"
   },
   {
-    "keyword": "Ingresa el teléfono (opcional) del usuario",
+    "keyword": "Ingrese su número telefónico (este fase es opcional, en dado caso de no ingresar'-'). 📲",
     "key": "STEP_4"
   },
   {
-    "keyword": "Ingresa el correo del usuario",
+    "keyword": "Ingrese su correo electrónico. 📩",
     "key": "STEP_5"
   },
   {
-    "keyword": "Ingresa el usuario del usuario",
+    "keyword": "Ahora, agregue un nombre de Usuario con el cual iniciará sesión. 👤",
     "key": "STEP_6"
   },
   {
-    "keyword": "Ingresa la contraseña del usuario",
+    "keyword": "Ingrese la contraseña con el cual iniciará sesión (esta contraseña puede tener números, caracteres especiales como son '# < > /', y/o mayúsculas). ✱✱✱",
     "key": "STEP_7"
   },
   {
-    "keyword": "Ingresa el rol del usuario (1 ,2 ,3)",
+    "keyword": "Ahora ingrese el numero del rol que tomará\n1. REGISTRADOR \n2. VISUALIZADOR. \n👩‍🏫 💬",
     "key": "STEP_8"
   }
 ]

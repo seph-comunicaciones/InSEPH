@@ -66,24 +66,39 @@ const reply = (step, from, split = false) => {
         json.usuario_id_modificacion = 2
 
         request_post("/api/v1/usuarios/agregar_usuario", json).then((response) => {
-          resolve({
-            replyMessage: response.message,
-            media: null,
-            trigger: null
-          })
 
-          fs.writeFile(`./js/chat_bot/chats/${from}.json`,
-            JSON.stringify({messages: []}),
-            (error) => {
-              resolve(true)
-              if (error) console.log(error);
-            }
-          );
+          if (response.success) {
+            resolve({
+              replyMessage: "¡Gracias! Su registro se ha completado. Ingrese a la pagina con su usuario y contraseña.  👩‍🏫 💬\n\nhttp://ihde.edu.mx/ \n\nTenga un excelente día. ⛅🌤 ",
+              media: null,
+              trigger: null
+            })
+
+            fs.writeFile(`./js/chat_bot/chats/${from}.json`,
+              JSON.stringify({messages: []}),
+              (error) => {
+                if (error) console.log(error);
+              }
+            );
+          } else {
+            resolve({
+              replyMessage: response.message,
+              media: null,
+              trigger: null
+            })
+
+            fs.writeFile(`./js/chat_bot/chats/${from}.json`,
+              JSON.stringify({messages: []}),
+              (error) => {
+                if (error) console.log(error);
+              }
+            );
+          }
 
           return null
         })
       })
-    }else {
+    } else {
 
       const responseFind = response_message[step] || {};
 

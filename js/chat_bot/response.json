@@ -1,47 +1,47 @@
 {
   "DEFAULT": {
     "replyMessage": [
-      "Bienvenido a InSEPH\n"
+      "¡Bienvenido a InSEPH!\n\nSomos una plataforma educativa en donde podrás encontrar los diferentes niveles educativos.🏫\n\nPodría encontrar los registros e las escuelas, avisos importantes e indicadores con muestras.  👩‍🏫  👩‍🏫 \n\nPor favor, si deseas registrarte a la plataforma ingresa 'REGISTRO' y procederemos con la creación de tu usuario.\n\nEn dado caso que no desee continuar con el proceso de registro escriba 'CANCELAR'."
     ]
   },
   "STEP_1": {
     "replyMessage": [
-      "Ingresa el nombre del usuario"
+      "Para continuar con el registro, ingrese su Nombre(s).  🤵 "
     ]
   },
   "STEP_2": {
     "replyMessage": [
-      "Ingresa el apellido paterno del usuario"
+      "Ingrese su Apellido Paterno.  🤵 "
     ]
   },
   "STEP_3": {
     "replyMessage": [
-      "Ingresa el apellido materno del usuario"
+      "Ingrese su Apellido Materno.  🤵 "
     ]
   },
   "STEP_4": {
     "replyMessage": [
-      "Ingresa el teléfono (opcional) del usuario"
+      "Ingrese su número telefónico (este fase es opcional, en dado caso de no ingresar'-'). 📲"
     ]
   },
   "STEP_5": {
     "replyMessage": [
-      "Ingresa el correo del usuario"
+      "Ingrese su correo electrónico. 📩"
     ]
   },
   "STEP_6": {
     "replyMessage": [
-      "Ingresa el usuario del usuario"
+      "Ahora, agregue un nombre de Usuario con el cual iniciará sesión. 👤"
     ]
   },
   "STEP_7": {
     "replyMessage": [
-      "Ingresa la contraseña del usuario"
+      "Ingrese la contraseña con el cual iniciará sesión (esta contraseña puede tener números, caracteres especiales como son '# < > /', y/o mayúsculas). ✱✱✱"
     ]
   },
   "STEP_8": {
     "replyMessage": [
-      "Ingresa el rol del usuario (1 ,2 ,3)"
+      "Ahora ingrese el numero del rol que tomará\n1. REGISTRADOR \n2. VISUALIZADOR. \n👩‍🏫 💬"
     ]
   }
 }
