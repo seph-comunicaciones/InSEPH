@@ -81,7 +81,7 @@ const reply = (step, from, split = false) => {
           }
         }
         json.token_acceso = "0012b5cc-0f3e-4c66-8fd3-24b828e359a2"
-        json.usuario_id_modificacion = 2
+        json.usuario_id_modificacion = 1
 
         request_post("/api/v1/usuarios/agregar_usuario", json).then((response) => {
 
