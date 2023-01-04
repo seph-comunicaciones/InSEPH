@@ -146,6 +146,13 @@
             <div class="card-body">
               <form class="form" data-parsley-validate id="form_nueva_escuela">
                 <div class="row">
+
+                  <div class="col-md-12 col-12">
+                    <div class="form-group">
+                      <input accept="image/png, image/jpeg, image/gif" class="filepond image-preview-filepond" id="img_escuela" name="filepond" type="file"/>
+                    </div>
+                  </div>
+
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory" id="container_validacion_clave">
                       <label for="clave_centro" class="form-label">Clave del centro de trabajo </label>
@@ -155,15 +162,59 @@
                   </div>
 
                   <div class="col-md-6 col-12">
-                    <div class="form-group">
-                      <input id="img_escuela" type="file" class="filepond image-preview-filepond" name="filepond" accept="image/png, image/jpeg, image/gif"/>
+                    <div class="form-group mandatory" id="container_validacion_clave_plantel">
+                      <label class="form-label" for="clave_plantel">Clave del plantel de trabajo </label>
+                      <input class="form-control validacion validacion_input" data-limit="10" data-name="validacion_clave" data-parsley-required="true" data-validacion-clave="true" data-validacion-espacios="true" id="clave_plantel" name="clave_plantel" placeholder="Clave del plantel de trabajo" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_clave_plantel"></div>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="turno" class="form-label">Tipo de turno </label>
-                      <select id="turno" name="turno" class="form-select validacion" data-parsley-required="true"></select>
+                      <label class="form-label" for="marca">Marca</label>
+                      <select class="form-select validacion_edit" data-parsley-required="true" id="marca" name="marca"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="estatus">Estatus</label>
+                      <select class="form-select validacion_edit" data-parsley-required="true" id="estatus" name="estatus"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="turno_1">Tipo de turno 1</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="turno_1" name="turno_1"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="turno_2">Tipo de turno 2</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="turno_2" name="turno_2"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="turno_3">Tipo de turno 3</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="turno_3" name="turno_3"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="nivel">Nivel de educación </label>
+                      <select class="form-select validacion_edit" data-parsley-required="true" id="nivel" name="nivel"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="tipo">Tipo educativo </label>
+                      <select class="form-select validacion_edit" data-parsley-required="true" id="tipo" name="tipo"></select>
                     </div>
                   </div>
 
@@ -176,108 +227,250 @@
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="nivel" class="form-label">Nivel de educación </label>
-                      <select id="nivel" name="nivel" class="form-select validacion" data-parsley-required="true"></select>
+                      <label class="form-label" for="director">Director</label>
+                      <input class="form-control validacion" data-parsley-required="true" id="director" name="director" placeholder="Director" type="text"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="servicio" class="form-label">Servicio educativo </label>
-                      <select id="servicio" name="servicio" class="form-select validacion" data-parsley-required="true"></select>
+                      <label class="form-label" for="municipio">Municipio </label>
+                      <select class="form-select validacion" data-parsley-required="true" id="municipio" name="municipio"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="tipo" class="form-label">Tipo educativo </label>
-                      <select id="tipo" name="tipo" class="form-select validacion" data-parsley-required="true"></select>
+                      <label class="form-label" for="postal">Código postal </label>
+                      <select class="form-select validacion" data-parsley-required="true" id="postal" name="inmueble"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="control" class="form-label">Tipo de control </label>
-                      <select id="control" name="control" class="form-select validacion" data-parsley-required="true"></select>
+                      <label class="form-label" for="asentamiento">Asentamiento</label>
+                      <input class="form-control validacion" data-parsley-required="true" id="asentamiento" name="asentamiento" placeholder="Asentamiento" type="text"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="sostenimiento" class="form-label">Tipo de sostenimiento </label>
-                      <select id="sostenimiento" name="sostenimiento" class="form-select validacion" data-parsley-required="true"></select>
+                      <label class="form-label" for="vialidad_principal">Vialidad Principal</label>
+                      <input class="form-control validacion" data-parsley-required="true" id="vialidad_principal" name="vialidad_principal" placeholder="Vialidad Principal" type="text"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="modelo" class="form-label">Tipo de modelo </label>
-                      <select id="modelo" name="modelo" class="form-select validacion" data-parsley-required="true"></select>
-                    </div>
-                  </div>
-
-                  <div class="col-12">
-                    <div class="form-group mandatory">
-                      <label for="direccion" class="form-label">Dirección </label>
-                      <input type="text" id="direccion" class="form-control validacion" placeholder="Dirección" name="direccion" data-parsley-required="true"/>
+                      <label class="form-label" for="vialidad_derecha">Vialidad Derecha</label>
+                      <input class="form-control validacion" data-parsley-required="true" id="vialidad_derecha" name="vialidad_derecha" placeholder="Vialidad Derecha" type="text"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="municipio" class="form-label">Municipio </label>
-                      <select id="municipio" name="municipio" class="form-select validacion" data-parsley-required="true"></select>
+                      <label class="form-label" for="vialidad_izquierda">Vialidad Izquierda</label>
+                      <input class="form-control validacion" data-parsley-required="true" id="vialidad_izquierda" name="vialidad_izquierda" placeholder="Vialidad Izquierda" type="text"/>
                     </div>
                   </div>
 
-                  <div class="col-md-6 col-12 d-none">
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="vialidad_posterior">Vialidad Posterior</label>
+                      <input class="form-control validacion" data-parsley-required="true" id="vialidad_posterior" name="vialidad_posterior" placeholder="Vialidad Posterior" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group" id="container_validacion_numero_exterior">
+                      <label class="form-label" for="num_ext">Numero Exterior</label>
+                      <input class="form-control validacion_input" data-limit="100" data-name="validacion_numero_exterior" data-validacion-espacios="true" data-validacion-numero="true" id="num_ext" name="num_ext" placeholder="Numero Exterior" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero_exterior"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group" id="container_validacion_numero_exterior_alfanumerico">
+                      <label class="form-label" for="num_ext_elf">Numero Exterior Alfanumérico</label>
+                      <input class="form-control validacion_input" id="num_ext_elf" name="num_ext_elf" placeholder="Numero Exterior Alfanumérico" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero_exterior_alfanumerico"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group" id="container_validacion_numero_interior">
+                      <label class="form-label" for="num_int">Numero Interior</label>
+                      <input class="form-control validacion_input" data-limit="100" data-name="validacion_numero_interior" data-validacion-espacios="true" data-validacion-numero="true" id="num_int" name="num_int" placeholder="Numero Interior" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero_interior"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group" id="container_validacion_numero_interior_alfanumerico">
+                      <label class="form-label" for="num_int_elf">Numero Interior Alfanumérico</label>
+                      <input class="form-control validacion_input" id="num_int_elf" name="num_int_elf" placeholder="Numero Interior Alfanumérico" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero_interior_alfanumerico"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="des_ubicacion">Descripción de la ubicación</label>
+                      <input class="form-control validacion_input" id="des_ubicacion" name="des_ubicacion" placeholder="Descripción de la ubicación" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="latitud">Latitud</label>
+                      <input class="form-select validacion" data-parsley-required="true" id="latitud" name="latitud" placeholder="Latitud" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="longitud">Longitud</label>
+                      <input class="form-select validacion" data-parsley-required="true" id="longitud" name="longitud" placeholder="Longitud" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="region">Region </label>
+                      <select class="form-select validacion" data-parsley-required="true" id="region" name="region"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_control">Sostenimiento Control</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="sost_control" name="sost_control"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_sub_control">Sostenimiento Sub-Control</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="sost_sub_control" name="sost_sub_control"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_dependencia_1">Dependencia de Sostenimiento 1</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="sost_dependencia_1" name="sost_dependencia_1"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_dependencia_2">Dependencia de Sostenimiento 2</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="sost_dependencia_2" name="sost_dependencia_2"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_dependencia_3">Dependencia de Sostenimiento 3</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="sost_dependencia_3" name="sost_dependencia_3"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_dependencia_4">Dependencia de Sostenimiento 4</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="sost_dependencia_4" name="sost_dependencia_4"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_servicio">Servicio de Sostenimiento</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="sost_servicio" name="sost_servicio"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="dep_operativa_1">Dependencia Operativa 1</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="dep_operativa_1" name="dep_operativa_1"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="dep_operativa_2">Dependencia Operativa 2</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="dep_operativa_2" name="dep_operativa_2"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="dep_operativa_3">Dependencia Operativa 3</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="dep_operativa_3" name="dep_operativa_3"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="dep_operativa_4">Dependencia Operativa 4</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="dep_operativa_4" name="dep_operativa_4"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="dep_operativa_5">Dependencia Operativa 5</label>
+                      <select class="form-select validacion" data-parsley-required="true" id="dep_operativa_5" name="dep_operativa_5"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
                     <div class="form-group">
-                      <label for="municipio_maps" class="form-label">Municipio </label>
-                      <input type="text" id="municipio_maps" class="form-control" placeholder="Municipio" name="municipio_maps" data-parsley-required="true"/>
+                      <label class="form-label" for="supervicion_cct">Supervision </label>
+                      <input class="form-control" data-parsley-required="false" id="supervicion_cct" name="pagina" placeholder="Supervision" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group">
+                      <label class="form-label" for="jefsec_cct">Jefatura de Sector</label>
+                      <input class="form-control" data-parsley-required="false" id="jefsec_cct" name="pagina" placeholder="Jefatura de Sector" type="text"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="localidad_maps" class="form-label">Localidad </label>
-                      <input type="text" id="localidad_maps" class="form-control validacion" name="localidad_maps" data-parsley-required="true"/>
+                      <label class="form-label" for="serreg_cct">Servicios Regionales</label>
+                      <input class="form-control" data-parsley-required="false" id="serreg_cct" name="pagina" placeholder="Servicios Regionales" type="text"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="colonia_maps" class="form-label">Colonia </label>
-                      <input type="text" id="colonia_maps" class="form-control validacion" name="colonia_maps" data-parsley-required="true"/>
+                      <label class="form-label" for="servicio">Servicio educativo </label>
+                      <select class="form-select validacion_edit" data-parsley-required="true" id="servicio" name="servicio"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
-                    <div class="form-group mandatory" id="container_validacion_postal">
-                      <label for="postal_maps" class="form-label">Código Postal </label>
-                      <input type="text" id="postal_maps" class="form-control validacion validacion_input" data-limit="5" data-name="validacion_postal" data-validacion-espacios="true" data-validacion-numero="true" name="postal_maps" data-parsley-required="true"/>
-                      <div class="parsley-error filled" id="errores_validacion_postal"></div>
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="servicio_cam">Servicio CAM </label>
+                      <select class="form-select validacion_edit" data-parsley-required="true" id="servicio_cam" name="servicio_cam"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
-                    <div class="form-group" id="container_validacion_interior">
-                      <label for="num_int_maps" class="form-label">Numero interior </label>
-                      <input type="text" id="num_int_maps" class="form-control validacion_input" data-name="validacion_interior" data-validacion-espacios="true" data-validacion-numero="true" name="num_int_maps"/>
-                      <div style="opacity: 0.5;">
-                        <p><em>0 si no tiene numero</em></p>
-                      </div>
-                      <div class="parsley-error filled" id="errores_validacion_interior"></div>
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="caracteristica_1">Característica 1</label>
+                      <select class="form-select validacion_edit" data-parsley-required="true" id="caracteristica_1" name="caracteristica_1"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
-                    <div class="form-group" id="container_validacion_exterior">
-                      <label for="num_ext_maps" class="form-label">Numero exterior </label>
-                      <input type="text" id="num_ext_maps" class="form-control validacion_input" data-name="validacion_exterior" data-validacion-espacios="true" data-validacion-numero="true" name="num_ext_maps"/>
-                      <div style="opacity: 0.5;">
-                        <p><em>0 si no tiene numero</em></p>
-                      </div>
-                      <div class="parsley-error filled" id="errores_validacion_exterior"></div>
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="caracteristica_2">Característica 2</label>
+                      <select class="form-select validacion_edit" data-parsley-required="true" id="caracteristica_2" name="caracteristica_2"></select>
                     </div>
                   </div>
 
@@ -291,71 +484,82 @@
 
                   <div class="col-md-6 col-12">
                     <div class="form-group">
+                      <label class="form-label" for="correo">Correo Electrónico</label>
+                      <input class="form-control" data-parsley-required="false" id="correo" name="correo" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group">
                       <label for="pagina" class="form-label">Página Web </label>
                       <input type="text" id="pagina" class="form-control" name="pagina" data-parsley-required="false"/>
                     </div>
                   </div>
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory" id="container_validacion_alumnos_hombres">
-                      <label for="alumnos_hombres" class="form-label">Alumnos (Hombres) </label>
-                      <input type="text" id="alumnos_hombres" placeholder="0" class="form-control validacion validacion_input" data-name="validacion_alumnos_hombres" data-validacion-espacios="true" data-validacion-numero="true" name="alumnos_hombres" data-parsley-required="true"/>
-                      <div class="parsley-error filled" id="errores_validacion_alumnos_hombres"></div>
-                    </div>
-                  </div>
+                  <div class="row">
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory" id="container_validacion_alumnos_mujeres">
-                      <label for="alumnos_mujeres" class="form-label">Alumnos (Mujeres) </label>
-                      <input type="text" id="alumnos_mujeres" placeholder="0" class="form-control validacion validacion_input" data-name="validacion_alumnos_mujeres" data-validacion-espacios="true" data-validacion-numero="true" name="alumnos_mujeres" data-parsley-required="true"/>
-                      <div class="parsley-error filled" id="errores_validacion_alumnos_mujeres"></div>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory" id="container_validacion_alumnos_hombres">
+                        <label class="form-label" for="alumnos_hombres">Alumnos (Hombres) </label>
+                        <input class="form-control validacion validacion_input" data-name="validacion_alumnos_hombres" data-parsley-required="true" data-validacion-espacios="true" data-validacion-numero="true" id="alumnos_hombres" name="alumnos_hombres" placeholder="0" type="text"/>
+                        <div class="parsley-error filled" id="errores_validacion_alumnos_hombres"></div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory">
-                      <label for="alumnos_totales" class="form-label">Alumnos (Totales) </label>
-                      <input type="number" id="alumnos_totales" value="0" step="1" min="0" class="form-control validacion" name="alumnos_totales" disabled data-parsley-required="true"/>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory" id="container_validacion_alumnos_mujeres">
+                        <label class="form-label" for="alumnos_mujeres">Alumnos (Mujeres) </label>
+                        <input class="form-control validacion validacion_input" data-name="validacion_alumnos_mujeres" data-parsley-required="true" data-validacion-espacios="true" data-validacion-numero="true" id="alumnos_mujeres" name="alumnos_mujeres" placeholder="0" type="text"/>
+                        <div class="parsley-error filled" id="errores_validacion_alumnos_mujeres"></div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory" id="container_validacion_docentes_hombres">
-                      <label for="docentes_hombres" class="form-label">Docentes (Hombres) </label>
-                      <input type="text" id="docentes_hombres" placeholder="0" class="form-control validacion validacion_input" data-name="validacion_docentes_hombres" data-validacion-espacios="true" data-validacion-numero="true" name="docentes_hombres" data-parsley-required="true"/>
-                      <div class="parsley-error filled" id="errores_validacion_docentes_hombres"></div>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory">
+                        <label class="form-label" for="alumnos_totales">Alumnos (Totales) </label>
+                        <input class="form-control validacion" data-parsley-required="true" disabled id="alumnos_totales" min="0" name="alumnos_totales" step="1" type="number" value="0"/>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory" id="container_validacion_docentes_mujeres">
-                      <label for="docentes_mujeres" class="form-label">Docentes (Mujeres) </label>
-                      <input type="text" id="docentes_mujeres" placeholder="0" class="form-control validacion validacion_input" data-name="validacion_docentes_mujeres" data-validacion-espacios="true" data-validacion-numero="true" name="docentes_mujeres" data-parsley-required="true"/>
-                      <div class="parsley-error filled" id="errores_validacion_docentes_mujeres"></div>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory" id="container_validacion_docentes_hombres">
+                        <label class="form-label" for="docentes_hombres">Docentes (Hombres) </label>
+                        <input class="form-control validacion validacion_input" data-name="validacion_docentes_hombres" data-parsley-required="true" data-validacion-espacios="true" data-validacion-numero="true" id="docentes_hombres" name="docentes_hombres" placeholder="0" type="text"/>
+                        <div class="parsley-error filled" id="errores_validacion_docentes_hombres"></div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory">
-                      <label for="docentes_totales" class="form-label">Docentes (Totales) </label>
-                      <input type="number" id="docentes_totales" value="0" step="1" min="0" class="form-control validacion" name="docentes_totales" disabled data-parsley-required="true"/>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory" id="container_validacion_docentes_mujeres">
+                        <label class="form-label" for="docentes_mujeres">Docentes (Mujeres) </label>
+                        <input class="form-control validacion validacion_input" data-name="validacion_docentes_mujeres" data-parsley-required="true" data-validacion-espacios="true" data-validacion-numero="true" id="docentes_mujeres" name="docentes_mujeres" placeholder="0" type="text"/>
+                        <div class="parsley-error filled" id="errores_validacion_docentes_mujeres"></div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-6 col-12">
-                    <div class="form-group mandatory" id="container_validacion_aulas_existentes">
-                      <label for="aulas_existentes" class="form-label">Aulas Existentes </label>
-                      <input type="text" id="aulas_existentes" placeholder="0" class="form-control validacion validacion_input" data-name="validacion_aulas_existentes" data-validacion-espacios="true" data-validacion-numero="true" name="aulas_existentes" data-parsley-required="true"/>
-                      <div class="parsley-error filled" id="errores_validacion_aulas_existentes"></div>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory">
+                        <label class="form-label" for="docentes_totales">Docentes (Totales) </label>
+                        <input class="form-control validacion" data-parsley-required="true" disabled id="docentes_totales" min="0" name="docentes_totales" step="1" type="number" value="0"/>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-6 col-12">
-                    <div class="form-group mandatory" id="container_validacion_aulas_uso">
-                      <label for="aulas_uso" class="form-label">Aulas uso </label>
-                      <input type="text" id="aulas_uso" placeholder="0" class="form-control validacion validacion_input" data-name="validacion_aulas_uso" data-validacion-espacios="true" data-validacion-numero="true" name="aulas_uso" data-parsley-required="true"/>
-                      <div class="parsley-error filled" id="errores_validacion_aulas_uso"></div>
+                    <div class="col-md-6 col-12">
+                      <div class="form-group mandatory" id="container_validacion_aulas_existentes">
+                        <label class="form-label" for="aulas_existentes">Aulas Existentes </label>
+                        <input class="form-control validacion validacion_input" data-name="validacion_aulas_existentes" data-parsley-required="true" data-validacion-espacios="true" data-validacion-numero="true" id="aulas_existentes" name="aulas_existentes" placeholder="0" type="text"/>
+                        <div class="parsley-error filled" id="errores_validacion_aulas_existentes"></div>
+                      </div>
                     </div>
+
+                    <div class="col-md-6 col-12">
+                      <div class="form-group mandatory" id="container_validacion_aulas_uso">
+                        <label class="form-label" for="aulas_uso">Aulas uso </label>
+                        <input class="form-control validacion validacion_input" data-name="validacion_aulas_uso" data-parsley-required="true" data-validacion-espacios="true" data-validacion-numero="true" id="aulas_uso" name="aulas_uso" placeholder="0" type="text"/>
+                        <div class="parsley-error filled" id="errores_validacion_aulas_uso"></div>
+                      </div>
+                    </div>
+
                   </div>
 
                   <div class="row">

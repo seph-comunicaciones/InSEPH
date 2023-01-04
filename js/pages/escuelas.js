@@ -1,7 +1,5 @@
 let escuelas_datatable = null;
 let escuelas_local = [];
-let servicios_local = [];
-let tipos_local = [];
 let escuela_actual = null;
 let rol = false
 let usuario = 0
@@ -16,6 +14,10 @@ const pintar_select_menu_municipios = (municipios) => {
   $("#escuelas_select_municipio").append(options_select);
 };
 
+const validar_turno = (turno) => {
+  return turno.substring(4) !== "NO NECESARIO" ? turno.substring(4) : "-"
+}
+
 const pintar_tabla_escuelas = (escuelas) => {
   $("#container_table_escuelas").empty();
   escuelas_datatable = null;
@@ -27,7 +29,9 @@ const pintar_tabla_escuelas = (escuelas) => {
                     <th style="text-align: center">Clave del centro de trabajo</th>
                     <th style="text-align: center">Nombre del centro de trabajo</th>
                     <th style="text-align: center">Nombre del municipio</th>
-                    <th style="text-align: center">Nombre del turno</th>
+                    <th style="text-align: center">Nombre del turno 1</th>
+                    <th style="text-align: center">Nombre del turno 2</th>
+                    <th style="text-align: center">Nombre del turno 3</th>
                     <th style="text-align: center">Visualizar</th>
                     ${rol === 1 ? `
                     <th style="text-align: center">Editar</th> 
@@ -39,11 +43,13 @@ const pintar_tabla_escuelas = (escuelas) => {
 
   escuelas.forEach((escuela) => {
     table += `<tr>
-                <td>${escuela.clave}</td>
-                <td>${escuela.nombre}</td>
+                <td>${escuela.id_cct}</td>
+                <td>${escuela.nom_escuela}</td>
                 <td>${escuela.nom_municipio}</td>
-                <td>${escuela.nom_turno}</td>
-                <td><button id="row_${escuela.clave}" data-id="${escuela.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela"><i class="bi bi-eye-fill"></i></button></td>
+                <td>${validar_turno(escuela.nom_turno1)}</td>
+                <td>${validar_turno(escuela.nom_turno2)}</td>
+                <td>${validar_turno(escuela.nom_turno3)}</td>
+                <td><button id="row_${escuela.id_cct}" data-id="${escuela.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela"><i class="bi bi-eye-fill"></i></button></td>
                 ${rol === 1 ? `
                 <td><button data-id="${escuela.id_escuela}" data-type="editar_escuela" class="btn btn-primary control_escuela"><i class="bi bi-pencil-square"></i></button></td>
                 <td><button data-id="${escuela.id_escuela}" data-type="eliminar_escuela" class="btn btn-danger control_escuela"><i class="bi bi-trash3-fill"></i></button></td>
@@ -108,20 +114,20 @@ const vista_visualizar_escuela_sim = (escuela) => {
 
   validar_img(escuela.imagen, "container_vis_sim_img")
 
-  validar_campo(escuela.clave, "clave_centro_vis_sim");
-  validar_campo(escuela.nombre, "nombre_centro_vis_sim");
+  validar_campo(escuela.cct, "clave_centro_vis_sim");
+  validar_campo(escuela.nom_escuela, "nombre_centro_vis_sim");
   validar_campo(escuela.telefono, "telefono_vis_sim");
-  validar_campo(escuela.pag_web, "pagina_vis_sim");
-  validar_campo(escuela.alum_muj, "alumnos_mujeres_vis_sim");
-  validar_campo(escuela.alum_hom, "alumnos_hombres_vis_sim");
-  validar_campo(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_vis_sim");
-  validar_campo(escuela.doc_muj, "docentes_mujeres_vis_sim");
-  validar_campo(escuela.doc_hom, "docentes_hombres_vis_sim");
-  validar_campo(escuela.doc_hom + escuela.doc_muj, "docentes_totales_vis_sim");
-  validar_campo(escuela.aulas_exist, "aulas_existentes_vis_sim");
+  validar_campo(escuela.email, "pagina_vis_sim");
+  validar_campo(escuela.alumnos_mujeres, "alumnos_mujeres_vis_sim");
+  validar_campo(escuela.alumnos_hombres, "alumnos_hombres_vis_sim");
+  validar_campo(escuela.alumnos_hombres + escuela.alumnos_mujeres, "alumnos_totales_vis_sim");
+  validar_campo(escuela.docentes_mujeres, "docentes_mujeres_vis_sim");
+  validar_campo(escuela.docentes_hombres, "docentes_hombres_vis_sim");
+  validar_campo(escuela.docentes_hombres + escuela.docentes_mujeres, "docentes_totales_vis_sim");
+  validar_campo(escuela.aulas_existentes, "aulas_existentes_vis_sim");
   validar_campo(escuela.aulas_uso, "aulas_uso_vis_sim");
 
-  validar_campo(escuela.direccion, "direccion_vis_sim");
+  validar_campo(`${escuela.nom_municipio}, ${escuela.colonia_localidad}, ${escuela.calle_principal}, ${escuela.num_int} ${escuela.num_ext} `, "direccion_vis_sim");
 
   $("#escuela_modificacion_vis_sim").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
 
@@ -244,7 +250,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
     }
 
     //Cargar municipios
-    request_get("/api/v1/municipios/consultar_municipios").then((response) => {
+    request_get("/api/v1/catalogos/consultar_municipios").then((response) => {
       const {success, response: municipios} = response;
 
       if (success) {
@@ -283,6 +289,319 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
           const {success, response: escuelas} = response;
 
           if (success) {
+            //Carga de catalogos
+            request_get("/api/v1/catalogos/consultar_marcas").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_marca}">${consulta.nom_marca}</option> `));
+                $(`#marca`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_estatus").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_status}">${consulta.nom_status}</option> `));
+                $(`#estatus`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_turnos_1").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_turno1}">${consulta.nom_turno1}</option> `));
+                $(`#turno_1`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_turnos_2").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_turno2}">${consulta.nom_turno2}</option> `));
+                $(`#turno_2`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_turnos_3").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_turno3}">${consulta.nom_turno3}</option> `));
+                $(`#turno_3`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_niveles").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_nivel}">${consulta.nom_nivel}</option> `));
+                $(`#nivel`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_tipos").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_tipo}">${consulta.nom_tipo}</option> `));
+                $(`#tipo`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_directores").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_director}">${consulta.nombre_director}</option> `));
+                $(`#director`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_postal").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_asenta}">${consulta.d_codigo} - ${consulta.d_asenta} - ${consulta.c_tipo_asenta} - ${consulta.d_tipo_asenta}</option> `));
+                $(`#postal`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_region").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_region}">${consulta.nom_region}</option> `));
+                $(`#region`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_sostenimiento_control").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_control}">${consulta.nom_sost_control}</option> `));
+                $(`#sost_control`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_sostenimiento_sub_control").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_subcontrol}">${consulta.nom_sost_subcontrol}</option> `));
+                $(`#sost_sub_control`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_sostenimiento_dependencia_1").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_dependencia1}">${consulta.nom_sost_dependencia1}</option> `));
+                $(`#sost_dependencia_1`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_sostenimiento_dependencia_2").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_dependencia2}">${consulta.nom_sost_dependencia2}</option> `));
+                $(`#sost_dependencia_2`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_sostenimiento_dependencia_3").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_dependencia3}">${consulta.nom_sost_dependencia3}</option> `));
+                $(`#sost_dependencia_3`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_sostenimiento_dependencia_4").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_dependencia4}">${consulta.nom_sost_dependencia4}</option> `));
+                $(`#sost_dependencia_4`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_sostenimiento_servicio").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_servicio}">${consulta.num_sost_servicio}</option> `));
+                $(`#sost_servicio`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_dependencia_operativa_1").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa1}">${consulta.nom_dep_operativa1}</option> `));
+                $(`#dep_operativa_1`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_dependencia_operativa_2").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa2}">${consulta.nom_dep_operativa2}</option> `));
+                $(`#dep_operativa_2`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_dependencia_operativa_3").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa3}">${consulta.nom_dep_operativa3}</option> `));
+                $(`#dep_operativa_3`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_dependencia_operativa_4").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa4}">${consulta.nom_dep_operativa4}</option> `));
+                $(`#dep_operativa_4`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_dependencia_operativa_5").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa5}">${consulta.nom_dep_operativa5}</option> `));
+                $(`#dep_operativa_5`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_servicio_educativo").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_servicio_educativo}">${consulta.nom_servicio_educativo}</option> `));
+                $(`#servicio`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_servicio_cam").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_cam_servicio}">${consulta.nom_cam_servicio}</option> `));
+                $(`#servicio_cam`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_caracteristica_1").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_caracteristica1}">${consulta.nom_caracteristica1}</option> `));
+                $(`#caracteristica_1`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
+            request_get("/api/v1/catalogos/consultar_caracteristica_2").then((response) => {
+              const {success, message, response: consultas} = response;
+
+              if (success) {
+                let opciones_select = `<option value="">Elige una opción</option> `;
+                consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_caracteristica2}">${consulta.nom_caracteristica2}</option> `));
+                $(`#caracteristica_2`).empty().append(opciones_select);
+              } else {
+                Swal.fire("Error", message, "error");
+              }
+            });
+
             notificacion_toastify("Escuelas consultadas");
             pintar_tabla_escuelas(escuelas);
           } else {
@@ -295,152 +614,6 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
     Swal.fire("Error", message, "error");
   }
 })
-
-//Carga de catalogos
-
-//Turnos
-request_get("/api/v1/turnos/consultar_turnos").then((response) => {
-  const {success, message, response: turnos} = response;
-
-  if (success) {
-    $(`#turno`).empty();
-    $(`#turno_edit`).empty();
-    $(`#turno_vis`).empty();
-    let opciones_select = `<option value="">Elige una opción</option> `;
-
-    turnos.forEach((turno) => (opciones_select += ` <option value="${turno.id_turno}">${turno.nom_turno}</option> `));
-
-    $(`#turno`).append(opciones_select);
-    $(`#turno_edit`).append(opciones_select);
-    $(`#turno_vis`).append(opciones_select);
-  } else {
-    Swal.fire("Error", message, "error");
-  }
-});
-
-//Niveles educativos
-request_get("/api/v1/sistemas_educativos/consultar_niveles").then((response) => {
-  const {success, message, response: niveles} = response;
-
-  if (success) {
-    $(`#nivel`).empty();
-    $(`#nivel_edit`).empty();
-    $(`#nivel_vis`).empty();
-    let opciones_select = `<option value="">Elige una opción</option> `;
-
-    niveles.forEach((nivel) => (opciones_select += ` <option value="${nivel.id_nivel}">${nivel.nom_nivel}</option> `));
-
-    $(`#nivel`).append(opciones_select);
-    $(`#nivel_edit`).append(opciones_select);
-    $(`#nivel_vis`).append(opciones_select);
-  } else {
-    Swal.fire("Error", message, "error");
-  }
-});
-
-//Servicios educativos
-request_get("/api/v1/sistemas_educativos/consultar_servicios").then((response) => {
-  const {success, message, response: servicios} = response;
-
-  if (success) {
-    servicios_local = servicios;
-
-    $(`#servicio`).empty();
-    $(`#servicio_edit`).empty();
-    $(`#servicio_vis`).empty();
-    let opciones_select = `<option value="">Elige una opción</option> `;
-
-    servicios.forEach((servicio) => (opciones_select += ` <option value="${servicio.id_servicio_educativo}">${servicio.nom_servicio_educativo}</option> `));
-
-    $(`#servicio`).append(opciones_select);
-    $(`#servicio_edit`).append(opciones_select);
-    $(`#servicio_vis`).append(opciones_select);
-  } else {
-    Swal.fire("Error", message, "error");
-  }
-});
-
-//Tipos educativos
-request_get("/api/v1/sistemas_educativos/consultar_tipos").then((response) => {
-  const {success, message, response: tipos} = response;
-
-  if (success) {
-    tipos_local = tipos;
-
-    $(`#tipo`).empty();
-    $(`#tipo_edit`).empty();
-    $(`#tipo_vis`).empty();
-    let opciones_select = `<option value="">Elige una opción</option> `;
-
-    tipos.forEach((tipo) => (opciones_select += ` <option value="${tipo.id_tipo}">${tipo.nom_tipo}</option> `));
-
-    $(`#tipo`).append(opciones_select);
-    $(`#tipo_edit`).append(opciones_select);
-    $(`#tipo_vis`).append(opciones_select);
-  } else {
-    Swal.fire("Error", message, "error");
-  }
-});
-
-//Controles
-request_get("/api/v1/controles/consultar_controles").then((response) => {
-  const {success, message, response: controles} = response;
-
-  if (success) {
-    $(`#control`).empty();
-    $(`#control_edit`).empty();
-    $(`#control_vis`).empty();
-    let opciones_select = `<option value="">Elige una opción</option> `;
-
-    controles.forEach((control) => (opciones_select += ` <option value="${control.id_sost_control}">${control.nom_sost_control}</option> `));
-
-    $(`#control`).append(opciones_select);
-    $(`#control_edit`).append(opciones_select);
-    $(`#control_vis`).append(opciones_select);
-  } else {
-    Swal.fire("Error", message, "error");
-  }
-});
-
-//Sostenimiento
-request_get("/api/v1/sostenimientos/consultar_sostenimientos").then((response) => {
-  const {success, message, response: sostenimientos} = response;
-
-  if (success) {
-    $(`#sostenimiento`).empty();
-    $(`#sostenimiento_edit`).empty();
-    $(`#sostenimiento_vis`).empty();
-    let opciones_select = `<option value="">Elige una opción</option> `;
-
-    sostenimientos.forEach((sostenimiento) => (opciones_select += ` <option value="${sostenimiento.id_sostenimiento}">${sostenimiento.nom_sostenimiento}</option> `));
-
-    $(`#sostenimiento`).append(opciones_select);
-    $(`#sostenimiento_edit`).append(opciones_select);
-    $(`#sostenimiento_vis`).append(opciones_select);
-  } else {
-    Swal.fire("Error", message, "error");
-  }
-});
-
-//Modelos
-request_get("/api/v1/modelos/consultar_modelos").then((response) => {
-  const {success, message, response: modelos} = response;
-
-  if (success) {
-    $(`#modelo`).empty();
-    $(`#modelo_edit`).empty();
-    $(`#modelo_vis`).empty();
-    let opciones_select = `<option value="">Elige una opción</option> `;
-
-    modelos.forEach((modelo) => (opciones_select += ` <option value="${modelo.id_modelo}">${modelo.nom_modelo}</option> `));
-
-    $(`#modelo`).append(opciones_select);
-    $(`#modelo_edit`).append(opciones_select);
-    $(`#modelo_vis`).append(opciones_select);
-  } else {
-    Swal.fire("Error", message, "error");
-  }
-});
 
 //On change select municipios
 $("#escuelas_select_municipio").on("change", () => {
@@ -500,30 +673,62 @@ $("#btn_guardar_escuela").click(async () => {
     notificacion_toastify_carga();
 
     let json = {
-      clave: $("#clave_centro").val(),
-      nombre: $("#nombre_centro").val(),
-      pag_web: $("#pagina").val(),
+      id_cct: $("#clave_centro").val(),
+      marca_id_marca: $("#marca").val(),
+      nom_escuela: $("#nombre_centro").val(),
+      status_id_status: $("#estatus").val(),
+
+      id_asenta_codigo_postal: $("#postal").val(),
+      asenta2: $("#asentamiento").val(),
+      vialidad_principal: $("#vialidad_principal").val(),
+      vialidad_derecha: $("#vialidad_derecha").val(),
+      vialidad_izquierda: $("#vialidad_izquierda").val(),
+      vialidad_posterior: $("#vialidad_posterior").val(),
+      num_ext: $("#num_ext").val(),
+      alf_ext: $("#num_ext_elf").val(),
+      num_int: $("#num_int").val(),
+      alf_int: $("#num_int_elf").val(),
+      desc_ubicacion: $("#des_ubicacion").val(),
+      latitud: $("#latitud").val(),
+      longitud: $("#longitud").val(),
+
+      municipio_id_municipio: $("#municipio").val(),
+      region_id_region: $("#region").val(),
+      sost_control_id_sost_control: $("#sost_control").val(),
+      sost_subcontrol_id_sost_subcontrol: $("#sost_sub_control").val(),
+      sost_dependencian1_id_sost_dependencia1: $("#sost_dependencia_1").val(),
+      sost_dependencian2_id_sost_dependencia2: $("#sost_dependencia_2").val(),
+      sost_dependencian3_id_sost_dependencia3: $("#sost_dependencia_3").val(),
+      sost_dependencian4_id_sost_dependencia4: $("#sost_dependencia_4").val(),
+      sost_servicio_id_sost_servicio: $("#sost_servicio").val(),
+      dep_operativa1_id_dep_operativa1: $("#dep_operativa_1").val(),
+      dep_operativa2_id_dep_operativa2: $("#dep_operativa_2").val(),
+      dep_operativa3_id_dep_operativa3: $("#dep_operativa_3").val(),
+      dep_operativa4_id_dep_operativa4: $("#dep_operativa_4").val(),
+      dep_operativa5_id_dep_operativa5: $("#dep_operativa_5").val(),
+      supervision_id_cct: $("#supervicion_cct").val(),
+      jefsec_id_cct: $("#jefsec_cct").val(),
+      serreg_id_cct: $("#serreg_cct").val(),
+      institucion_plantel: $("#clave_plantel").val(),
+      turno1_id_turno1: $("#turno_1").val(),
+      turno2_id_turno2: $("#turno_2").val(),
+      turno3_id_turno3: $("#turno_3").val(),
+      nivel_id_nivel: $("#nivel").val(),
+      tipo_id_tipo: $("#tipo").val(),
+      servicio_educativo_id_servicio_educativo: $("#servicio").val(),
+      cam_servicio_id_cam_servicio: $("#servicio_cam").val(),
+      caracteristica1_id_caracteristica1: $("#caracteristica_1").val(),
+      caracteristica2_id_caracteristica2: $("#caracteristica_2").val(),
       telefono: $("#telefono").val(),
-      alum_muj: $("#alumnos_mujeres").val(),
-      alum_hom: $("#alumnos_hombres").val(),
-      doc_muj: $("#docentes_mujeres").val(),
-      doc_hom: $("#docentes_hombres").val(),
-      aulas_exist: $("#aulas_existentes").val(),
+      email: $("#correo").val(),
+      nombre_director: $("#director").val(),
+      alumnos_hombres: $("#alumnos_hombres").val(),
+      alumnos_mujeres: $("#alumnos_mujeres").val(),
+      docentes_hombres: $("#docentes_hombres").val(),
+      docentes_mujeres: $("#docentes_mujeres").val(),
       aulas_uso: $("#aulas_uso").val(),
-      turno_id: $("#turno").val(),
-      control_id: $("#control").val(),
-      modelo_id: $("#modelo").val(),
-      tipo_id: $("#tipo").val(),
-      servicio_educativo_id: $("#servicio").val(),
-      sostenimiento_id: $("#sostenimiento").val(),
-      municipio_id: $("#municipio").val(),
-      nivel_id: $("#nivel").val(),
-      direccion: $("#direccion").val(),
-      localidad: $("#localidad_maps").val(),
-      colonia: $("#colonia_maps").val(),
-      codigo_postal: $("#postal_maps").val(),
-      num_int: $("#num_int_maps").val(),
-      num_ext: $("#num_ext_maps").val(),
+      aulas_existentes: $("#aulas_existentes").val(),
+      pag_web: $("#pagina").val(),
     }
 
     if (img_escuela.getFile()) {
@@ -753,14 +958,15 @@ const socket = io.connect();
 socket.on("agregar_escuela", mensaje_socket => {
   console.log("agregar_escuela")
   let validacion_existente = false
+  console.log(mensaje_socket);
   for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
-    if (escuelas_datatable.data()[i][0] === mensaje_socket.clave) {
+    if (escuelas_datatable.data()[i][0] === mensaje_socket.cct) {
       validacion_existente = true
       break
     }
   }
   if (!validacion_existente) {
-    const new_row = [mensaje_socket.clave, mensaje_socket.nombre, mensaje_socket.nom_municipio, mensaje_socket.nom_turno, `<td><button id="row_${mensaje_socket.clave}" data-id="${mensaje_socket.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela"><i class="bi bi-eye-fill"></i></button></td>`]
+    const new_row = [mensaje_socket.cct, mensaje_socket.nom_escuela, mensaje_socket.nom_municipio, validar_turno(mensaje_socket.turno1), validar_turno(mensaje_socket.turno2), validar_turno(mensaje_socket.turno3), `<td><button id="row_${mensaje_socket.cct}" data-id="${mensaje_socket.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela"><i class="bi bi-eye-fill"></i></button></td>`]
 
     if (rol === 1) {
       new_row.push(`<td><button data-id="${mensaje_socket.id_escuela}" data-type="editar_escuela" class="btn btn-primary control_escuela"><i class="bi bi-pencil-square"></i></button></td>`)

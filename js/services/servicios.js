@@ -82,7 +82,7 @@ const pool_query_unique = (query, msg_success, msg_failure) => {
   });
 };
 
-const pool_query_insert = (body, uuid, tabla) => {
+const pool_query_insert = (body, uuid, tabla, uuid_val = "") => {
   const llaves_body = Object.keys(body);
   const values_body = Object.values(body);
 
@@ -97,6 +97,9 @@ const pool_query_insert = (body, uuid, tabla) => {
   if (uuid) {
     query += " uuid, ";
     values += ` '${get_uuid()}', `;
+  } else {
+    query += " uuid, ";
+    values += ` '${uuid_val}', `;
   }
 
   for (let i = 0; i < llaves_body.length; i++) {
@@ -302,5 +305,6 @@ module.exports = {
   name_file,
   create_directory,
   validate_session,
-  routes_session
+  routes_session,
+  get_uuid
 };
