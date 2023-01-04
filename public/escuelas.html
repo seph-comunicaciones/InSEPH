@@ -111,7 +111,7 @@
         </header>
 
         <div class="page-heading">
-          <h3>Alta, Baja y Modificación de Escuelas</h3>
+          <h3>Escuelas</h3>
         </div>
 
         <section id="menu_escuelas" class="section">
@@ -172,14 +172,14 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label class="form-label" for="marca">Marca</label>
-                      <select class="form-select validacion_edit" data-parsley-required="true" id="marca" name="marca"></select>
+                      <select class="form-select validacion" data-parsley-required="true" id="marca" name="marca"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label class="form-label" for="estatus">Estatus</label>
-                      <select class="form-select validacion_edit" data-parsley-required="true" id="estatus" name="estatus"></select>
+                      <select class="form-select validacion" data-parsley-required="true" id="estatus" name="estatus"></select>
                     </div>
                   </div>
 
@@ -207,14 +207,14 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label class="form-label" for="nivel">Nivel de educación </label>
-                      <select class="form-select validacion_edit" data-parsley-required="true" id="nivel" name="nivel"></select>
+                      <select class="form-select validacion" data-parsley-required="true" id="nivel" name="nivel"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label class="form-label" for="tipo">Tipo educativo </label>
-                      <select class="form-select validacion_edit" data-parsley-required="true" id="tipo" name="tipo"></select>
+                      <select class="form-select validacion" data-parsley-required="true" id="tipo" name="tipo"></select>
                     </div>
                   </div>
 
@@ -449,28 +449,28 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label class="form-label" for="servicio">Servicio educativo </label>
-                      <select class="form-select validacion_edit" data-parsley-required="true" id="servicio" name="servicio"></select>
+                      <select class="form-select validacion" data-parsley-required="true" id="servicio" name="servicio"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label class="form-label" for="servicio_cam">Servicio CAM </label>
-                      <select class="form-select validacion_edit" data-parsley-required="true" id="servicio_cam" name="servicio_cam"></select>
+                      <select class="form-select validacion" data-parsley-required="true" id="servicio_cam" name="servicio_cam"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label class="form-label" for="caracteristica_1">Característica 1</label>
-                      <select class="form-select validacion_edit" data-parsley-required="true" id="caracteristica_1" name="caracteristica_1"></select>
+                      <select class="form-select validacion" data-parsley-required="true" id="caracteristica_1" name="caracteristica_1"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
                       <label class="form-label" for="caracteristica_2">Característica 2</label>
-                      <select class="form-select validacion_edit" data-parsley-required="true" id="caracteristica_2" name="caracteristica_2"></select>
+                      <select class="form-select validacion" data-parsley-required="true" id="caracteristica_2" name="caracteristica_2"></select>
                     </div>
                   </div>
 
@@ -937,131 +937,349 @@
             <div class="card-body">
               <form class="form" data-parsley-validate id="form_vis_escuela">
                 <div class="row">
+
                   <div class="col-12" id="container_vis_img" style="padding: 1rem;display: flex;justify-content: center;"></div>
 
                   <div class="col-md-6 col-12">
-                    <div class="form-group mandatory">
-                      <label for="clave_centro_vis" class="form-label">Clave del centro de trabajo </label>
-                      <input type="text" id="clave_centro_vis" class="form-control validacion_vis" placeholder="Clave del centro de trabajo" name="clave_centro_vis" data-parsley-required="true" disabled/>
+                    <div class="form-group mandatory" id="container_validacion_clave_vis">
+                      <label class="form-label" for="clave_centro_vis">Clave del centro de trabajo </label>
+                      <input class="form-control validacion_vis  validacion_input" data-limit="10" data-name="validacion_clave_vis" data-parsley-required="true" data-validacion-clave="true" data-validacion-espacios="true" disabled id="clave_centro_vis" name="clave_centro_vis" placeholder="Clave del centro de trabajo" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_clave_vis"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory" id="container_validacion_clave_plantel_vis">
+                      <label class="form-label" for="clave_plantel_vis">Clave del plantel de trabajo </label>
+                      <input class="form-control validacion_vis  validacion_input" data-limit="10" data-name="validacion_clave_vis" data-parsley-required="true" data-validacion-clave="true" data-validacion-espacios="true" disabled id="clave_plantel_vis" name="clave_plantel_vis" placeholder="Clave del plantel de trabajo" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_clave_plantel_vis"></div>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="turno_vis" class="form-label">Tipo de turno </label>
-                      <select id="turno_vis" name="turno_vis" class="form-select validacion_vis" data-parsley-required="true" disabled></select>
+                      <label class="form-label" for="marca_vis">Marca</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="marca_vis" name="marca_vis"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="nombre_centro_vis" class="form-label">Nombre del centro de trabajo </label>
-                      <input type="text" id="nombre_centro_vis" class="form-control validacion_vis" placeholder="Nombre del centro de trabajo" name="nombre_centro_vis" data-parsley-required="true" disabled/>
+                      <label class="form-label" for="estatus_vis">Estatus</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="estatus_vis" name="estatus_vis"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="nivel_vis" class="form-label">Nivel de educación </label>
-                      <select id="nivel_vis" name="nivel_vis" class="form-select validacion_vis" data-parsley-required="true" disabled></select>
+                      <label class="form-label" for="turno_1_vis">Tipo de turno 1</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="turno_1_vis" name="turno_1_vis"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="servicio_vis" class="form-label">Servicio educativo </label>
-                      <select id="servicio_vis" name="servicio_vis" class="form-select validacion_vis" data-parsley-required="true" disabled></select>
+                      <label class="form-label" for="turno_2_vis">Tipo de turno 2</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="turno_2_vis" name="turno_2_vis"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="tipo_vis" class="form-label">Tipo educativo </label>
-                      <select id="tipo_vis" name="tipo_vis" class="form-select validacion_vis" data-parsley-required="true" disabled></select>
+                      <label class="form-label" for="turno_3_vis">Tipo de turno 3</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="turno_3_vis" name="turno_3_vis"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="control_vis" class="form-label">Tipo de control </label>
-                      <select id="control_vis" name="control_vis" class="form-select validacion_vis" data-parsley-required="true" disabled></select>
+                      <label class="form-label" for="nivel_vis">Nivel de educación </label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="nivel_vis" name="nivel_vis"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="sostenimiento_vis" class="form-label">Tipo de sostenimiento </label>
-                      <select id="sostenimiento_vis" name="sostenimiento_vis" class="form-select validacion_vis" data-parsley-required="true" disabled></select>
+                      <label class="form-label" for="tipo_vis">Tipo educativo </label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="tipo_vis" name="tipo_vis"></select>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="modelo_vis" class="form-label">Tipo de modelo </label>
-                      <select id="modelo_vis" name="modelo_vis" class="form-select validacion_vis" data-parsley-required="true" disabled></select>
+                      <label class="form-label" for="nombre_centro_vis">Nombre del centro de trabajo </label>
+                      <input class="form-control validacion_vis" data-parsley-required="true" disabled id="nombre_centro_vis" name="nombre_centro_vis" placeholder="Nombre del centro de trabajo" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="director_vis">Director</label>
+                      <input class="form-control validacion_vis" data-parsley-required="true" disabled id="director_vis" name="director_vis" placeholder="Director" type="text"/>
                     </div>
                   </div>
 
                   <div class="col-12">
                     <div class="form-group mandatory">
-                      <label for="direccion_vis" class="form-label">Dirección </label>
-                      <input type="text" id="direccion_vis" class="form-control validacion_vis" placeholder="Dirección" name="direccion_vis" data-parsley-required="true" disabled/>
+                      <label class="form-label" for="direccion_vis">Dirección </label>
+                      <input class="form-control validacion_vis" data-parsley-required="true" disabled id="direccion_vis" name="direccion_vis" placeholder="Dirección" type="text"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="municipio_vis" class="form-label">Municipio </label>
-                      <select id="municipio_vis" name="municipio_vis" class="form-select validacion_vis" data-parsley-required="true" disabled></select>
+                      <label class="form-label" for="municipio_vis">Municipio </label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="municipio_vis" name="municipio_vis"></select>
                     </div>
                   </div>
 
-                  <div class="col-md-6 col-12 d-none">
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="postal_vis">Código postal </label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="postal_vis" name="inmueble_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="asentamiento_vis">Asentamiento</label>
+                      <input class="form-control validacion_vis" data-parsley-required="true" disabled id="asentamiento_vis" name="asentamiento_vis" placeholder="Asentamiento" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="vialidad_principal_vis">Vialidad Principal</label>
+                      <input class="form-control validacion_vis" data-parsley-required="true" disabled id="vialidad_principal_vis" name="vialidad_principal_vis" placeholder="Vialidad Principal" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="vialidad_derecha_vis">Vialidad Derecha</label>
+                      <input class="form-control validacion_vis" data-parsley-required="true" disabled id="vialidad_derecha_vis" name="vialidad_derecha_vis" placeholder="Vialidad Derecha" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="vialidad_izquierda_vis">Vialidad Izquierda</label>
+                      <input class="form-control validacion_vis" data-parsley-required="true" disabled id="vialidad_izquierda_vis" name="vialidad_izquierda_vis" placeholder="Vialidad Izquierda" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="vialidad_posterior_vis">Vialidad Posterior</label>
+                      <input class="form-control validacion_vis" data-parsley-required="true" disabled id="vialidad_posterior_vis" name="vialidad_posterior_vis" placeholder="Vialidad Posterior" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group" id="container_validacion_numero_exterior_vis">
+                      <label class="form-label" for="num_ext_vis">Numero Exterior</label>
+                      <input class="form-control validacion_input" data-limit="100" data-name="validacion_numero_exterior_vis" data-validacion-espacios="true" data-validacion-numero="true" disabled id="num_ext_vis" name="num_ext_vis" placeholder="Numero Exterior" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero_exterior_vis"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group" id="container_validacion_numero_exterior_alfanumerico_vis">
+                      <label class="form-label" for="num_ext_elf_vis">Numero Exterior Alfanumérico</label>
+                      <input class="form-control validacion_input" disabled id="num_ext_elf_vis" name="num_ext_elf_vis" placeholder="Numero Exterior Alfanumérico" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero_exterior_alfanumerico_vis"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group" id="container_validacion_numero_interior_vis">
+                      <label class="form-label" for="num_int_vis">Numero Interior</label>
+                      <input class="form-control validacion_input" data-limit="100" data-name="validacion_numero_interior_vis" data-validacion-espacios="true" data-validacion-numero="true" disabled id="num_int_vis" name="num_int_vis" placeholder="Numero Interior" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero_interior_vis"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group" id="container_validacion_numero_interior_alfanumerico_vis">
+                      <label class="form-label" for="num_int_elf_vis">Numero Interior Alfanumérico</label>
+                      <input class="form-control validacion_input" disabled id="num_int_elf_vis" name="num_int_elf_vis" placeholder="Numero Interior Alfanumérico" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero_interior_alfanumerico_vis"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="des_ubicacion_vis">Descripción de la ubicación</label>
+                      <input class="form-control validacion_input" disabled id="des_ubicacion_vis" name="des_ubicacion_vis" placeholder="Descripción de la ubicación" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="latitud_vis">Latitud</label>
+                      <input class="form-select validacion_vis" data-parsley-required="true" disabled id="latitud_vis" name="latitud_vis" placeholder="Latitud" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="longitud_vis">Longitud</label>
+                      <input class="form-select validacion_vis" data-parsley-required="true" disabled id="longitud_vis" name="longitud_vis" placeholder="Longitud" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="region_vis">Region </label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="region_vis" name="region_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_control_vis">Sostenimiento Control</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="sost_control_vis" name="sost_contro_visl"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_sub_control_vis">Sostenimiento Sub-Control</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="sost_sub_control_vis" name="sost_sub_control_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_dependencia_1_vis">Dependencia de Sostenimiento 1</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="sost_dependencia_1_vis" name="sost_dependencia_1_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_dependencia_2_vis">Dependencia de Sostenimiento 2</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="sost_dependencia_2_vis" name="sost_dependencia_2_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_dependencia_3_vis">Dependencia de Sostenimiento 3</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="sost_dependencia_3_vis" name="sost_dependencia_3_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_dependencia_4_vis">Dependencia de Sostenimiento 4</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="sost_dependencia_4_vis" name="sost_dependencia_4_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="sost_servicio_vis">Servicio de Sostenimiento</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="sost_servicio_vis" name="sost_servicio_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="dep_operativa_1_vis">Dependencia Operativa 1</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="dep_operativa_1_vis" name="dep_operativa_1_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="dep_operativa_2_vis">Dependencia Operativa 2</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="dep_operativa_2_vis" name="dep_operativa_2_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="dep_operativa_3_vis">Dependencia Operativa 3</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="dep_operativa_3_vis" name="dep_operativa_3_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="dep_operativa_4_vis">Dependencia Operativa 4</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="dep_operativa_4_vis" name="dep_operativa_4_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="dep_operativa_5_vis">Dependencia Operativa 5</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="dep_operativa_5_vis" name="dep_operativa_5_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
                     <div class="form-group">
-                      <label for="municipio_maps_vis" class="form-label">Municipio </label>
-                      <input type="text" id="municipio_maps_vis" class="form-control" placeholder="Municipio" name="municipio_maps_vis" data-parsley-required="true" disabled/>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6 col-12">
-                    <div class="form-group mandatory">
-                      <label for="localidad_maps_vis" class="form-label">Localidad </label>
-                      <input type="text" id="localidad_maps_vis" class="form-control validacion_vis" name="localidad_maps_vis" data-parsley-required="true" disabled/>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6 col-12">
-                    <div class="form-group mandatory">
-                      <label for="colonia_maps_vis" class="form-label">Colonia </label>
-                      <input type="text" id="colonia_maps_vis" class="form-control validacion_vis" name="colonia_maps_vis" data-parsley-required="true" disabled/>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6 col-12">
-                    <div class="form-group mandatory">
-                      <label for="postal_maps_vis" class="form-label">Código Postal </label>
-                      <input type="number" id="postal_maps_vis" step="1" min="1" class="form-control validacion_vis" name="postal_maps_vis" data-parsley-required="true" disabled/>
+                      <label class="form-label" for="supervicion_cct_vis">Supervision </label>
+                      <input class="form-control" data-parsley-required="false" disabled id="supervicion_cct_vis" name="pagina_vis" placeholder="Supervision" type="text"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group">
-                      <label for="num_int_maps_vis" class="form-label">Numero interior </label>
-                      <input type="number" id="num_int_maps_vis" step="1" min="1" class="form-control" name="num_int_maps_vis" disabled/>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6 col-12">
-                    <div class="form-group">
-                      <label for="num_ext_maps_vis" class="form-label">Numero exterior </label>
-                      <input type="number" id="num_ext_maps_vis" step="1" min="1" class="form-control" name="num_ext_maps_vis" disabled/>
+                      <label class="form-label" for="jefsec_cct_vis">Jefatura de Sector</label>
+                      <input class="form-control" data-parsley-required="false" disabled id="jefsec_cct_vis" name="pagina_vis" placeholder="Jefatura de Sector" type="text"/>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-12">
                     <div class="form-group mandatory">
-                      <label for="telefono_vis" class="form-label">Teléfono </label>
-                      <input type="number" id="telefono_vis" step="1" min="1" class="form-control validacion_vis" name="telefono_vis" data-parsley-required="true" disabled/>
+                      <label class="form-label" for="serreg_cct_vis">Servicios Regionales</label>
+                      <input class="form-control" data-parsley-required="false" disabled id="serreg_cct_vis" name="serreg_cct_vis" placeholder="Servicios Regionales" type="text"/>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="servicio_vis">Servicio educativo </label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="servicio_vis" name="servicio_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="servicio_cam_vis">Servicio CAM </label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="servicio_cam_vis" name="servicio_cam_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="caracteristica_1_vis">Característica 1</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="caracteristica_1_vis" name="caracteristica_1_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group mandatory">
+                      <label class="form-label" for="caracteristica_2_vis">Característica 2</label>
+                      <select class="form-select validacion_vis" data-parsley-required="true" disabled id="caracteristica_2_vis" name="caracteristica_2_vis"></select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group" id="container_validacion_numero_vis">
+                      <label class="form-label" for="telefono_vis">Teléfono</label>
+                      <input class="form-control validacion_input" data-limit="10" data-name="validacion_numero_vis" data-validacion-espacios="true" data-validacion-numero="true" disabled id="telefono_vis" name="telefono_vis" placeholder="Teléfono" type="text"/>
+                      <div class="parsley-error filled" id="errores_validacion_numero_vis"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="form-group">
+                      <label class="form-label" for="correo_vis">Correo Electrónico</label>
+                      <input class="form-control" data-parsley-required="false" disabled id="correo_vis" name="correo_vis" type="text"/>
                     </div>
                   </div>
 
@@ -1072,60 +1290,64 @@
                     </div>
                   </div>
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory">
-                      <label for="alumnos_hombres_vis" class="form-label">Alumnos (Hombres) </label>
-                      <input type="number" id="alumnos_hombres_vis" placeholder="0" step="1" min="0" class="form-control validacion_vis" name="alumnos_hombres_vis" data-parsley-required="true" disabled/>
-                    </div>
-                  </div>
+                  <div class="row">
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory">
-                      <label for="alumnos_mujeres_vis" class="form-label">Alumnos (Mujeres) </label>
-                      <input type="number" id="alumnos_mujeres_vis" placeholder="0" step="1" min="0" class="form-control validacion_vis" name="alumnos_mujeres_vis" data-parsley-required="true" disabled/>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory">
+                        <label class="form-label" for="alumnos_hombres_vis">Alumnos (Hombres) </label>
+                        <input class="form-control validacion_vis" data-parsley-required="true" disabled id="alumnos_hombres_vis" min="0" name="alumnos_hombres_vis" placeholder="0" step="1" type="number"/>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory">
-                      <label for="alumnos_totales_vis" class="form-label">Alumnos (Totales) </label>
-                      <input type="number" id="alumnos_totales_vis" value="0" step="1" min="0" class="form-control validacion_vis" name="alumnos_totales_vis" disabled data-parsley-required="true" disabled/>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory">
+                        <label class="form-label" for="alumnos_mujeres_vis">Alumnos (Mujeres) </label>
+                        <input class="form-control validacion_vis" data-parsley-required="true" disabled id="alumnos_mujeres_vis" min="0" name="alumnos_mujeres_vis" placeholder="0" step="1" type="number"/>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory">
-                      <label for="docentes_hombres_vis" class="form-label">Docentes (Hombres) </label>
-                      <input type="number" id="docentes_hombres_vis" placeholder="0" step="1" min="0" class="form-control validacion_vis" name="docentes_hombres_vis" data-parsley-required="true" disabled/>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory">
+                        <label class="form-label" for="alumnos_totales_vis">Alumnos (Totales) </label>
+                        <input class="form-control validacion_vis" data-parsley-required="true" disabled id="alumnos_totales_vis" min="0" name="alumnos_totales_vis" step="1" type="number" value="0"/>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory">
-                      <label for="docentes_mujeres_vis" class="form-label">Docentes (Mujeres) </label>
-                      <input type="number" id="docentes_mujeres_vis" placeholder="0" step="1" min="0" class="form-control validacion_vis" name="docentes_mujeres_vis" data-parsley-required="true" disabled/>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory">
+                        <label class="form-label" for="docentes_hombres_vis">Docentes (Hombres) </label>
+                        <input class="form-control validacion_vis" data-parsley-required="true" disabled id="docentes_hombres_vis" min="0" name="docentes_hombres_vis" placeholder="0" step="1" type="number"/>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-4 col-12">
-                    <div class="form-group mandatory">
-                      <label for="docentes_totales_vis" class="form-label">Docentes (Totales) </label>
-                      <input type="number" id="docentes_totales_vis" value="0" step="1" min="0" class="form-control validacion_vis" name="docentes_totales_vis" disabled data-parsley-required="true" disabled/>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory">
+                        <label class="form-label" for="docentes_mujeres_vis">Docentes (Mujeres) </label>
+                        <input class="form-control validacion_vis" data-parsley-required="true" disabled id="docentes_mujeres_vis" min="0" name="docentes_mujeres_vis" placeholder="0" step="1" type="number"/>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-6 col-12">
-                    <div class="form-group mandatory">
-                      <label for="aulas_existentes_vis" class="form-label">Aulas Existentes </label>
-                      <input type="number" id="aulas_existentes_vis" placeholder="0" step="1" min="0" class="form-control validacion_vis" name="aulas_existentes_vis" data-parsley-required="true" disabled/>
+                    <div class="col-md-4 col-12">
+                      <div class="form-group mandatory">
+                        <label class="form-label" for="docentes_totales_vis">Docentes (Totales) </label>
+                        <input class="form-control validacion_vis" data-parsley-required="true" disabled id="docentes_totales_vis" min="0" name="docentes_totales_vis" step="1" type="number" value="0"/>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-md-6 col-12">
-                    <div class="form-group mandatory">
-                      <label for="aulas_uso_vis" class="form-label">Aulas En Uso </label>
-                      <input type="number" id="aulas_uso_vis" placeholder="0" step="1" min="0" class="form-control validacion_vis" name="aulas_uso_vis" data-parsley-required="true" disabled/>
+                    <div class="col-md-6 col-12">
+                      <div class="form-group mandatory">
+                        <label class="form-label" for="aulas_existentes_vis">Aulas Existentes </label>
+                        <input class="form-control validacion_vis" data-parsley-required="true" disabled id="aulas_existentes_vis" min="0" name="aulas_existentes_vis" placeholder="0" step="1" type="number"/>
+                      </div>
                     </div>
+
+                    <div class="col-md-6 col-12">
+                      <div class="form-group mandatory">
+                        <label class="form-label" for="aulas_uso_vis">Aulas En Uso </label>
+                        <input class="form-control validacion_vis" data-parsley-required="true" disabled id="aulas_uso_vis" min="0" name="aulas_uso_vis" placeholder="0" step="1" type="number"/>
+                      </div>
+                    </div>
+
                   </div>
 
                   <div style="text-align: right;opacity: 0.5;padding: 1rem;">

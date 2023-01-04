@@ -110,7 +110,7 @@ const validar_form_edit = () => {
 };
 
 const validar_campo = (campo, id) => {
-  if (campo && $(`#${id}`).length > 0) {
+  if (campo !== null || $(`#${id}`).length > 0) {
     $(`#${id}`).val(campo);
   }
 };
