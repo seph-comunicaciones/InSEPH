@@ -284,7 +284,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
     usuario = id_usuario
 
     //Cargar municipios
-    request_get("/api/v1/municipios/consultar_municipios").then((response) => {
+    request_get("/api/v1/catalogos/consultar_municipios").then((response) => {
       const {success, response: municipios} = response;
 
       if (success) {
