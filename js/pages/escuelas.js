@@ -132,6 +132,8 @@ const vista_visualizar_escuela = (escuela) => {
   validar_campo(escuela.docentes_hombres + escuela.docentes_mujeres, "docentes_totales_vis");
   validar_campo(escuela.aulas_existentes, "aulas_existentes_vis");
   validar_campo(escuela.aulas_uso, "aulas_uso_vis");
+  validar_campo(escuela.problematica, "problematica_vis");
+  validar_campo(escuela.beneficio, "beneficio_vis");
 
   validar_campo(`${escuela.nom_municipio}, escuela.colonia_localidad2, ${escuela.calle_principal}, ${escuela.num_int} ${escuela.num_ext} `, "direccion_vis");
 
@@ -158,6 +160,8 @@ const vista_visualizar_escuela_sim = (escuela) => {
   validar_campo(escuela.docentes_hombres + escuela.docentes_mujeres, "docentes_totales_vis_sim");
   validar_campo(escuela.aulas_existentes, "aulas_existentes_vis_sim");
   validar_campo(escuela.aulas_uso, "aulas_uso_vis_sim");
+  validar_campo(escuela.problematica, "problematica_vis_sim");
+  validar_campo(escuela.beneficio, "beneficio_vis_sim");
 
   validar_campo(`${escuela.nom_municipio}, ${escuela.colonia_localidad2}, ${escuela.calle_principal}, ${escuela.num_int} ${escuela.num_ext} `, "direccion_vis_sim");
 
@@ -787,6 +791,9 @@ $("#btn_guardar_escuela").click(async () => {
       aulas_uso: $("#aulas_uso").val(),
       aulas_existentes: $("#aulas_existentes").val(),
       pag_web: $("#pagina").val(),
+
+      problematica: $("#problematica").val(),
+      beneficio: $("#beneficio").val(),
     }
 
     if (img_escuela.getFile()) {

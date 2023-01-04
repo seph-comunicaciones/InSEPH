@@ -66,6 +66,8 @@ const consultar_escuela = async (request, response) => {
     const query = await pool_query_unique(
       `select escuela.id_cct                                        as CCT,
              escuela.id_escuela,
+             escuela.problematica,
+             escuela.beneficio,
              escuela.status_id_status,
              marca.id_marca,
              marca.nom_marca                                       as marca,
@@ -246,13 +248,15 @@ const agregar_escuela = async (request, response, socket) => {
     request.body["inmueble_id_inmueble"] = inmueble.response.id_inmueble
 
     if (query_director.success && query_inmueble.success) {
-      const llaves_filtrar = ["imagen", "id_cct", "marca_id_marca", "nom_escuela", "status_id_status", "inmueble_id_inmueble", "municipio_id_municipio", "region_id_region", "sost_control_id_sost_control", "sost_subcontrol_id_sost_subcontrol", "sost_dependencian1_id_sost_dependencia1", "sost_dependencian2_id_sost_dependencia2", "sost_dependencian3_id_sost_dependencia3", "sost_dependencian4_id_sost_dependencia4", "sost_servicio_id_sost_servicio", "dep_operativa1_id_dep_operativa1", "dep_operativa2_id_dep_operativa2", "dep_operativa3_id_dep_operativa3", "dep_operativa4_id_dep_operativa4", "dep_operativa5_id_dep_operativa5", "supervision_id_cct", "jefsec_id_cct", "serreg_id_cct", "institucion_plantel", "turno1_id_turno1", "turno2_id_turno2", "turno3_id_turno3", "nivel_id_nivel", "tipo_id_tipo", "servicio_educativo_id_servicio_educativo", "cam_servicio_id_cam_servicio", "caracteristica1_id_caracteristica1", "caracteristica2_id_caracteristica2", "telefono", "email", "director_id_director", "alumnos_hombres", "alumnos_mujeres", "docentes_hombres", "docentes_mujeres", "aulas_uso", "aulas_existentes", "pag_web", "usuario_id_modificacion",]
+      const llaves_filtrar = ["imagen", "id_cct", "problematica", "beneficio", "marca_id_marca", "nom_escuela", "status_id_status", "inmueble_id_inmueble", "municipio_id_municipio", "region_id_region", "sost_control_id_sost_control", "sost_subcontrol_id_sost_subcontrol", "sost_dependencian1_id_sost_dependencia1", "sost_dependencian2_id_sost_dependencia2", "sost_dependencian3_id_sost_dependencia3", "sost_dependencian4_id_sost_dependencia4", "sost_servicio_id_sost_servicio", "dep_operativa1_id_dep_operativa1", "dep_operativa2_id_dep_operativa2", "dep_operativa3_id_dep_operativa3", "dep_operativa4_id_dep_operativa4", "dep_operativa5_id_dep_operativa5", "supervision_id_cct", "jefsec_id_cct", "serreg_id_cct", "institucion_plantel", "turno1_id_turno1", "turno2_id_turno2", "turno3_id_turno3", "nivel_id_nivel", "tipo_id_tipo", "servicio_educativo_id_servicio_educativo", "cam_servicio_id_cam_servicio", "caracteristica1_id_caracteristica1", "caracteristica2_id_caracteristica2", "telefono", "email", "director_id_director", "alumnos_hombres", "alumnos_mujeres", "docentes_hombres", "docentes_mujeres", "aulas_uso", "aulas_existentes", "pag_web", "usuario_id_modificacion",]
 
       const query = await pool_query(pool_query_insert(await filtrar_llaves(request.body, llaves_filtrar), true, "escuela"), "Escuela registrada exitosamente", "Error, no se pudo registrar la escuela");
 
       const query_socket = await pool_query_unique(
         `select escuela.id_cct                                        as CCT,
                escuela.id_escuela,
+               escuela.problematica,
+               escuela.beneficio,
                escuela.status_id_status,
                marca.id_marca,
                marca.nom_marca                                       as marca,
