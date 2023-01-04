@@ -30,8 +30,8 @@ const pintar_tabla_escuelas = (escuelas) => {
                     <th style="text-align: center">Nombre del centro de trabajo</th>
                     <th style="text-align: center">Nombre del municipio</th>
                     <th style="text-align: center">Nombre del turno 1</th>
-                    <th style="text-align: center">Nombre del turno 2</th>
-                    <th style="text-align: center">Nombre del turno 3</th>
+                    <th style="text-align: center">Director</th>
+                    <th style="text-align: center">Mapa</th>
                     <th style="text-align: center">Visualizar</th>
                     ${rol === 1 ? `
                     <th style="text-align: center">Editar</th> 
@@ -47,8 +47,8 @@ const pintar_tabla_escuelas = (escuelas) => {
                 <td>${escuela.nom_escuela}</td>
                 <td>${escuela.nom_municipio}</td>
                 <td>${validar_turno(escuela.nom_turno1)}</td>
-                <td>${validar_turno(escuela.nom_turno2)}</td>
-                <td>${validar_turno(escuela.nom_turno3)}</td>
+                <td>${escuela.nombre_director ? escuela.nombre_director : "ACTUALIZÁNDOSE"}</td>
+                <td><button data-latitud="${escuela.latitud}" data-longitud="${escuela.longitud}" data-type="mapa_escuela" class="btn btn-warning control_escuela"><i class="bi bi-geo-alt-fill"></i></button></td>
                 <td><button id="row_${escuela.id_cct}" data-id="${escuela.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela"><i class="bi bi-eye-fill"></i></button></td>
                 ${rol === 1 ? `
                 <td><button data-id="${escuela.id_escuela}" data-type="editar_escuela" class="btn btn-primary control_escuela"><i class="bi bi-pencil-square"></i></button></td>
@@ -847,6 +847,8 @@ $("#main").on("click", ".control_escuela", (event) => {
   const button = event.currentTarget;
   const type = button.dataset.type;
   const id = button.dataset.id;
+  const latitud = button.dataset.latitud;
+  const longitud = button.dataset.longitud;
 
   escuela_actual = id;
 
@@ -909,6 +911,11 @@ $("#main").on("click", ".control_escuela", (event) => {
         }
       });
       break;
+    case "mapa_escuela":
+      const a = document.createElement("a")
+      a.href = `https://maps.google.com/?q=${latitud},${longitud}`
+      a.target = "_blank"
+      a.click()
   }
 });
 
@@ -1016,7 +1023,6 @@ const socket = io.connect();
 socket.on("agregar_escuela", mensaje_socket => {
   console.log("agregar_escuela")
   let validacion_existente = false
-  console.log(mensaje_socket);
   for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
     if (escuelas_datatable.data()[i][0] === mensaje_socket.cct) {
       validacion_existente = true
@@ -1024,7 +1030,13 @@ socket.on("agregar_escuela", mensaje_socket => {
     }
   }
   if (!validacion_existente) {
-    const new_row = [mensaje_socket.cct, mensaje_socket.nom_escuela, mensaje_socket.nom_municipio, validar_turno(mensaje_socket.turno1), validar_turno(mensaje_socket.turno2), validar_turno(mensaje_socket.turno3), `<td><button id="row_${mensaje_socket.cct}" data-id="${mensaje_socket.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela"><i class="bi bi-eye-fill"></i></button></td>`]
+    const new_row = [
+      mensaje_socket.cct, mensaje_socket.nom_escuela,
+      mensaje_socket.nom_municipio, validar_turno(mensaje_socket.turno1),
+      mensaje_socket.nombre_director ? mensaje_socket.nombre_director : "ACTUALIZÁNDOSE",
+      `<td><button data-latitud="${mensaje_socket.latitud}" data-longitud="${mensaje_socket.longitud}" data-type="mapa_escuela" class="btn btn-warning control_escuela"><i class="bi bi-geo-alt-fill"></i></button></td>`,
+      `<td><button id="row_${mensaje_socket.cct}" data-id="${mensaje_socket.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela"><i class="bi bi-eye-fill"></i></button></td>`
+    ]
 
     if (rol === 1) {
       new_row.push(`<td><button data-id="${mensaje_socket.id_escuela}" data-type="editar_escuela" class="btn btn-primary control_escuela"><i class="bi bi-pencil-square"></i></button></td>`)
