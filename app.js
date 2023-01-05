@@ -23,7 +23,7 @@ const {consultar_indicadores_internacionales, consultar_indicadores_nacionales, 
 const {consultar_avisos, consultar_aviso} = require("./js/services/aviso");
 const fs = require("fs");
 
-const {PORT, DEFAULT_MESSAGE} = process.env
+const {PORT, DEFAULT_MESSAGE, ACTIVATE_BOT} = process.env
 let my_session;
 
 app.use("/js", express.static(__dirname + "/js"));
@@ -41,55 +41,57 @@ server.listen(PORT);
 console.log(`"Server on port ${PORT}"`)
 
 //Bot WhatsApp
-const client = new Client({
-  authStrategy: new LocalAuth(),
-});
+if (ACTIVATE_BOT === 'true') {
+  const client = new Client({
+    authStrategy: new LocalAuth(),
+  });
 
-client.on("qr", (qr) => {
-  qrcode.generate(qr, {small: true});
-});
+  client.on("qr", (qr) => {
+    qrcode.generate(qr, {small: true});
+  });
 
-client.on("authenticated", () => {
-  console.log("Autentificado");
-});
+  client.on("authenticated", () => {
+    console.log("Autentificado");
+  });
 
-client.on("ready", () => {
-  console.log("Cliente listo");
-});
+  client.on("ready", () => {
+    console.log("Cliente listo");
+  });
 
-client.on("message", async (msg) => {
-  const {from, body} = msg;
-  const message = body.toLowerCase();
+  client.on("message", async (msg) => {
+    const {from, body} = msg;
+    const message = body.toLowerCase();
 
-  if (message !== "cancelar") {
-    const last_step = await get_last_step(from)
-    const step = last_step ? await last_step : await get_step(message);
-    await create_chat(from, body)
+    if (message !== "cancelar") {
+      const last_step = await get_last_step(from)
+      const step = last_step ? await last_step : await get_step(message);
+      await create_chat(from, body)
 
-    if (step) {
-      const data = await reply(step, from, true)
-      await create_chat(from, data.replyMessage)
-      await client.sendMessage(from, data.replyMessage);
-    }
-
-    if (DEFAULT_MESSAGE === 'true' && !step) {
-      const response = await reply('DEFAULT', from)
-      await create_chat(from, response.replyMessage)
-      await client.sendMessage(from, response.replyMessage);
-    }
-  } else {
-    await client.sendMessage(from, "Registro de usuario cancelado");
-
-    fs.writeFile(`./js/chat_bot/chats/${from}.json`,
-      JSON.stringify({messages: []}),
-      (error) => {
-        if (error) console.log(error);
+      if (step) {
+        const data = await reply(step, from, true)
+        await create_chat(from, data.replyMessage)
+        await client.sendMessage(from, data.replyMessage);
       }
-    );
-  }
-});
 
-client.initialize();
+      if (DEFAULT_MESSAGE === 'true' && !step) {
+        const response = await reply('DEFAULT', from)
+        await create_chat(from, response.replyMessage)
+        await client.sendMessage(from, response.replyMessage);
+      }
+    } else {
+      await client.sendMessage(from, "Registro de usuario cancelado");
+
+      fs.writeFile(`./js/chat_bot/chats/${from}.json`,
+        JSON.stringify({messages: []}),
+        (error) => {
+          if (error) console.log(error);
+        }
+      );
+    }
+  });
+
+  client.initialize();
+}
 
 //Socket
 socket.on('connection', (socket) => {
