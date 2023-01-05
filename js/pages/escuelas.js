@@ -1165,16 +1165,18 @@ socket.on("editar_escuela", mensaje_socket => {
     }
   }
 
-  if (escuela_actual === mensaje_socket.id_escuela.toString() && ($("#editar_escuela").attr("class").match("d-none") || $("#visualizar_escuela").attr("class").match("d-none"))) {
+  if (escuela_actual === mensaje_socket.id_escuela.toString() && ($("#editar_escuela").attr("class").match("d-none") || $("#visualizar_escuela").attr("class").match("d-none") || $("#visualizar_escuela_sim").attr("class").match("d-none"))) {
     request_post("/api/v1/escuelas/consultar_escuela", {
       id_escuela: escuela_actual,
     }).then((response) => {
-      const {success, message, response: escuela} = response;
+      const {success, response: escuela} = response;
 
       if (success && $("#menu_escuelas").attr("class").match("d-none")) {
-        if ($("#editar_escuela").attr("class").match("d-none")) {
+        if ($("#editar_escuela").attr("class").match("d-none") && $("#visualizar_escuela").attr("class").match("d-none")) {
           vista_visualizar_escuela_sim(escuela);
-        } else if ($("#visualizar_escuela").attr("class").match("d-none")) {
+        } else if ($("#editar_escuela").attr("class").match("d-none") && $("#visualizar_escuela_sim").attr("class").match("d-none")) {
+          vista_visualizar_escuela(escuela);
+        } else if ($("#visualizar_escuela").attr("class").match("d-none") && $("#visualizar_escuela_sim").attr("class").match("d-none")) {
           vista_editar_escuela(escuela);
         }
       }
