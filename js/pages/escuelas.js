@@ -88,7 +88,7 @@ const vista_visualizar_escuela = (escuela) => {
   validar_campo(escuela.nombre_director, "director_vis");
   validar_campo(escuela.id_municipio, "municipio_vis");
   validar_campo(escuela.id_asenta_codigo_postal, "postal_vis");
-  validar_campo(escuela.colonia_localidad1, "asentamiento_vis");
+  validar_campo(escuela.colonia_localidad2, "asentamiento_vis");
   validar_campo(escuela.calle_principal, "vialidad_principal_vis");
   validar_campo(escuela.vialidad_derecha, "vialidad_derecha_vis");
   validar_campo(escuela.vialidad_izquierda, "vialidad_izquierda_vis");
@@ -135,7 +135,7 @@ const vista_visualizar_escuela = (escuela) => {
   validar_campo(escuela.problematica, "problematica_vis");
   validar_campo(escuela.beneficio, "beneficio_vis");
 
-  validar_campo(`${escuela.nom_municipio}, escuela.colonia_localidad2, ${escuela.calle_principal}, ${escuela.num_int} ${escuela.num_ext} `, "direccion_vis");
+  validar_campo(`${escuela.nom_municipio}, ${escuela.colonia_localidad2}, ${escuela.calle_principal}, ${escuela.num_int} ${escuela.num_ext} `, "direccion_vis");
 
   $("#escuela_modificacion_vis").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
 
@@ -177,33 +177,67 @@ const vista_editar_escuela = (escuela) => {
 
   validar_img(escuela.imagen, "container_edit_img")
 
-  validar_campo(escuela.clave, "clave_centro_edit");
-  validar_campo(escuela.nombre, "nombre_centro_edit");
-  validar_campo(escuela.pag_web, "pagina_edit");
+  validar_campo(escuela.cct, "clave_centro_edit");
+  validar_campo(escuela.cct_plantel, "clave_plantel_edit");
+  validar_campo(escuela.id_marca, "marca_edit");
+  validar_campo(escuela.status_id_status, "estatus_edit");
+  validar_campo(escuela.id_turno1, "turno_1_edit");
+  validar_campo(escuela.id_turno2, "turno_2_edit");
+  validar_campo(escuela.id_turno3, "turno_3_edit");
+  validar_campo(escuela.id_nivel, "nivel_edit");
+  validar_campo(escuela.id_tipo, "tipo_edit");
+  validar_campo(escuela.nom_escuela, "nombre_centro_edit");
+  validar_campo(escuela.nombre_director, "director_edit");
+  validar_campo(escuela.id_municipio, "municipio_edit");
+  validar_campo(escuela.id_asenta_codigo_postal, "postal_edit");
+  validar_campo(escuela.colonia_localidad2, "asentamiento_edit");
+  validar_campo(escuela.calle_principal, "vialidad_principal_edit");
+  validar_campo(escuela.vialidad_derecha, "vialidad_derecha_edit");
+  validar_campo(escuela.vialidad_izquierda, "vialidad_izquierda_edit");
+  validar_campo(escuela.vialidad_posterior, "vialidad_posterior_edit");
+  validar_campo(escuela.num_ext, "num_ext_edit");
+  validar_campo(escuela.alf_ext, "num_ext_elf_edit");
+  validar_campo(escuela.num_int, "num_int_edit");
+  validar_campo(escuela.alf_int, "num_int_elf_edit");
+  validar_campo(escuela.desc_ubicacion, "des_ubicacion_edit");
+  validar_campo(escuela.latitud, "latitud_edit");
+  validar_campo(escuela.longitud, "longitud_edit");
+  validar_campo(escuela.id_region, "region_edit");
+  validar_campo(escuela.id_sost_control, "sost_control_edit");
+  validar_campo(escuela.id_sost_subcontrol, "sost_sub_control_edit");
+  validar_campo(escuela.id_sost_dependencia1, "sost_dependencia_1_edit");
+  validar_campo(escuela.id_sost_dependencia2, "sost_dependencia_2_edit");
+  validar_campo(escuela.id_sost_dependencia3, "sost_dependencia_3_edit");
+  validar_campo(escuela.id_sost_dependencia4, "sost_dependencia_4_edit");
+  validar_campo(escuela.id_sost_servicio, "sost_servicio_edit");
+  validar_campo(escuela.id_dep_operativa1, "dep_operativa_1_edit");
+  validar_campo(escuela.id_dep_operativa2, "dep_operativa_2_edit");
+  validar_campo(escuela.id_dep_operativa3, "dep_operativa_3_edit");
+  validar_campo(escuela.id_dep_operativa4, "dep_operativa_4_edit");
+  validar_campo(escuela.id_dep_operativa5, "dep_operativa_5_edit");
+  validar_campo(escuela.cct_supervision, "supervicion_cct_edit");
+  validar_campo(escuela.cct_jefaturasector, "jefsec_cct_edit");
+  validar_campo(escuela.cct_serviciosregionales, "serreg_cct_edit");
+  validar_campo(escuela.id_servicio_educativo, "servicio_edit");
+  validar_campo(escuela.id_cam_servicio, "servicio_cam_edit");
+  validar_campo(escuela.id_caracteristica1, "caracteristica_1_edit");
+  validar_campo(escuela.id_caracteristica2, "caracteristica_2_edit");
   validar_campo(escuela.telefono, "telefono_edit");
-  validar_campo(escuela.alum_muj, "alumnos_mujeres_edit");
-  validar_campo(escuela.alum_hom, "alumnos_hombres_edit");
-  validar_campo(escuela.alum_hom + escuela.alum_muj, "alumnos_totales_edit");
-  validar_campo(escuela.doc_muj, "docentes_mujeres_edit");
-  validar_campo(escuela.doc_hom, "docentes_hombres_edit");
-  validar_campo(escuela.doc_hom + escuela.doc_muj, "docentes_totales_edit");
-  validar_campo(escuela.aulas_exist, "aulas_existentes_edit");
-  validar_campo(escuela.aulas_uso, "aulas_uso_edit");
-  validar_campo(escuela.turno_id, "turno_edit");
-  validar_campo(escuela.control_id, "control_edit");
-  validar_campo(escuela.modelo_id, "modelo_edit");
-  validar_campo(escuela.tipo_id, "tipo_edit");
-  validar_campo(escuela.servicio_educativo_id, "servicio_edit");
-  validar_campo(escuela.sostenimiento_id, "sostenimiento_edit");
-  validar_campo(escuela.municipio_id, "municipio_edit");
-  validar_campo(escuela.nivel_id, "nivel_edit");
+  validar_campo(escuela.email, "correo_edit");
+  validar_campo(escuela.pag_web, "pagina_edit");
 
-  validar_campo(escuela.direccion, "direccion_edit");
-  validar_campo(escuela.codigo_postal, "postal_maps_edit");
-  validar_campo(escuela.colonia, "colonia_maps_edit");
-  validar_campo(escuela.num_int, "num_int_maps_edit");
-  validar_campo(escuela.num_ext, "num_ext_maps_edit");
-  validar_campo(escuela.localidad, "localidad_maps_edit");
+  validar_campo(escuela.alumnos_mujeres, "alumnos_mujeres_edit");
+  validar_campo(escuela.alumnos_hombres, "alumnos_hombres_edit");
+  validar_campo(escuela.alumnos_hombres + escuela.alumnos_mujeres, "alumnos_totales_edit");
+  validar_campo(escuela.docentes_mujeres, "docentes_mujeres_edit");
+  validar_campo(escuela.docentes_hombres, "docentes_hombres_edit");
+  validar_campo(escuela.docentes_hombres + escuela.docentes_mujeres, "docentes_totales_edit");
+  validar_campo(escuela.aulas_existentes, "aulas_existentes_edit");
+  validar_campo(escuela.aulas_uso, "aulas_uso_edit");
+  validar_campo(escuela.problematica, "problematica_edit");
+  validar_campo(escuela.beneficio, "beneficio_edit");
+
+  validar_campo(`${escuela.nom_municipio}, ${escuela.colonia_localidad2}, ${escuela.calle_principal}, ${escuela.num_int} ${escuela.num_ext} `, "direccion_edit");
 
   $("#escuela_modificacion_edit").text(`Ultima modificación el ${escuela.fecha_modificacion} a las ${escuela.hora_modificacion} por ${escuela.usuario_nombre_modificacion} ${escuela.usuario_apellido_paterno_modificacion} ${escuela.usuario_apellido_materno_modificacion}`)
 
@@ -334,6 +368,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_marca}">${consulta.nom_marca}</option> `));
                 $(`#marca`).empty().append(opciones_select);
                 $(`#marca_vis`).empty().append(opciones_select);
+                $(`#marca_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -347,6 +382,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_status}">${consulta.nom_status}</option> `));
                 $(`#estatus`).empty().append(opciones_select);
                 $(`#estatus_vis`).empty().append(opciones_select);
+                $(`#estatus_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -360,6 +396,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_turno1}">${consulta.nom_turno1}</option> `));
                 $(`#turno_1`).empty().append(opciones_select);
                 $(`#turno_1_vis`).empty().append(opciones_select);
+                $(`#turno_1_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -373,6 +410,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_turno2}">${consulta.nom_turno2}</option> `));
                 $(`#turno_2`).empty().append(opciones_select);
                 $(`#turno_2_vis`).empty().append(opciones_select);
+                $(`#turno_2_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -386,6 +424,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_turno3}">${consulta.nom_turno3}</option> `));
                 $(`#turno_3`).empty().append(opciones_select);
                 $(`#turno_3_vis`).empty().append(opciones_select);
+                $(`#turno_3_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -399,6 +438,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_nivel}">${consulta.nom_nivel}</option> `));
                 $(`#nivel`).empty().append(opciones_select);
                 $(`#nivel_vis`).empty().append(opciones_select);
+                $(`#nivel_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -412,6 +452,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_tipo}">${consulta.nom_tipo}</option> `));
                 $(`#tipo`).empty().append(opciones_select);
                 $(`#tipo_vis`).empty().append(opciones_select);
+                $(`#tipo_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -425,6 +466,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_director}">${consulta.nombre_director}</option> `));
                 $(`#director`).empty().append(opciones_select);
                 $(`#director_vis`).empty().append(opciones_select);
+                $(`#director_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -438,6 +480,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_asenta}">${consulta.d_codigo} - ${consulta.d_asenta} - ${consulta.c_tipo_asenta} - ${consulta.d_tipo_asenta}</option> `));
                 $(`#postal`).empty().append(opciones_select);
                 $(`#postal_vis`).empty().append(opciones_select);
+                $(`#postal_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -451,6 +494,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_region}">${consulta.nom_region}</option> `));
                 $(`#region`).empty().append(opciones_select);
                 $(`#region_vis`).empty().append(opciones_select);
+                $(`#region_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -464,6 +508,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_control}">${consulta.nom_sost_control}</option> `));
                 $(`#sost_control`).empty().append(opciones_select);
                 $(`#sost_control_vis`).empty().append(opciones_select);
+                $(`#sost_control_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -477,6 +522,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_subcontrol}">${consulta.nom_sost_subcontrol}</option> `));
                 $(`#sost_sub_control`).empty().append(opciones_select);
                 $(`#sost_sub_control_vis`).empty().append(opciones_select);
+                $(`#sost_sub_control_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -490,6 +536,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_dependencia1}">${consulta.nom_sost_dependencia1}</option> `));
                 $(`#sost_dependencia_1`).empty().append(opciones_select);
                 $(`#sost_dependencia_1_vis`).empty().append(opciones_select);
+                $(`#sost_dependencia_1_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -503,6 +550,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_dependencia2}">${consulta.nom_sost_dependencia2}</option> `));
                 $(`#sost_dependencia_2`).empty().append(opciones_select);
                 $(`#sost_dependencia_2_vis`).empty().append(opciones_select);
+                $(`#sost_dependencia_2_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -516,6 +564,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_dependencia3}">${consulta.nom_sost_dependencia3}</option> `));
                 $(`#sost_dependencia_3`).empty().append(opciones_select);
                 $(`#sost_dependencia_3_vis`).empty().append(opciones_select);
+                $(`#sost_dependencia_3_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -529,6 +578,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_dependencia4}">${consulta.nom_sost_dependencia4}</option> `));
                 $(`#sost_dependencia_4`).empty().append(opciones_select);
                 $(`#sost_dependencia_4_vis`).empty().append(opciones_select);
+                $(`#sost_dependencia_4_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -542,6 +592,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_sost_servicio}">${consulta.num_sost_servicio}</option> `));
                 $(`#sost_servicio`).empty().append(opciones_select);
                 $(`#sost_servicio_vis`).empty().append(opciones_select);
+                $(`#sost_servicio_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -555,6 +606,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa1}">${consulta.nom_dep_operativa1}</option> `));
                 $(`#dep_operativa_1`).empty().append(opciones_select);
                 $(`#dep_operativa_1_vis`).empty().append(opciones_select);
+                $(`#dep_operativa_1_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -567,7 +619,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 let opciones_select = `<option value="">Elige una opción</option> `;
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa2}">${consulta.nom_dep_operativa2}</option> `));
                 $(`#dep_operativa_2`).empty().append(opciones_select);
-                $(`#dep_operativa_2_vis`).empty().append(opciones_select);
+                $(`#dep_operativa_2_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -580,7 +632,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 let opciones_select = `<option value="">Elige una opción</option> `;
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa3}">${consulta.nom_dep_operativa3}</option> `));
                 $(`#dep_operativa_3`).empty().append(opciones_select);
-                $(`#dep_operativa_3_vis`).empty().append(opciones_select);
+                $(`#dep_operativa_3_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -594,6 +646,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa4}">${consulta.nom_dep_operativa4}</option> `));
                 $(`#dep_operativa_4`).empty().append(opciones_select);
                 $(`#dep_operativa_4_vis`).empty().append(opciones_select);
+                $(`#dep_operativa_4_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -607,6 +660,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa5}">${consulta.nom_dep_operativa5}</option> `));
                 $(`#dep_operativa_5`).empty().append(opciones_select);
                 $(`#dep_operativa_5_vis`).empty().append(opciones_select);
+                $(`#dep_operativa_5_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -620,6 +674,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_servicio_educativo}">${consulta.nom_servicio_educativo}</option> `));
                 $(`#servicio`).empty().append(opciones_select);
                 $(`#servicio_vis`).empty().append(opciones_select);
+                $(`#servicio_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -633,6 +688,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_cam_servicio}">${consulta.nom_cam_servicio}</option> `));
                 $(`#servicio_cam`).empty().append(opciones_select);
                 $(`#servicio_cam_vis`).empty().append(opciones_select);
+                $(`#servicio_cam_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -646,6 +702,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_caracteristica1}">${consulta.nom_caracteristica1}</option> `));
                 $(`#caracteristica_1`).empty().append(opciones_select);
                 $(`#caracteristica_1_vis`).empty().append(opciones_select);
+                $(`#caracteristica_1_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -659,6 +716,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_caracteristica2}">${consulta.nom_caracteristica2}</option> `));
                 $(`#caracteristica_2`).empty().append(opciones_select);
                 $(`#caracteristica_2_vis`).empty().append(opciones_select);
+                $(`#caracteristica_2_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
               }
@@ -978,29 +1036,65 @@ $("#btn_guardar_edit_escuela").click(async () => {
     notificacion_toastify_carga();
     let json = {
       id_escuela: escuela_actual,
-      nombre: $("#nombre_centro_edit").val(),
-      pag_web: $("#pagina_edit").val(),
+      id_cct: $("#clave_centro_edit").val(),
+      marca_id_marca: $("#marca_edit").val(),
+      nom_escuela: $("#nombre_centro_edit").val(),
+      status_id_status: $("#estatus_edit").val(),
+
+      id_asenta_codigo_postal: $("#postal_edit").val(),
+      asenta2: $("#asentamiento_edit").val(),
+      vialidad_principal: $("#vialidad_principal_edit").val(),
+      vialidad_derecha: $("#vialidad_derecha_edit").val(),
+      vialidad_izquierda: $("#vialidad_izquierda_edit").val(),
+      vialidad_posterior: $("#vialidad_posterior_edit").val(),
+      num_ext: $("#num_ext_edit").val(),
+      alf_ext: $("#num_ext_elf_edit").val(),
+      num_int: $("#num_int_edit").val(),
+      alf_int: $("#num_int_elf_edit").val(),
+      desc_ubicacion: $("#des_ubicacion_edit").val(),
+      latitud: $("#latitud_edit").val(),
+      longitud: $("#longitud_edit").val(),
+
+      municipio_id_municipio: $("#municipio_edit").val(),
+      region_id_region: $("#region_edit").val(),
+      sost_control_id_sost_control: $("#sost_control_edit").val(),
+      sost_subcontrol_id_sost_subcontrol: $("#sost_sub_control_edit").val(),
+      sost_dependencian1_id_sost_dependencia1: $("#sost_dependencia_1_edit").val(),
+      sost_dependencian2_id_sost_dependencia2: $("#sost_dependencia_2_edit").val(),
+      sost_dependencian3_id_sost_dependencia3: $("#sost_dependencia_3_edit").val(),
+      sost_dependencian4_id_sost_dependencia4: $("#sost_dependencia_4_edit").val(),
+      sost_servicio_id_sost_servicio: $("#sost_servicio_edit").val(),
+      dep_operativa1_id_dep_operativa1: $("#dep_operativa_1_edit").val(),
+      dep_operativa2_id_dep_operativa2: $("#dep_operativa_2_edit").val(),
+      dep_operativa3_id_dep_operativa3: $("#dep_operativa_3_edit").val(),
+      dep_operativa4_id_dep_operativa4: $("#dep_operativa_4_edit").val(),
+      dep_operativa5_id_dep_operativa5: $("#dep_operativa_5_edit").val(),
+      supervision_id_cct: $("#supervicion_cct_edit").val(),
+      jefsec_id_cct: $("#jefsec_cct_edit").val(),
+      serreg_id_cct: $("#serreg_cct_edit").val(),
+      institucion_plantel: $("#clave_plantel_edit").val(),
+      turno1_id_turno1: $("#turno_1_edit").val(),
+      turno2_id_turno2: $("#turno_2_edit").val(),
+      turno3_id_turno3: $("#turno_3_edit").val(),
+      nivel_id_nivel: $("#nivel_edit").val(),
+      tipo_id_tipo: $("#tipo_edit").val(),
+      servicio_educativo_id_servicio_educativo: $("#servicio_edit").val(),
+      cam_servicio_id_cam_servicio: $("#servicio_cam_edit").val(),
+      caracteristica1_id_caracteristica1: $("#caracteristica_1_edit").val(),
+      caracteristica2_id_caracteristica2: $("#caracteristica_2_edit").val(),
       telefono: $("#telefono_edit").val(),
-      alum_muj: $("#alumnos_mujeres_edit").val(),
-      alum_hom: $("#alumnos_hombres_edit").val(),
-      doc_muj: $("#docentes_mujeres_edit").val(),
-      doc_hom: $("#docentes_hombres_edit").val(),
-      aulas_exist: $("#aulas_existentes_edit").val(),
+      email: $("#correo_edit").val(),
+      nombre_director: $("#director_edit").val(),
+      alumnos_hombres: $("#alumnos_hombres_edit").val(),
+      alumnos_mujeres: $("#alumnos_mujeres_edit").val(),
+      docentes_hombres: $("#docentes_hombres_edit").val(),
+      docentes_mujeres: $("#docentes_mujeres_edit").val(),
       aulas_uso: $("#aulas_uso_edit").val(),
-      turno_id: $("#turno_edit").val(),
-      control_id: $("#control_edit").val(),
-      modelo_id: $("#modelo_edit").val(),
-      tipo_id: $("#tipo_edit").val(),
-      servicio_educativo_id: $("#servicio_edit").val(),
-      sostenimiento_id: $("#sostenimiento_edit").val(),
-      municipio_id: $("#municipio_edit").val(),
-      nivel_id: $("#nivel_edit").val(),
-      direccion: $("#direccion_edit").val(),
-      localidad: $("#localidad_maps_edit").val(),
-      colonia: $("#colonia_maps_edit").val(),
-      codigo_postal: $("#postal_maps_edit").val(),
-      num_int: $("#num_int_maps_edit").val(),
-      num_ext: $("#num_ext_maps_edit").val(),
+      aulas_existentes: $("#aulas_existentes_edit").val(),
+      pag_web: $("#pagina_edit").val(),
+
+      problematica: $("#problematica_edit").val(),
+      beneficio: $("#beneficio_edit").val(),
     }
 
     if (img_escuela_edit.getFile()) {
@@ -1038,8 +1132,10 @@ socket.on("agregar_escuela", mensaje_socket => {
   }
   if (!validacion_existente) {
     const new_row = [
-      mensaje_socket.cct, mensaje_socket.nom_escuela,
-      mensaje_socket.nom_municipio, validar_turno(mensaje_socket.turno1),
+      mensaje_socket.cct,
+      mensaje_socket.nom_escuela,
+      mensaje_socket.nom_municipio,
+      validar_turno(mensaje_socket.turno1),
       mensaje_socket.nombre_director ? mensaje_socket.nombre_director : "ACTUALIZÁNDOSE",
       `<td><button data-latitud="${mensaje_socket.latitud}" data-longitud="${mensaje_socket.longitud}" data-type="mapa_escuela" class="btn btn-warning control_escuela"><i class="bi bi-geo-alt-fill"></i></button></td>`,
       `<td><button id="row_${mensaje_socket.cct}" data-id="${mensaje_socket.id_escuela}" data-type="visualizar_escuela" class="btn btn-success control_escuela"><i class="bi bi-eye-fill"></i></button></td>`
@@ -1058,11 +1154,12 @@ socket.on("agregar_escuela", mensaje_socket => {
 socket.on("editar_escuela", mensaje_socket => {
   console.log("editar_escuela")
   for (let i = 0; i < escuelas_datatable.rows().data().length; i++) {
-    if (escuelas_datatable.data()[i][0] === mensaje_socket.clave) {
-      escuelas_datatable.cell({row: i, column: 0}).data(mensaje_socket.clave);
-      escuelas_datatable.cell({row: i, column: 1}).data(mensaje_socket.nombre);
+    if (escuelas_datatable.data()[i][0] === mensaje_socket.cct) {
+      escuelas_datatable.cell({row: i, column: 0}).data(mensaje_socket.cct);
+      escuelas_datatable.cell({row: i, column: 1}).data(mensaje_socket.nom_escuela);
       escuelas_datatable.cell({row: i, column: 2}).data(mensaje_socket.nom_municipio);
-      escuelas_datatable.cell({row: i, column: 3}).data(mensaje_socket.nom_turno);
+      escuelas_datatable.cell({row: i, column: 3}).data(validar_turno(mensaje_socket.turno1));
+      escuelas_datatable.cell({row: i, column: 4}).data(mensaje_socket.nombre_director ? mensaje_socket.nombre_director : "ACTUALIZÁNDOSE");
       notificacion_toastify("Escuela editada")
       break
     }
