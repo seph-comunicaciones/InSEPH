@@ -3,7 +3,7 @@ let usuarios_locales
 let roles_locales
 let usuario_actual = null
 let rol = false
-let usuario = 0
+let usuario_local = 0
 
 //Funciones
 const pintar_tabla_usuarios = (usuarios) => {
@@ -76,6 +76,12 @@ const vista_editar_usuario = (usuario) => {
   validar_campo(usuario.apellido_materno, "apellido_materno_edit");
   validar_campo(usuario.rol_id, "rol_edit");
 
+  if (parseInt(usuario.id_usuario) === parseInt(usuario_local) || parseInt(usuario.id_usuario) === 1) {
+    $("#rol_edit").attr("disabled", "true")
+  } else {
+    $("#rol_edit").removeAttr("disabled")
+  }
+
   $("#usuario_modificacion_edit").text(`Ultima modificación el ${usuario.fecha_modificacion} a las ${usuario.hora_modificacion} por ${usuario.usuario_nombre_modificacion} ${usuario.usuario_apellido_paterno_modificacion} ${usuario.usuario_apellido_materno_modificacion}`)
 
   $("#menu_usuarios").addClass("d-none");
@@ -90,7 +96,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
   if (success) {
     //Cargar el rol
     rol = rol_id
-    usuario = id_usuario
+    usuario_local = id_usuario
 
     request_post("/api/v1/usuarios/consultar_usuarios", {}).then((response) => {
       const {success, response: usuarios} = response;
@@ -269,13 +275,17 @@ $("#form_edit_usuario").on("submit", (event) => event.preventDefault());
 $("#btn_guardar_edit_usuario").click(() => {
   if (validar_form_edit()) {
     notificacion_toastify_carga();
-    request_post("/api/v1/usuarios/editar_usuario", {
+
+    let json = {
       "id_usuario": usuario_actual,
       "correo": $("#correo_edit").val(),
       "telefono": $("#telefono_edit").val(),
       "rol_id": $("#rol_edit").val(),
+    }
 
-    }).then((response) => {
+    if (parseInt(usuario_local) === parseInt(usuario_actual) || parseInt(usuario_actual) === 1) delete json['rol_id'];
+
+    request_post("/api/v1/usuarios/editar_usuario", json).then((response) => {
       const {success, message} = response;
 
       if (success) {
@@ -353,7 +363,7 @@ socket.on("editar_usuario", mensaje_socket => {
     })
   }
 
-  if (mensaje_socket.id_usuario.toString() === usuario.toString()) {
+  if (mensaje_socket.id_usuario.toString() === usuario_local.toString()) {
     request_get("/api/v1/usuarios/validar_session").then((response) => {
       console.log(response);
     })
@@ -384,7 +394,7 @@ socket.on("eliminar_usuario", mensaje_socket => {
     }
   }
 
-  if (mensaje_socket.id_usuario.toString() === usuario.toString()) {
+  if (mensaje_socket.id_usuario.toString() === usuario_local.toString()) {
     request_get("/api/v1/usuarios/validar_session").then((response) => {
       console.log(response);
     })

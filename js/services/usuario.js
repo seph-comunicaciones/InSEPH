@@ -264,11 +264,13 @@ const editar_usuario = async (request, response, socket) => {
                                                   AND id_usuario != ${id_usuario}
                                                   AND activo = true;`, "", "Error, no se pudo agregar el usuario")
 
-    if (validacion.response && validacion.success) {
-      if (validacion.response.correo === correo) return response.status(200).json(message_failure("Correo no valido"));
-    }
+    if (validacion.response && validacion.success) if (validacion.response.correo === correo) return response.status(200).json(message_failure("Correo no valido"));
 
-    const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, ["correo", "telefono", "rol_id", "usuario_id_modificacion"]), {id_usuario: id_usuario}, "usuario"), "Usuario actualizado exitosamente", "Error, no se pudo editar el usuario");
+    const llaves_fliltrar = ["rol_id", "correo", "telefono", "usuario_id_modificacion"]
+
+    if (parseInt(request.session.id_usuario) === parseInt(id_usuario) || parseInt(id_usuario) === 1) llaves_fliltrar.shift()
+
+    const query = await pool_query(pool_query_update(await filtrar_llaves(request.body, llaves_fliltrar), {id_usuario: id_usuario}, "usuario"), "Usuario actualizado exitosamente", "Error, no se pudo editar el usuario");
 
     if (query.success) {
       const query_socket = await pool_query_unique(`SELECT usuario, nombre, apellido_materno, apellido_paterno, id_usuario
