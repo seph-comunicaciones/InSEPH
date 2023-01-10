@@ -381,6 +381,12 @@ const glosario_IMCO = [
     "definition": "Porcentaje de alumnos en nivel de desempeño 3 y 4 en matemáticas, en la prueba Planea."
   },
 ]
+let value_indicadores = {
+  "indicador": 0,
+  "sub_secretaria": 0,
+  "direccion_general": 0,
+  "nivel_educativo": 0,
+}
 
 //Funciones
 const notificacion_palabra = (tittle, text, message) => {
@@ -538,6 +544,76 @@ const pintar_chart_indicadores = (indicadores_chart_nacionales, id) => {
       new_chart.render();
     })
   })
+}
+
+const pintar_indicador = (service, id_indicador, consumir) => {
+  if (consumir) {
+    notificacion_toastify_carga()
+    $("#menu_indicadores").removeClass("d-none")
+    request_post(`/api/v1/indicadores/${service}`, {}).then((response) => {
+      const {success, response: {indicador, charts}} = response;
+
+      if (success) {
+        switch (service) {
+          case "consultar_indicadores_internacionales":
+            pintar_tabla_indicadores_internacionales(indicadores[id_indicador].name, "Indicador", indicador, charts);
+            break
+          case "consultar_indicadores_nacionales":
+            pintar_tabla_indicadores_nacionales(indicadores[id_indicador].name, "Indicador", indicador, charts);
+            break
+          case "consultar_indicadores_estatales":
+            pintar_tabla_indicadores_estatales(indicadores[id_indicador].name, "Indicador", indicador);
+            break
+        }
+      }
+    })
+  }
+}
+
+const pintar_direccion_general = (service, id_indicador, id_sub_secretaria, id_direccion_general, direccion_general, consumir) => {
+  if (consumir) {
+    notificacion_toastify_carga()
+    $("#menu_indicadores").removeClass("d-none")
+    request_post(`/api/v1/indicadores/${service}`, {
+      "subsecretaria": id_sub_secretaria + 1,
+      "direccion_general": (direccion_general) + 1,
+      "nivel_educativo": ""
+    }).then((response) => {
+      const {success, response: {indicador, charts}} = response;
+
+      if (success) pintar_tabla_indicadores_institucionales(indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales[id_direccion_general].name, "Dirección General", indicador)
+    })
+  }
+}
+
+const pintar_nivel_educativo = (service, id_indicador, id_sub_secretaria, id_direccion_general, id_nivel_educativo, direccion_general, consumir) => {
+  if (consumir) {
+    notificacion_toastify_carga()
+    $("#menu_indicadores").removeClass("d-none")
+    request_post(`/api/v1/indicadores/${service}`, {
+      "subsecretaria": id_sub_secretaria + 1,
+      "direccion_general": direccion_general + 1,
+      "nivel_educativo": id_nivel_educativo + 1
+    }).then((response) => {
+      const {success, response: {indicador, charts}} = response;
+
+      if (success) pintar_tabla_indicadores_institucionales(indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales[id_direccion_general].niveles_educativos[id_nivel_educativo].name, "Nivel Educativo", indicador)
+    })
+  }
+}
+
+const pintar_choice = (id) => {
+  const choice_indicadores = document.querySelector(`#${id}`)
+  if (choice_indicadores.classList.contains("multiple-remove")) {
+    new Choices(choice_indicadores, {
+      delimiter: ",",
+      editItems: true,
+      maxItemCount: -1,
+      removeItemButton: true,
+    });
+  } else {
+    new Choices(choice_indicadores);
+  }
 }
 
 $("#menu_indicadores").on("click", ".control_chart_indicadores_nacionales", (event) => {
@@ -798,153 +874,131 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
 //Opciones de indicadores
 request_get("/api/v1/usuarios/validar_session").then()
 
-indicadores.forEach((indicador) => {
-  const {name, id, end, service} = indicador
+//Pintar indicadores
+indicadores.forEach((indicador) => $("#indicadores_select").append(`<option value="${indicador.id - 1}">${indicador.name}</option>`))
+// Estilo choice select
+pintar_choice("indicadores_select")
 
-  $("#indicadores").append(`<button type="button" id="indicador_${id}" data-type="indicador" data-id-indicador="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn  btn-marron-seph control_indicadores">${name}</button>`)
-})
+$("#menu_indicadores").removeClass("d-none")
+pintar_indicador(indicadores[$("#indicadores_select").val()].service, $("#indicadores_select").val(), true)
 
-$("#app").on("click", ".control_indicadores, .control_subsecretarias, .control_direccion_general, .control_nivel_educativo", (event) => {
-  const button = event.currentTarget
-  const id = button.id
-  const type = button.dataset.type
-  const end = button.dataset.end ? button.dataset.end : "false"
-  const service = button.dataset.service ? button.dataset.service : ""
-  const id_indicador = button.dataset.idIndicador
-  const id_subsecretaria = button.dataset.idSubsecretaria
-  const id_direccion_general = button.dataset.idDireccionGeneral
-  const id_nivel_educativo = button.dataset.idNivelEducativo
+//Opciones de indicadores
+const pintar_select_indicadores = (indicadores, id_select, id_div) => {
+  let options = ""
+  $(`#${id_div}`).empty().append(`<select id="${id_select}" class="choices form-select"></select>`)
+  indicadores.forEach((indicador) => options += `<option value="${indicador.id - 1}">${indicador.name}</option>`)
+  $(`#${id_select}`).empty().append(options)
 
-  let id_direccion_general_indicador;
-  id_direccion_general_indicador = id_direccion_general > 23 ? 24 : id_direccion_general_indicador = id_direccion_general > 18 ? 19 : id_direccion_general_indicador = id_direccion_general > 6 ? 7 : 1;
+  pintar_choice(id_select)
+}
 
-  let btn_subsecretarias = ``
-  let btn_direcciones_generales = ``
-  let btn_niveles_educativos = ``
-
+$("#indicadores_select").on("change", () => {
   $("#menu_indicadores").addClass("d-none")
+  $("#sub_secretaria").addClass("d-none")
+  $("#direccion_general").addClass("d-none")
+  $("#nivel_educativo").addClass("d-none")
 
-  if (type === "indicador") {
-    $(".control_indicadores").removeClass("btn-cafe-seph")
-    $(".control_indicadores").addClass("btn-marron-seph")
+  value_indicadores.indicador = parseInt($("#indicadores_select").val())
 
-    $("#subsecretaria").empty()
-    $("#direccion_general").empty()
-    $("#nivel_educativo").empty()
+  const {indicador: id_indicador} = value_indicadores
+  const {end, service} = indicadores[id_indicador]
 
-    $("#divider_subsecretarias").addClass("d-none")
-    $("#divider_direcciones_generales").addClass("d-none")
-    $("#divider_niveles_educativos").addClass("d-none")
+  pintar_indicador(service, id_indicador, end && service && service !== "")
 
-    if (indicadores[id_indicador - 1].subsecretarias.length > 0) $("#divider_subsecretarias").removeClass("d-none")
+  if (indicadores[id_indicador] &&
+    indicadores[id_indicador].subsecretarias &&
+    indicadores[id_indicador].subsecretarias.length > 0) {
+    $("#sub_secretaria").removeClass("d-none")
+    pintar_select_indicadores(indicadores[id_indicador].subsecretarias, "sub_secretaria_select", "sub_secretaria_div")
 
-    indicadores[id_indicador - 1].subsecretarias.forEach((subsecretaria) => {
-      const {name, id, end} = subsecretaria
-      btn_subsecretarias += `<button type="button" id="subsecretaria_${id}" data-type="subsecretaria" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id}" data-end="${end}"  class="btn  btn-marron-seph control_subsecretarias">${name}</button>`
-    })
+    /*
+    Subsecretarias
+    */
+    value_indicadores.sub_secretaria = parseInt($("#sub_secretaria_select").val())
+    $("#direccion_general").removeClass("d-none")
+    pintar_select_indicadores(indicadores[id_indicador].subsecretarias[$("#sub_secretaria_select").val()].direcciones_generales, "direccion_general_select", "direccion_general_div")
 
-    if (end === "true" && service && service !== "") {
-      $("#menu_indicadores").removeClass("d-none")
+    /*
+    Direcciones generales
+    */
+    const {end, service, name} = indicadores[id_indicador].subsecretarias[0].direcciones_generales[0]
+    pintar_direccion_general(service, id_indicador, 0, 0, 0, end && service && service !== "")
 
-      notificacion_toastify_carga()
-      request_post(`/api/v1/indicadores/${service}`, {}).then((response) => {
-        const {success, response: {indicador, charts}} = response;
+    $("#direccion_general_select").on("change", () => {
+      $("#nivel_educativo").addClass("d-none")
 
-        if (success) {
-          switch (service) {
-            case "consultar_indicadores_internacionales":
-              pintar_tabla_indicadores_internacionales(indicadores[id_indicador - 1].name, "Indicador", indicador, charts);
-              break
-            case "consultar_indicadores_nacionales":
-              pintar_tabla_indicadores_nacionales(indicadores[id_indicador - 1].name, "Indicador", indicador, charts);
-              break
-            case "consultar_indicadores_estatales":
-              pintar_tabla_indicadores_estatales(indicadores[id_indicador - 1].name, "Indicador", indicador);
-              break
+      const dg = parseInt($("#direccion_general_select").val())
+
+      value_indicadores.direccion_general = dg < 6 ? dg : dg < 18 ? dg - 6 : dg < 23 ? dg - 18 : dg - 23
+
+      const {indicador: id_indicador, sub_secretaria: id_sub_secretaria, direccion_general: id_direccion_general} = value_indicadores
+      const {end, service, name} = indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales[id_direccion_general]
+
+      pintar_direccion_general(service, id_indicador, id_sub_secretaria, id_direccion_general, dg, end && service && service !== "")
+    });
+
+
+    $("#sub_secretaria_select").on("change", () => {
+      $("#menu_indicadores").addClass("d-none")
+      $("#direccion_general").addClass("d-none")
+      $("#nivel_educativo").addClass("d-none")
+
+      value_indicadores.sub_secretaria = parseInt($("#sub_secretaria_select").val())
+
+      const {indicador: id_indicador, sub_secretaria: id_sub_secretaria} = value_indicadores
+      const {end, service} = indicadores[id_indicador].subsecretarias[id_sub_secretaria]
+
+
+      if (indicadores[id_indicador].subsecretarias &&
+        indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales &&
+        indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales.length > 0) {
+        $("#direccion_general").removeClass("d-none")
+        pintar_select_indicadores(indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales, "direccion_general_select", "direccion_general_div")
+
+        /*
+        Direcciones generales
+        */
+        const {end, service, name} = indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales[0]
+        pintar_direccion_general(service, id_indicador, id_sub_secretaria, 0, parseInt($("#direccion_general_select").val()), end && service && service !== "")
+
+        $("#direccion_general_select").on("change", () => {
+          $("#menu_indicadores").addClass("d-none")
+          $("#nivel_educativo").addClass("d-none")
+
+          const dg = parseInt($("#direccion_general_select").val())
+
+          value_indicadores.direccion_general = dg < 6 ? dg : dg < 18 ? dg - 6 : dg < 23 ? dg - 18 : dg - 23
+
+          const {indicador: id_indicador, sub_secretaria: id_sub_secretaria, direccion_general: id_direccion_general} = value_indicadores
+          const {end, service, name} = indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales[id_direccion_general]
+
+          pintar_direccion_general(service, id_indicador, id_sub_secretaria, id_direccion_general, dg, end && service && service !== "")
+
+          if (indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales &&
+            indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales[id_direccion_general].niveles_educativos &&
+            indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales[id_direccion_general].niveles_educativos.length > 0) {
+            $("#nivel_educativo").removeClass("d-none")
+            pintar_select_indicadores(indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales[id_direccion_general].niveles_educativos, "nivel_educativo_select", "nivel_educativo_div")
+
+            /*
+            Niveles educativos
+            */
+            const {end, service, name} = indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales[id_direccion_general].niveles_educativos[0]
+            pintar_nivel_educativo(service, id_indicador, id_sub_secretaria, id_direccion_general, 0, parseInt($("#direccion_general_select").val()), end && service && service !== "")
+
+            $("#nivel_educativo_select").on("change", () => {
+              $("#menu_indicadores").addClass("d-none")
+
+              value_indicadores.nivel_educativo = parseInt($("#nivel_educativo_select").val())
+
+              const {indicador: id_indicador, sub_secretaria: id_sub_secretaria, direccion_general: id_direccion_general, nivel_educativo: id_nivel_educativo} = value_indicadores
+              const {end, service, name} = indicadores[id_indicador].subsecretarias[id_sub_secretaria].direcciones_generales[id_direccion_general].niveles_educativos[id_nivel_educativo]
+
+              pintar_nivel_educativo(service, id_indicador, id_sub_secretaria, id_direccion_general, id_nivel_educativo, parseInt($("#direccion_general_select").val()), end && service && service !== "")
+            });
           }
-        }
-      })
-    }
-
-    $("#subsecretaria").append(btn_subsecretarias)
+        });
+      }
+    });
   }
-
-  if (type === "subsecretaria") {
-    $(".control_subsecretarias").removeClass("btn-cafe-seph")
-    $(".control_subsecretarias").addClass("btn-marron-seph")
-    $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
-
-    $("#direccion_general").empty()
-    $("#nivel_educativo").empty()
-
-    $("#divider_direcciones_generales").addClass("d-none")
-    $("#divider_niveles_educativos").addClass("d-none")
-
-    if (indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales.length > 0) $("#divider_direcciones_generales").removeClass("d-none")
-
-    indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales.forEach((direccion_general) => {
-      const {name, id, end, service} = direccion_general
-      btn_direcciones_generales += `<button type="button" id="direccion_general_${id}" data-type="direccion_general" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id_subsecretaria}" data-id-direccion-general="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn  btn-marron-seph control_direccion_general">${name}</button>`
-    })
-
-    $("#direccion_general").append(btn_direcciones_generales)
-  }
-
-  if (type === "direccion_general") {
-    $(".control_direccion_general").removeClass("btn-cafe-seph")
-    $(".control_direccion_general").addClass("btn-marron-seph")
-    $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
-
-    $("#nivel_educativo").empty()
-
-    $("#divider_niveles_educativos").addClass("d-none")
-
-    if (indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].niveles_educativos.length > 0) $("#divider_niveles_educativos").removeClass("d-none")
-
-    indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].niveles_educativos.forEach((nivel_educativo) => {
-      const {name, id, end, service} = nivel_educativo
-      btn_niveles_educativos += `<button type="button" id="nivel_educativo_${id}" data-type="nivel_educativo" data-id-indicador="${id_indicador}" data-id-subsecretaria="${id_subsecretaria}" data-id-direccion-general="${id_direccion_general}" data-id-nivel-educativo="${id}" data-end="${end}" data-service="${service ? service : ""}" class="btn  btn-marron-seph control_nivel_educativo">${name}</button>`
-    })
-
-    if (end === "true" && service && service !== "") {
-      $("#menu_indicadores").removeClass("d-none")
-
-      notificacion_toastify_carga()
-      request_post(`/api/v1/indicadores/${service}`, {
-        "subsecretaria": id_subsecretaria,
-        "direccion_general": id_direccion_general,
-        "nivel_educativo": ""
-      }).then((response) => {
-        const {success, response: {indicador, charts}} = response;
-
-        if (success) pintar_tabla_indicadores_institucionales(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].name, "Dirección General", indicador)
-      })
-    }
-
-    $("#nivel_educativo").append(btn_niveles_educativos)
-  }
-
-  if (type === "nivel_educativo") {
-    $(".control_nivel_educativo").removeClass("btn-cafe-seph")
-    $(".control_nivel_educativo").addClass("btn-marron-seph")
-    $(".control_chart_indicadores_nacionales").addClass("btn-marron-seph")
-
-    if (end === "true" && service && service !== "") {
-      $("#menu_indicadores").removeClass("d-none")
-
-      notificacion_toastify_carga()
-      request_post(`/api/v1/indicadores/${service}`, {
-        "subsecretaria": id_subsecretaria,
-        "direccion_general": id_direccion_general,
-        "nivel_educativo": id_nivel_educativo
-      }).then((response) => {
-        const {success, response: {indicador, charts}} = response;
-
-        if (success) pintar_tabla_indicadores_institucionales(indicadores[id_indicador - 1].subsecretarias[id_subsecretaria - 1].direcciones_generales[id_direccion_general - id_direccion_general_indicador].niveles_educativos[id_nivel_educativo - 1].name, "Nivel Educativo", indicador)
-      })
-    }
-  }
-
-  $(`#${id}`).addClass('btn-cafe-seph');
-  $(`#${id}`).removeClass('btn-marron-seph');
-})
+});

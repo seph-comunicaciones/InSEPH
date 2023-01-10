@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="/css/main/app.css"/>
     <link rel="stylesheet" href="/css/main/app-dark.css"/>
+    <link href="/extensions/choices.js/public/assets/styles/choices.css" rel="stylesheet"/>
     <link rel="stylesheet" href="/extensions/toastify-js/src/toastify.css"/>
     <link rel="stylesheet" href="/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css"/>
     <link rel="stylesheet" href="/css/pages/datatables.css"/>
@@ -113,26 +114,60 @@
           <h3>Indicadores educativos</h3>
         </div>
 
-        <section class="section">
-          <div class="divider divider-center">
-            <div class="divider-text">Indicadores</div>
+        <section class="basic-choices">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h6>Seleccione un indicador:</h6>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <select class="choices form-select" id="indicadores_select"></select>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="buttons" id="indicadores" style="display: flex; flex-wrap: wrap; justify-content: space-between;"></div>
 
-          <div class="divider divider-center d-none" id="divider_subsecretarias">
-            <div class="divider-text">Subsecretarias</div>
+          <div class="col-12 d-none" id="sub_secretaria">
+            <div class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h6>Seleccione una subsecretaria:</h6>
+                </div>
+                <div class="card-body">
+                  <div class="form-group" id="sub_secretaria_div"></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="buttons" id="subsecretaria" style="display: flex; flex-wrap: wrap; justify-content: space-between;"></div>
 
-          <div class="divider divider-center d-none" id="divider_direcciones_generales">
-            <div class="divider-text">Direcciones Generales</div>
+          <div class="col-12 d-none" id="direccion_general">
+            <div class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h6>Seleccione una dirección general:</h6>
+                </div>
+                <div class="card-body">
+                  <div class="form-group" id="direccion_general_div"></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="buttons" id="direccion_general" style="display: flex; flex-wrap: wrap; justify-content: space-between;"></div>
 
-          <div class="divider divider-center d-none" id="divider_niveles_educativos">
-            <div class="divider-text">Niveles Educativos</div>
+          <div class="col-12 d-none" id="nivel_educativo">
+            <div class="card">
+              <div class="card-content">
+                <div class="card-header">
+                  <h6>Seleccione un nivel educativo:</h6>
+                </div>
+                <div class="card-body">
+                  <div class="form-group" id="nivel_educativo_div"></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="buttons" id="nivel_educativo" style="display: flex; flex-wrap: wrap; justify-content: space-between;"></div>
         </section>
 
         <br>
@@ -153,6 +188,7 @@
     <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
     <script src="/js/bootstrap.js"></script>
     <script src="/js/app.js"></script>
+    <script src="/extensions/choices.js/public/assets/scripts/choices.js"></script>
     <script src="/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="/extensions/sweetalert2/sweetalert2.min.js"></script>
     <script src="/extensions/toastify-js/src/toastify.js"></script>
