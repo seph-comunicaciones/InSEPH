@@ -2,6 +2,7 @@ let rol = false
 let usuario = 0
 
 //Funciones
+const fill = (number, len) => "0".repeat(len - number.toString().length) + number.toString();
 const pintar_alumnos = (alumnos_hombres, alumnos_mujeres) => {
   $("#dashboard_chart_alumnos").empty()
 
@@ -240,6 +241,38 @@ const pintar_alumnos_docente_aulas = (alumnos_hombres, alumnos_mujeres, docentes
   chart_alumnos_docente_aulas.render();
 }
 
+const pintar_poblacion = (poblacion, municipio) => {
+  $("#dashboard_poblacion").empty()
+
+  const options_poblacion = {
+    colors: ["#bc955c", "#621132"],
+    series: poblacion,
+    chart: {
+      width: 500,
+      type: 'pie',
+    },
+    labels: municipio,
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }]
+  };
+
+  let chart_poblacion = new ApexCharts(
+    document.querySelector("#dashboard_poblacion"),
+    options_poblacion
+  );
+
+  chart_poblacion.render();
+}
+
 const pintar_dashboard = () => {
   request_post("/api/v1/dashboard/consultar_datos_dashboard", {
     "municipio_id": $("#bashboard_select_municipio").val()
@@ -258,6 +291,25 @@ const pintar_dashboard = () => {
       $("#totales_tab").click()
     }
   });
+
+  if ($("#bashboard_select_municipio").val() === "") {
+    request_get("https://gaia.inegi.org.mx/wscatgeo/mgee/13", false).then((response) => {
+      const {datos} = response
+      if (datos) {
+        const {pob_fem, pob_mas} = datos
+        pintar_poblacion([parseFloat(pob_fem), parseFloat(pob_mas)], ["Población Femenina", "Población Masculina"])
+      }
+    })
+  } else {
+    request_get(`https://gaia.inegi.org.mx/wscatgeo/mgem/130${fill($("#bashboard_select_municipio").val(), 2)}`, false).then((response) => {
+      const {datos} = response
+      if (datos.length > 0 && datos[0]) {
+        const {pob_fem, pob_mas} = datos[0]
+        pintar_poblacion([parseFloat(pob_fem), parseFloat(pob_mas)], ["Población Femenina", "Población Masculina"])
+      }
+    })
+  }
+
 }
 
 //Consultar municipios
