@@ -6,6 +6,7 @@ const pintar_alumnos = (alumnos_hombres, alumnos_mujeres) => {
   $("#dashboard_chart_alumnos").empty()
 
   let options_alumnos = {
+    colors: ["#621132"],
     annotations: {
       position: "back",
     },
@@ -50,6 +51,7 @@ const pintar_docentes = (docentes_hombres, docentes_mujeres) => {
   $("#dashboard_chart_docentes").empty()
 
   let options_docentes = {
+    colors: ["#621132"],
     annotations: {
       position: "back",
     },
@@ -93,6 +95,7 @@ const pintar_aulas = (aulas_uso, aulas_existentes) => {
   $("#dashboard_chart_aulas").empty()
 
   let options_aulas = {
+    colors: ["#621132"],
     annotations: {
       position: "back",
     },
@@ -133,6 +136,7 @@ const pintar_niveles = (SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, 
   $("#dashboard_chart_niveles").empty()
 
   let options_niveles = {
+    colors: ["#621132"],
     annotations: {
       position: "back",
     },
@@ -192,6 +196,7 @@ const pintar_alumnos_docente_aulas = (alumnos_hombres, alumnos_mujeres, docentes
   $("#dashboard_alumnos_docentes_aulas").empty()
 
   let options_alumnos_docente_aulas = {
+    colors: ["#621132"],
     annotations: {
       position: "back",
     },
