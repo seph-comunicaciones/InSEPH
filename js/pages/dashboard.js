@@ -2,7 +2,7 @@ let rol = false
 let usuario = 0
 
 //Funciones
-const pintar_alumnos = (alumnos_hombres, alumnos_mujeres, alumnos_total) => {
+const pintar_alumnos = (alumnos_hombres, alumnos_mujeres) => {
   $("#dashboard_chart_alumnos").empty()
 
   let options_alumnos = {
@@ -19,11 +19,10 @@ const pintar_alumnos = (alumnos_hombres, alumnos_mujeres, alumnos_total) => {
     fill: {
       opacity: 1,
     },
-    plotOptions: {},
     series: [
       {
         name: "Alumnos",
-        data: [alumnos_hombres ? alumnos_hombres : 0, alumnos_mujeres ? alumnos_mujeres : 0, alumnos_total ? alumnos_total : 0],
+        data: [alumnos_hombres ? alumnos_hombres : 0, alumnos_mujeres ? alumnos_mujeres : 0],
       },
     ],
     plotOptions: {
@@ -35,7 +34,6 @@ const pintar_alumnos = (alumnos_hombres, alumnos_mujeres, alumnos_total) => {
       categories: [
         "Alumnos total (hombres)	",
         "Alumnos total (mujeres)	",
-        "Alumnos total	",
       ],
     },
   };
@@ -48,7 +46,7 @@ const pintar_alumnos = (alumnos_hombres, alumnos_mujeres, alumnos_total) => {
   chart_alumnos.render();
 }
 
-const pintar_docentes = (docentes_hombres, docentes_mujeres, docentes_total) => {
+const pintar_docentes = (docentes_hombres, docentes_mujeres) => {
   $("#dashboard_chart_docentes").empty()
 
   let options_docentes = {
@@ -65,11 +63,10 @@ const pintar_docentes = (docentes_hombres, docentes_mujeres, docentes_total) => 
     fill: {
       opacity: 1,
     },
-    plotOptions: {},
     series: [
       {
         name: "Docentes",
-        data: [docentes_hombres ? docentes_hombres : 0, docentes_mujeres ? docentes_mujeres : 0, docentes_total ? docentes_total : 0],
+        data: [docentes_hombres ? docentes_hombres : 0, docentes_mujeres ? docentes_mujeres : 0],
       },
     ],
     plotOptions: {
@@ -81,7 +78,6 @@ const pintar_docentes = (docentes_hombres, docentes_mujeres, docentes_total) => 
       categories: [
         "Docentes total (hombres)	",
         "Docentes total (mujeres)	",
-        "Docentes total	",
       ],
     },
   };
@@ -110,7 +106,6 @@ const pintar_aulas = (aulas_uso, aulas_existentes) => {
     fill: {
       opacity: 1,
     },
-    plotOptions: {},
     series: [
       {
         name: "Aulas",
@@ -151,7 +146,6 @@ const pintar_niveles = (SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, 
     fill: {
       opacity: 1,
     },
-    plotOptions: {},
     series: [
       {
         name: "Niveles educativos",
@@ -194,81 +188,67 @@ const pintar_select_menu_municipios = (municipios) => {
   $("#bashboard_select_municipio").append(options_select);
 };
 
-const pintar_tabla_alumnos_docente_aulas = (alumnos_hombres, alumnos_mujeres, alumnos_total, docentes_hombres, docentes_mujeres, docentes_total, aulas_uso, aulas_existentes) => {
-  $("#container_tabla_alumnos_docentes_aulas").empty()
-  $("#container_tabla_alumnos_docentes_aulas").append(`<table class="table mb-0">
-                      <thead class="thead-dark">
-                      <tr>
-                        <th>Alumnos total (hombres)</th>
-                        <th>Alumnos total (mujeres)</th>
-                        <th>Alumnos total</th>
-                        <th>Docentes total (hombres)</th>
-                        <th>Docentes total (mujeres)</th>
-                        <th>Docentes total</th>
-                        <th>Aulas en uso</th>
-                        <th>Aulas existentes</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr>
-                        <td>${alumnos_hombres ? alumnos_hombres : 0}</td>
-                        <td>${alumnos_mujeres ? alumnos_mujeres : 0}</td>
-                        <td>${alumnos_total ? alumnos_total : 0}</td>
-                        <td>${docentes_hombres ? docentes_hombres : 0}</td>
-                        <td>${docentes_mujeres ? docentes_mujeres : 0}</td>
-                        <td>${docentes_total ? docentes_total : 0}</td>
-                        <td>${aulas_uso ? aulas_uso : 0}</td>
-                        <td>${aulas_existentes ? aulas_existentes : 0}</td>
-                      </tr>
-                      </tbody>
-                    </table>`)
-}
+const pintar_alumnos_docente_aulas = (alumnos_hombres, alumnos_mujeres, docentes_hombres, docentes_mujeres, aulas_uso, aulas_existentes) => {
+  $("#dashboard_alumnos_docentes_aulas").empty()
 
-const pintar_tabla_niveles = (SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS) => {
-  $("#container_tabla_niveles").empty()
-  $("#container_tabla_niveles").append(`<table class="table mb-0">
-                      <thead class="thead-dark">
-                      <tr>
-                        <th>SIN DEFINIR</th>
-                        <th>INICIAL</th>
-                        <th>BÁSICA</th>
-                        <th>MEDIA SUPERIOR</th>
-                        <th>SUPERIOR</th>
-                        <th>CAPACITACIÓN</th>
-                        <th>ESPECIAL</th>
-                        <th>OTROS</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr>
-                        <td>${SIN_DEFINIR ? SIN_DEFINIR : 0}</td>
-                        <td>${INICIAL ? INICIAL : 0}</td>
-                        <td>${BASICA ? BASICA : 0}</td>
-                        <td>${MEDIA_SUPERIOR ? MEDIA_SUPERIOR : 0}</td>
-                        <td>${SUPERIOR ? SUPERIOR : 0}</td>
-                        <td>${CAPACITACION ? CAPACITACION : 0}</td>
-                        <td>${ESPECIAL ? ESPECIAL : 0}</td>
-                        <td>${OTROS ? OTROS : 0}</td>
-                      </tr>
-                      </tbody>
-                    </table>`)
+  let options_alumnos_docente_aulas = {
+    annotations: {
+      position: "back",
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    chart: {
+      type: "bar",
+      height: 300,
+    },
+    fill: {
+      opacity: 1,
+    },
+    series: [
+      {
+        name: "Niveles educativos",
+        data: [alumnos_hombres ? alumnos_hombres : 0, alumnos_mujeres ? alumnos_mujeres : 0, docentes_hombres ? docentes_hombres : 0, docentes_mujeres ? docentes_mujeres : 0, aulas_uso ? aulas_uso : 0, aulas_existentes ? aulas_existentes : 0,],
+      },
+    ],
+    plotOptions: {
+      bar: {
+        distributed: true,
+      },
+    },
+    xaxis: {
+      categories: [
+        "Alumnos hombres",
+        "Alumnos mujeres",
+        "Docentes hombres",
+        "Docentes mujeres",
+        "Aulas uso",
+        "Aulas existentes",
+      ],
+    },
+  };
+  let chart_alumnos_docente_aulas = new ApexCharts(
+    document.querySelector("#dashboard_alumnos_docentes_aulas"),
+    options_alumnos_docente_aulas
+  );
+
+  chart_alumnos_docente_aulas.render();
 }
 
 const pintar_dashboard = () => {
   request_post("/api/v1/dashboard/consultar_datos_dashboard", {
     "municipio_id": $("#bashboard_select_municipio").val()
   }).then((response) => {
-    const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_exist, aulas_uso}, datos_niveles: {SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS}}} = response;
+    const {success, response: {datos_alumnos_docentes_aulas: {alum_hom, alum_muj, doc_hom, doc_muj, aulas_exist, aulas_uso}, datos_niveles: {SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS}}} = response;
 
     if (success) {
       notificacion_toastify("Datos consultados")
 
-      pintar_alumnos(alum_hom, alum_muj, alum_tot)
-      pintar_docentes(doc_hom, doc_muj, doc_tot)
+      pintar_alumnos(alum_hom, alum_muj)
+      pintar_docentes(doc_hom, doc_muj)
       pintar_aulas(aulas_uso, aulas_exist)
-      pintar_tabla_alumnos_docente_aulas(alum_hom, alum_muj, alum_tot, doc_hom, doc_muj, doc_tot, aulas_uso, aulas_exist)
+      pintar_alumnos_docente_aulas(alum_hom, alum_muj, doc_hom, doc_muj, aulas_uso, aulas_exist)
       pintar_niveles(SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS)
-      pintar_tabla_niveles(SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS)
     }
   });
 }

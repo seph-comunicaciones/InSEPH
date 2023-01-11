@@ -15,10 +15,8 @@ const consultar_datos_dashboard = async (request, response) => {
 
     const query_datos_alumnos_docentes_aulas = await pool_query_unique(`SELECT SUM(alumnos_hombres)                     as alum_hom,
              SUM(alumnos_mujeres)                     as alum_muj,
-             SUM(alumnos_hombres + alumnos_mujeres)   as alum_tot,
              SUM(docentes_hombres)                    as doc_hom,
              SUM(docentes_mujeres)                    as doc_muj,
-             SUM(docentes_hombres + docentes_mujeres) as doc_tot,
              SUM(aulas_existentes)                    as aulas_exist,
              SUM(aulas_uso)                           as aulas_uso
       FROM escuela WHERE ${municipio_id !== "" ? ` municipio_id_municipio = ${municipio_id} AND ` : ``} activo = true;`, "", "");
