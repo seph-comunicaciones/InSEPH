@@ -249,6 +249,8 @@ const pintar_dashboard = () => {
       pintar_aulas(aulas_uso, aulas_exist)
       pintar_alumnos_docente_aulas(alum_hom, alum_muj, doc_hom, doc_muj, aulas_uso, aulas_exist)
       pintar_niveles(SIN_DEFINIR, INICIAL, BASICA, MEDIA_SUPERIOR, SUPERIOR, CAPACITACION, ESPECIAL, OTROS)
+
+      $("#totales_tab").click()
     }
   });
 }
