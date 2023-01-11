@@ -120,66 +120,56 @@
           </div>
         </section>
 
-        <section class="section">
-          <div class="row">
-            <div class="col-12">
-              <div class="card">
-                <div class="card-body">
-                  <div class="table-responsive" id="dashboard_alumnos_docentes_aulas"></div>
+        <section class="section" id="menu_indicadores">
+          <div class="card">
+            <div class="card-header" id="container_tittle_indicadores"></div>
+            <div class="card-body">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button aria-controls="totales" aria-selected="true" class="nav-link active" data-bs-toggle="tab" href="#totales" id="totales_tab" role="tab">Totales</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button aria-controls="alumnos" aria-selected="false" class="nav-link" data-bs-toggle="tab" href="#alumnos" id="alumnos_tab" role="tab">Alumnos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button aria-controls="docentes" aria-selected="false" class="nav-link" data-bs-toggle="tab" href="#docentes" id="docentes_tab" role="tab">Docentes</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button aria-controls="aulas" aria-selected="false" class="nav-link" data-bs-toggle="tab" href="#aulas" id="aulas_tab" role="tab">Aulas</button>
+                </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div aria-labelledby="home-tab" class="table-responsive card-body tab-pane fade show active" id="totales" role="tabpanel">
+                  <div class="card-header">
+                    <h4>Alumnos, Docentes y Aulas</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive" id="dashboard_alumnos_docentes_aulas"></div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h4>Alumnos</h4>
-              </div>
-              <div class="card-body">
-                <div id="dashboard_chart_alumnos"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h4>Docentes</h4>
-              </div>
-              <div class="card-body">
-                <div id="dashboard_chart_docentes"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h4>Aulas</h4>
-              </div>
-              <div class="card-body">
-                <div id="dashboard_chart_aulas"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="row">
-            <div class="col-12">
-              <div class="card">
-                <div class="card-header">
-                  <h4>Población Que Asiste A La Escuela</h4>
+                <div aria-labelledby="profile-tab" class="table-responsive card-body tab-pane fade" id="alumnos" role="tabpanel">
+                  <div class="card-header">
+                    <h4>Alumnos</h4>
+                  </div>
+                  <div class="card-body">
+                    <div id="dashboard_chart_alumnos"></div>
+                  </div>
                 </div>
-                <div class="card-body">
-                  <div class="table-responsive" id="dashboard_tabla_niveles"></div>
+                <div aria-labelledby="profile-tab" class="table-responsive card-body tab-pane fade" id="docentes" role="tabpanel">
+                  <div class="card-header">
+                    <h4>Docentes</h4>
+                  </div>
+                  <div class="card-body">
+                    <div id="dashboard_chart_docentes"></div>
+                  </div>
+                </div>
+                <div aria-labelledby="profile-tab" class="table-responsive card-body tab-pane fade" id="aulas" role="tabpanel">
+                  <div class="card-header">
+                    <h4>Aulas</h4>
+                  </div>
+                  <div class="card-body">
+                    <div id="dashboard_chart_aulas"></div>
+                  </div>
                 </div>
               </div>
             </div>
