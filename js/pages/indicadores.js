@@ -546,6 +546,16 @@ const pintar_chart_indicadores = (indicadores_chart_nacionales, id) => {
   })
 }
 
+const validar_navs_indicadores = () => {
+  if ($("#container_chart_indicadores").children().length === 0) {
+    $("#container_table_indicadores_tab").click()
+    $("#container_chart_indicadores_tab").addClass("d-none")
+  } else {
+    $("#container_chart_indicadores_tab").click()
+    $("#container_chart_indicadores_tab").removeClass("d-none")
+  }
+}
+
 const pintar_indicador = (service, id_indicador, consumir) => {
   if (consumir) {
     notificacion_toastify_carga()
@@ -644,7 +654,7 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_inte
 
   $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
 
-  let table = `<table class="table" style="text-align: center" id="table_indicadores">
+  let table = `<table class="table" style="text-align: center" id="table_indicadores_internacionales">
                 <thead>
                   <tr>
                     <th style="text-align: center">Meta</th>
@@ -676,11 +686,13 @@ const pintar_tabla_indicadores_internacionales = (tittle, type, indicadores_inte
   $("#container_table_indicadores").append(table);
 
   //Datatable
-  $("#table_indicadores").DataTable({
+  $("#table_indicadores_internacionales").DataTable({
     language: {
       url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
     },
   });
+
+  validar_navs_indicadores()
 }
 
 const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionales, charts) => {
@@ -755,6 +767,8 @@ const pintar_tabla_indicadores_nacionales = (tittle, type, indicadores_nacionale
       },
     });
   })
+
+  validar_navs_indicadores()
 }
 
 const pintar_tabla_indicadores_estatales = (tittle, type, indicadores_estatales) => {
@@ -762,6 +776,7 @@ const pintar_tabla_indicadores_estatales = (tittle, type, indicadores_estatales)
 
   $("#container_tittle_indicadores").empty();
   $("#container_table_indicadores").empty();
+  $("#container_chart_indicadores").empty();
   $("#container_chart_indicadores").addClass("d-none");
 
   $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2><hr>`);
@@ -809,6 +824,8 @@ const pintar_tabla_indicadores_estatales = (tittle, type, indicadores_estatales)
       },
     });
   })
+
+  validar_navs_indicadores()
 }
 
 const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_institucionales) => {
@@ -816,11 +833,12 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
 
   $("#container_tittle_indicadores").empty();
   $("#container_table_indicadores").empty();
+  $("#container_chart_indicadores").empty();
   $("#container_chart_indicadores").addClass("d-none");
 
   $("#container_tittle_indicadores").append(`<h2>${type}: ${tittle}</h2>`);
 
-  let table = `<table class="table" style="text-align: center" id="table_indicadores">
+  let table = `<table class="table" style="text-align: center" id="table_indicadores" data-table="true">
                 <thead>
                   <tr>
                     <th style="text-align: center">Componente</th>
@@ -860,16 +878,23 @@ const pintar_tabla_indicadores_institucionales = (tittle, type, indicadores_inst
             </table>`;
 
   $("#container_table_indicadores").append(table);
-
-  //Datatable
-  $("#table_indicadores").DataTable({
-    language: {
-      url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
-    },
-    paging: false,
-    info: false,
-  });
+  validar_navs_indicadores()
 }
+
+$("#menu_indicadores").on("click", "#container_table_indicadores_tab", () => {
+  const table = $("#table_indicadores")
+
+  if (table.length === 1 && table.attr("data-table") === "true") {
+    table.attr("data-table", "false")
+    table.DataTable({
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json",
+      },
+      paging: false,
+      info: false,
+    })
+  }
+})
 
 //Opciones de indicadores
 request_get("/api/v1/usuarios/validar_session").then()

@@ -168,8 +168,20 @@
         <section id="menu_indicadores" class="section d-none">
           <div class="card">
             <div class="card-header" id="container_tittle_indicadores"></div>
-            <div class="table-responsive card-body" id="container_chart_indicadores"></div>
-            <div class="table-responsive card-body" id="container_table_indicadores"></div>
+            <div class="card-body">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button aria-controls="container_chart_indicadores" aria-selected="true" class="nav-link active" data-bs-toggle="tab" href="#container_chart_indicadores" id="container_chart_indicadores_tab" role="tab">Gráficos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button aria-controls="container_table_indicadores" aria-selected="false" class="nav-link" data-bs-toggle="tab" href="#container_table_indicadores" id="container_table_indicadores_tab" role="tab">Tabulados</button>
+                </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div aria-labelledby="home-tab" class="table-responsive card-body tab-pane fade show active" id="container_chart_indicadores" role="tabpanel"></div>
+                <div aria-labelledby="profile-tab" class="table-responsive card-body tab-pane fade" id="container_table_indicadores" role="tabpanel"></div>
+              </div>
+            </div>
           </div>
         </section>
       </div>
