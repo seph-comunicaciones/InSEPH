@@ -1,5 +1,5 @@
-const request_get = async url => {
-  const url_peticion = `${window.location.origin}${url}`;
+const request_get = async (url, origin = true) => {
+  const url_peticion = origin ? `${window.location.origin}${url}` : url;
   console.log(`request_get(${url_peticion})`);
   const response = await fetch(url_peticion, {
     method: "GET",
@@ -26,8 +26,8 @@ const request_get = async url => {
   return responseJSON;
 };
 
-const request_post = async (url, json) => {
-  const url_peticion = `${window.location.origin}${url}`;
+const request_post = async (url, json, origin = true) => {
+  const url_peticion = origin ? `${window.location.origin}${url}` : url;
   console.log(`request_post(${url_peticion})`, json);
   const response = await fetch(url_peticion, {
     method: "POST",
