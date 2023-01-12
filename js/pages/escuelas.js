@@ -623,6 +623,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 let opciones_select = `<option value="">Elige una opción</option> `;
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa2}">${consulta.nom_dep_operativa2}</option> `));
                 $(`#dep_operativa_2`).empty().append(opciones_select);
+                $(`#dep_operativa_2_vis`).empty().append(opciones_select);
                 $(`#dep_operativa_2_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
@@ -636,6 +637,7 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
                 let opciones_select = `<option value="">Elige una opción</option> `;
                 consultas.forEach((consulta) => (opciones_select += ` <option value="${consulta.id_dep_operativa3}">${consulta.nom_dep_operativa3}</option> `));
                 $(`#dep_operativa_3`).empty().append(opciones_select);
+                $(`#dep_operativa_3_vis`).empty().append(opciones_select);
                 $(`#dep_operativa_3_edit`).empty().append(opciones_select);
               } else {
                 Swal.fire("Error", message, "error");
