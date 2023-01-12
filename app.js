@@ -195,12 +195,19 @@ app.get("/api/v1/usuarios/validar_session", async (request, response) => await v
 //Carga de vistas
 app.get("/", (request, response) => routes_session(request, response, "/", "dashboard.html", "login.html", false, __dirname));
 app.get("/login.html", (request, response) => routes_session(request, response, "/login.html", "dashboard.html", "login.html", false, __dirname));
+app.get("/login", (request, response) => routes_session(request, response, "/login.html", "dashboard.html", "login.html", false, __dirname));
 app.get("/logout.html", (request, response) => routes_session(request, response, "/logout.html", "login.html", "login.html", true, __dirname));
+app.get("/logout", (request, response) => routes_session(request, response, "/logout.html", "login.html", "login.html", true, __dirname));
 app.get("/dashboard.html", (request, response) => routes_session(request, response, "/dashboard.html", "dashboard.html", "login.html", false, __dirname));
+app.get("/dashboard", (request, response) => routes_session(request, response, "/dashboard.html", "dashboard.html", "login.html", false, __dirname));
 app.get("/escuelas.html", (request, response) => routes_session(request, response, "/escuelas.html", "escuelas.html", "escuelas_pub.html", false, __dirname));
+app.get("/escuelas", (request, response) => routes_session(request, response, "/escuelas.html", "escuelas.html", "escuelas_pub.html", false, __dirname));
 app.get("/indicadores.html", (request, response) => routes_session(request, response, "/indicadores.html", "indicadores.html", "login.html", false, __dirname));
+app.get("/indicadores", (request, response) => routes_session(request, response, "/indicadores.html", "indicadores.html", "login.html", false, __dirname));
 app.get("/avisos.html", (request, response) => routes_session(request, response, "/avisos.html", "avisos.html", "login.html", false, __dirname));
+app.get("/avisos", (request, response) => routes_session(request, response, "/avisos.html", "avisos.html", "login.html", false, __dirname));
 app.get("/usuarios.html", (request, response) => routes_session(request, response, "/usuarios.html", "usuarios.html", "login.html", false, __dirname));
+app.get("/usuarios", (request, response) => routes_session(request, response, "/usuarios.html", "usuarios.html", "login.html", false, __dirname));
 
 app.use((request, response) => {
   console.log("No encontrado")

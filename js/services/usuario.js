@@ -106,8 +106,6 @@ const consultar_usuario = async (request, response) => {
 const consultar_rol_usuario = async (request, response) => {
   const {token_acceso, id_usuario} = request.body;
 
-  console.log(request.session);
-
   //Consulta query
   if (request.session.login || id_usuario || token_acceso === TOKEN_WEB) {
     const query = await pool_query_unique(`SELECT rol_id, id_usuario
