@@ -319,6 +319,10 @@ request_post("/api/v1/usuarios/consultar_rol_usuario", {}).then((response) => {
       });
     }
 
+    if (usuario === -1) {
+      $("#informacion_privada").addClass("d-none")
+    }
+
     //Cargar municipios
     request_get("/api/v1/catalogos/consultar_municipios").then((response) => {
       const {success, response: municipios} = response;

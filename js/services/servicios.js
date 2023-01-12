@@ -210,7 +210,7 @@ const create_directory = async (path) => {
   }
 };
 
-const validate_session = async (request, response, token_acceso) => {
+const validate_session = async (request, response, token_acceso, page = null) => {
   if (!token_acceso && token_acceso !== "") {
     //Consulta query
     const query_permisos = await pool_query_unique(`SELECT id_usuario, activo, rol_id
@@ -227,10 +227,12 @@ const validate_session = async (request, response, token_acceso) => {
 
     if ((query_permisos.response && !activo) || !query_permisos.response) {
       console.log("Sin permisos")
-      request.session.login = false;
-      request.session.rol_id = 0;
-      request.session.id_usuario = 0;
-      return message_redirect("/login.html")
+      if (!(page && page === "escuelas")) {
+        request.session.login = false;
+        request.session.rol_id = 0;
+        request.session.id_usuario = 0;
+        return message_redirect("/login.html");
+      }
     } else if (query_permisos.response && activo && id_usuario.toString() === request.session.id_usuario.toString() && rol_id.toString() !== request.session.rol_id.toString()) {
       console.log("Actualización de session")
       request.session.login = true;

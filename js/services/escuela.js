@@ -5,7 +5,7 @@ const {TOKEN_WEB, TOKEN_MOVIL} = process.env
 const consultar_escuelas = async (request, response) => {
   const {id_municipio, token_acceso} = request.body;
 
-  const validacion_session = await validate_session(request, response, token_acceso)
+  const validacion_session = await validate_session(request, response, token_acceso, "escuelas")
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Validar llaves obligatorias
@@ -18,9 +18,8 @@ const consultar_escuelas = async (request, response) => {
   }
 
   //Consulta query
-  if (request.session.login || (token_acceso === TOKEN_WEB || token_acceso === TOKEN_MOVIL)) {
-    const query = await pool_query(
-      `SELECT escuela.id_escuela,
+  const query = await pool_query(
+    `SELECT escuela.id_escuela,
                    escuela.id_cct,
                    escuela.nom_escuela,
                    municipio.nom_municipio,
@@ -34,24 +33,21 @@ const consultar_escuelas = async (request, response) => {
                      LEFT JOIN director on escuela.director_id_director = director.id_director
                      LEFT JOIN inmueble on escuela.inmueble_id_inmueble = inmueble.id_inmueble
                      LEFT JOIN municipio on escuela.municipio_id_municipio = municipio.id_municipio ${id_municipio !== "" ? ` Where status.id_status = 1 AND municipio.id_municipio = ${id_municipio} And escuela.activo = true ` : " Where status.id_status = 1 AND escuela.activo = true "};`,
-      "Escuelas consultadas exitosamente",
-      "Error, no se pudieron consultar las escuelas"
-    );
+    "Escuelas consultadas exitosamente",
+    "Error, no se pudieron consultar las escuelas"
+  );
 
-    if (query.success) {
-      return response.status(200).json(query);
-    } else {
-      return response.status(400).json(query);
-    }
+  if (query.success) {
+    return response.status(200).json(query);
   } else {
-    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
+    return response.status(400).json(query);
   }
 }
 
 const consultar_escuela = async (request, response) => {
   const {id_escuela, token_acceso} = request.body;
 
-  const validacion_session = await validate_session(request, response, token_acceso)
+  const validacion_session = await validate_session(request, response, token_acceso, "escuelas")
   if (validacion_session.reload || validacion_session.redirect) return response.status(200).json(validacion_session);
 
   //Validar llaves obligatorias
@@ -62,9 +58,7 @@ const consultar_escuela = async (request, response) => {
   if (!validacion_llaves.success) return response.status(400).json(message_failure(validacion_llaves.message));
 
   //Consulta query
-  if (request.session.login || (token_acceso === TOKEN_WEB || token_acceso === TOKEN_MOVIL)) {
-    const query = await pool_query_unique(
-      `select escuela.id_cct                                        as CCT,
+  const escuelas = `select escuela.id_cct                                        as CCT,
              escuela.id_escuela,
              escuela.problematica,
              escuela.beneficio,
@@ -192,18 +186,95 @@ const consultar_escuela = async (request, response) => {
                join usuario on escuela.usuario_id_modificacion = usuario.id_usuario
       Where escuela.id_escuela = '${id_escuela}'
         AND escuela.activo = true
-        AND escuela.status_id_status = 1;`,
-      "Escuela consultada exitosamente",
-      "Error, no se pudo consultar la escuela"
-    );
+        AND escuela.status_id_status = 1;`
+  const escuelas_public = `SELECT escuela.id_cct                                        as CCT,
+                 escuela.id_escuela,
+                 escuela.status_id_status,
+                 escuela.nom_escuela,
+                 municipio.id_municipio,
+                 municipio.nom_municipio,
+                 codigo_postal.d_asenta                                as colonia_localidad,
+                 inmueble.asenta2                                      as colonia_localidad2,
+                 codigo_postal.d_tipo_asenta                           as tipo_asentamiento,
+                 inmueble.vialidad_principal                           as calle_principal,
+                 inmueble.vialidad_derecha,
+                 inmueble.vialidad_izquierda,
+                 inmueble.vialidad_posterior,
+                 inmueble.num_ext,
+                 inmueble.alf_ext,
+                 inmueble.num_int,
+                 inmueble.alf_int,
+                 inmueble.desc_ubicacion,
+                 inmueble.latitud,
+                 inmueble.longitud,
+                 codigo_postal.d_zona                                  as zona,
+                 sost_control.id_sost_control,
+                 sost_control.nom_sost_control                         as sostenimiento_control,
+                 sost_subcontrol.id_sost_subcontrol,
+                 sost_subcontrol.nom_sost_subcontrol                   as sostenimiento_sucontrol,
+                 escuela.institucion_plantel                           as cct_plantel,
+                 turno1.id_turno1,
+                 turno1.nom_turno1                                     as turno1,
+                 turno2.id_turno2,
+                 turno2.nom_turno2                                     as turno2,
+                 turno3.id_turno3,
+                 turno3.nom_turno3                                     as turno3,
+                 nivel.id_nivel,
+                 nivel.nom_nivel,
+                 tipo.id_tipo,
+                 tipo.nom_tipo,
+                 servicio_educativo.id_servicio_educativo,
+                 servicio_educativo.nom_servicio_educativo,
+                 director.id_director,
+                 director.nombre_director,
+                 escuela.telefono,
+                 escuela.email,
+                 escuela.pag_web,
+                 escuela.activo,
+                 escuela.imagen,
+                 escuela.alumnos_mujeres,
+                 escuela.alumnos_hombres,
+                 escuela.docentes_mujeres,
+                 escuela.docentes_hombres,
+                 escuela.aulas_uso,
+                 escuela.aulas_existentes,
+                 LEFT(cast(escuela.fecha_modificacion AS varchar), 10) AS fecha_modificacion,
+                 escuela.hora_modificacion,
+                 usuario.nombre                                        as usuario_nombre_modificacion,
+                 usuario.apellido_paterno                              as usuario_apellido_paterno_modificacion,
+                 usuario.apellido_materno                              as usuario_apellido_materno_modificacion,
+                 escuela.problematica,
+                 escuela.beneficio
+          FROM escuela
+                   LEFT JOIN inmueble ON inmueble.id_inmueble = escuela.inmueble_id_inmueble
+                   LEFT JOIN municipio ON municipio.id_municipio = escuela.municipio_id_municipio
+                   LEFT JOIN codigo_postal ON codigo_postal.id_asenta = inmueble.id_inmueble
+                   LEFT JOIN sost_control ON sost_control.id_sost_control = escuela.sost_control_id_sost_control
+                   LEFT JOIN sost_subcontrol ON sost_subcontrol.id_sost_subcontrol = escuela.sost_subcontrol_id_sost_subcontrol
+                   LEFT JOIN sost_servicio ON sost_servicio.id_sost_servicio = escuela.sost_servicio_id_sost_servicio
+                   LEFT JOIN turno1 ON turno1.id_turno1 = escuela.turno1_id_turno1
+                   LEFT JOIN turno2 ON turno2.id_turno2 = escuela.turno2_id_turno2
+                   LEFT JOIN turno3 ON turno3.id_turno3 = escuela.turno3_id_turno3
+                   LEFT JOIN nivel ON nivel.id_nivel = escuela.nivel_id_nivel
+                   LEFT JOIN tipo ON tipo.id_tipo = escuela.tipo_id_tipo
+                   LEFT JOIN servicio_educativo
+                             ON servicio_educativo.id_servicio_educativo = escuela.servicio_educativo_id_servicio_educativo
+                   LEFT JOIN director ON director.id_director = escuela.director_id_director
+                   join usuario ON escuela.usuario_id_modificacion = usuario.id_usuario
+              Where escuela.id_escuela = '${id_escuela}'
+                  AND escuela.activo = true
+                  AND escuela.status_id_status = 1;`
 
-    if (query.success) {
-      return response.status(200).json(query);
-    } else {
-      return response.status(400).json(query);
-    }
+  const query = await pool_query_unique(
+    request.session.login ? escuelas : escuelas_public,
+    "Escuela consultada exitosamente",
+    "Error, no se pudo consultar la escuela"
+  );
+
+  if (query.success) {
+    return response.status(200).json(query);
   } else {
-    return response.status(200).json(message_failure("No tienes los permisos para esta acción"));
+    return response.status(400).json(query);
   }
 }
 
@@ -430,7 +501,7 @@ const editar_escuela = async (request, response, socket) => {
     const query_inmueble = await pool_query(pool_query_update(await filtrar_llaves(request.body, llaves_filtrar_inmueble), where_inmueble, "inmueble"), "", "")
 
     //Editar escuela
-    const llaves_filtrar_escuela = [ "imagen", "problematica", "beneficio", "marca_id_marca", "nom_escuela", "status_id_status", "municipio_id_municipio", "region_id_region", "sost_control_id_sost_control", "sost_subcontrol_id_sost_subcontrol", "sost_dependencian1_id_sost_dependencia1", "sost_dependencian2_id_sost_dependencia2", "sost_dependencian3_id_sost_dependencia3", "sost_dependencian4_id_sost_dependencia4", "sost_servicio_id_sost_servicio", "dep_operativa1_id_dep_operativa1", "dep_operativa2_id_dep_operativa2", "dep_operativa3_id_dep_operativa3", "dep_operativa4_id_dep_operativa4", "dep_operativa5_id_dep_operativa5", "supervision_id_cct", "jefsec_id_cct", "serreg_id_cct", "institucion_plantel", "turno1_id_turno1", "turno2_id_turno2", "turno3_id_turno3", "nivel_id_nivel", "tipo_id_tipo", "servicio_educativo_id_servicio_educativo", "cam_servicio_id_cam_servicio", "caracteristica1_id_caracteristica1", "caracteristica2_id_caracteristica2", "telefono", "email", "alumnos_hombres", "alumnos_mujeres", "docentes_hombres", "docentes_mujeres", "aulas_uso", "aulas_existentes", "pag_web", "usuario_id_modificacion",]
+    const llaves_filtrar_escuela = ["imagen", "problematica", "beneficio", "marca_id_marca", "nom_escuela", "status_id_status", "municipio_id_municipio", "region_id_region", "sost_control_id_sost_control", "sost_subcontrol_id_sost_subcontrol", "sost_dependencian1_id_sost_dependencia1", "sost_dependencian2_id_sost_dependencia2", "sost_dependencian3_id_sost_dependencia3", "sost_dependencian4_id_sost_dependencia4", "sost_servicio_id_sost_servicio", "dep_operativa1_id_dep_operativa1", "dep_operativa2_id_dep_operativa2", "dep_operativa3_id_dep_operativa3", "dep_operativa4_id_dep_operativa4", "dep_operativa5_id_dep_operativa5", "supervision_id_cct", "jefsec_id_cct", "serreg_id_cct", "institucion_plantel", "turno1_id_turno1", "turno2_id_turno2", "turno3_id_turno3", "nivel_id_nivel", "tipo_id_tipo", "servicio_educativo_id_servicio_educativo", "cam_servicio_id_cam_servicio", "caracteristica1_id_caracteristica1", "caracteristica2_id_caracteristica2", "telefono", "email", "alumnos_hombres", "alumnos_mujeres", "docentes_hombres", "docentes_mujeres", "aulas_uso", "aulas_existentes", "pag_web", "usuario_id_modificacion",]
     const escuela = {id_escuela: id_escuela};
     const query_escuela = await pool_query(pool_query_update(await filtrar_llaves(request.body, llaves_filtrar_escuela), escuela, "escuela"), "Escuela editada exitosamente", "Error, no se pudo editar la escuela");
 
